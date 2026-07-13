@@ -1,6 +1,6 @@
 # Test Matrix
 
-**Status:** PLACEHOLDER -- cross-phase (all phases)
+**Status:** PLACEHOLDER -- cross-phase (Phase 2 document evidence added)
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
@@ -16,6 +16,17 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 ---
 
 ## Required Future Sections
+
+### Repository and Decision-Document Tests (Phase 1-2)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| REP-001 | Required repository scaffold exists | 1 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/repository/` |
+| REP-002 | Agent skills have valid frontmatter | 1 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/repository/` |
+| REP-003 | Architecture source digests match LF-normalized manifest entries | 1 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/repository/` |
+| DEC-001 | Phase 2 architecture decisions are frozen and complete | 2 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/repository/` |
+| DEC-002 | Glossary contains required standardized terms and core types | 2 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/repository/` |
+| DEC-003 | MVP scope contains all 15 acceptance criteria and exclusions | 2 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/repository/` |
+| DEC-004 | Phase 2 did not create schemas or registries | 2 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/repository/` |
 
 ### Record Tests (Phase 3-4)
 | Test ID | Description | Phase | Status | Evidence |
@@ -72,4 +83,4 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-All test rows are PLANNED. No test evidence exists in Phase 1 beyond repository-contract and import/version tests.
+Runtime, schema, conformance, crash, security, and performance rows remain PLANNED until their owning phases. Phase 2 evidence is limited to repository and decision-document checks; it does not claim runtime implementation.

@@ -1,6 +1,6 @@
 # Codex Build Plan
 
-**Status:** PLACEHOLDER -- cross-phase (Phase 1 closure candidate)
+**Status:** PLACEHOLDER -- cross-phase (Phase 2 complete)
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
@@ -19,7 +19,7 @@ Track the complete build sequence from repository bootstrap through research rel
 
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
-| A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phase 1 closure candidate; Phase 2 blocked pending acceptance |
+| A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phases 1-2 complete; Phase 3 next |
 | B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | BLOCKED |
 | C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | BLOCKED |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
@@ -31,8 +31,8 @@ Track the complete build sequence from repository bootstrap through research rel
 
 | Phase | Name | Gate | Status |
 |---|---|---|---|
-| 1 | Repository and Agent-Control Bootstrap | A | CLOSURE CANDIDATE |
-| 2 | Architecture Decisions | A | BLOCKED |
+| 1 | Repository and Agent-Control Bootstrap | A | PASS |
+| 2 | Architecture Decisions | A | PASS |
 | 3 | Machine Contracts | A | PENDING |
 | 4 | Conformance Fixtures | A | PENDING |
 | 5 | Codec, Config, Identifiers | B | PENDING |
@@ -67,4 +67,4 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-No phase beyond Phase 1 has been executed. Phase 2 remains blocked until Phase 1 closure is accepted with linked validation evidence.
+No phase beyond Phase 2 has been executed. Phase 3 is the next Gate A phase and must publish machine-readable schemas and registries before runtime implementation begins.

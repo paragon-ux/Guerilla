@@ -163,6 +163,12 @@ REQUIRED_SKELETONS = [
     "EVALUATION_PLAN.md",
 ]
 
+FROZEN_PHASE2_DOCS = {
+    "ARCHITECTURE_DECISIONS.md",
+    "GLOSSARY.md",
+    "MVP_SCOPE.md",
+}
+
 
 def test_all_skeletons_exist():
     docs_dir = REPO_ROOT / "docs"
@@ -335,8 +341,8 @@ def test_phase_2_prompt_placeholder_exists():
     assert path.is_file(), "Phase 2 architecture-decisions prompt is missing"
     content = path.read_text(encoding="utf-8")
     assert "Phase 2" in content
-    assert "BLOCKED" in content or "blocked" in content.lower()
-    assert "No Phase 2 work may begin" in content
+    assert "Architecture Decisions" in content
+    assert "runtime implementation remains blocked until Gate A completes" in content
 
 
 def test_prompt_inventory_complete():
@@ -357,12 +363,16 @@ def test_prompt_inventory_complete():
 # ── Placeholder integrity ─────────────────────────────────────────────
 
 
-def test_placeholders_identify_status():
-    """Document skeletons must contain a status marker."""
+def test_build_documents_identify_status():
+    """Build documents must identify whether they are frozen or placeholders."""
     docs_dir = REPO_ROOT / "docs"
     for name in REQUIRED_SKELETONS:
         path = docs_dir / name
         content = path.read_text(encoding="utf-8")
-        assert "PLACEHOLDER" in content or "placeholder" in content.lower(), (
-            f"{name} does not identify as placeholder"
-        )
+        if name in FROZEN_PHASE2_DOCS:
+            assert "**Status:** FROZEN -- Phase 2 complete" in content
+            assert "PLACEHOLDER" not in content
+        else:
+            assert "PLACEHOLDER" in content or "placeholder" in content.lower(), (
+                f"{name} does not identify as placeholder"
+            )

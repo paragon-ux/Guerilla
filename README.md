@@ -2,7 +2,7 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Architecture-complete / pre-prototype. Phase 1 closure candidate; Phase 2 is blocked until Phase 1 closure is accepted. No working graph runtime exists yet.
+**Current status:** Architecture-complete / pre-prototype. Phase 2 architecture decisions are frozen; Phase 3 machine contracts are next. No working graph runtime exists yet.
 
 ---
 
@@ -35,7 +35,7 @@ Guerilla does **not** own: canonical application content, external database tran
 
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
-| A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phase 1 closure candidate; Phase 2 blocked pending acceptance |
+| A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phases 1-2 complete; Phase 3 next |
 | B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Blocked by Gate A |
 | C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Blocked by Gate B |
 | D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |

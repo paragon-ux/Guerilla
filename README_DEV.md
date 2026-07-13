@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Architecture-complete / pre-prototype; Phase 1 closure candidate
-**Phase:** 1 - Repository and Agent-Control Bootstrap; Phase 2 blocked pending Phase 1 acceptance
+**Current status:** Architecture-complete / pre-prototype; Phase 2 complete
+**Phase:** 3 next - Machine Contracts; runtime implementation remains blocked until Gate A completes
 
 ---
 
@@ -106,11 +106,11 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Phase 2 Handoff
+## Phase 3 Handoff
 
-After Phase 1 closure is accepted:
+After Phase 2 completion:
 
 1. Confirm repository baseline passes all repository-contract tests.
 2. Verify architecture sources are present, classified, and hash-verified.
-3. Resolve any architecture decisions reserved for Phase 2 (none should be frozen in Phase 1).
-4. Hand off to `PHASE_02_ARCHITECTURE_DECISIONS.md`.
+3. Use `ARCHITECTURE_DECISIONS.md`, `GLOSSARY.md`, and `MVP_SCOPE.md` as frozen Phase 3 inputs.
+4. Hand off to `PHASE_03_MACHINE_CONTRACTS.md` when that prompt is created.

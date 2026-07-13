@@ -1,11 +1,11 @@
 # Phase 2 - Architecture Decisions
 
-**Status:** BLOCKED - Phase 1 closure has not been accepted
+**Status:** PASS - Phase 2 complete
 **Gate:** A - Contract Ready
 **Owner phase:** Phase 2 (Architecture Decisions)
 **Required predecessor:** Phase 1 PASS with reproducible lockfile, valid skills, source-integrity enforcement, isolated wheel smoke evidence, and updated status surfaces
 
-> **WARNING:** This prompt is a Phase 1 handoff placeholder. No Phase 2 work may begin until Phase 1 closure is accepted with linked validation evidence.
+> **Completion note:** Phase 2 froze architecture decisions, glossary terminology, and MVP scope. Phase 3 may proceed only to machine-readable schemas, registries, and examples; runtime implementation remains blocked until Gate A completes.
 
 ---
 
