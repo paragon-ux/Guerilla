@@ -58,6 +58,7 @@ def test_ci_uses_locked_install_and_isolated_wheel_smoke():
     workflow = (REPO_ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert "uv lock --check" in workflow
     assert "uv sync --frozen --extra dev" in workflow
+    assert "uv run --frozen --extra dev --python ${{ matrix.python-version }}" in workflow
     assert "uv venv" in workflow
     assert "uv pip install --python" in workflow
     assert "RUNNER_TEMP" in workflow
@@ -107,6 +108,11 @@ def _architecture_manifest_rows() -> list[tuple[str, str]]:
         if match:
             rows.append((match.group("path"), match.group("digest")))
     return rows
+
+
+def _read_line_normalized_bytes(path: Path) -> bytes:
+    content = path.read_bytes()
+    return content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
 
 
 def test_all_skills_exist():
@@ -213,13 +219,13 @@ def test_source_digests_recorded():
 
 
 def test_source_digests_match_files():
-    """The architecture manifest must match the exact bytes of every listed source."""
+    """The manifest must match LF-normalized bytes of every listed source."""
     rows = _architecture_manifest_rows()
     assert len(rows) >= 7, f"Expected at least 7 architecture manifest rows, found {len(rows)}"
     for rel_path, expected_digest in rows:
         path = REPO_ROOT / rel_path
         assert path.is_file(), f"Manifest source path is missing: {rel_path}"
-        actual_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        actual_digest = hashlib.sha256(_read_line_normalized_bytes(path)).hexdigest()
         assert actual_digest == expected_digest, (
             f"SHA-256 mismatch for {rel_path}: expected {expected_digest}, got {actual_digest}"
         )

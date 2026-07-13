@@ -34,16 +34,16 @@ jobs:
         run: uv sync --frozen --extra dev --python ${{ matrix.python-version }}
 
       - name: Formatting check
-        run: uv run ruff format --check .
+        run: uv run --frozen --extra dev --python ${{ matrix.python-version }} ruff format --check .
 
       - name: Lint check
-        run: uv run ruff check .
+        run: uv run --frozen --extra dev --python ${{ matrix.python-version }} ruff check .
 
       - name: Static analysis
-        run: uv run mypy src tests
+        run: uv run --frozen --extra dev --python ${{ matrix.python-version }} mypy src tests
 
       - name: Tests
-        run: uv run pytest
+        run: uv run --frozen --extra dev --python ${{ matrix.python-version }} pytest
 
       - name: Build package
         run: uv build

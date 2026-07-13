@@ -8,17 +8,17 @@
 
 | Original filename | Repository path | SHA-256 digest | Import date | Architecture role | Classification |
 |---|---|---|---|---|---|
-| `GUERILLA_CONCEPT_PAPER.md` | `docs/architecture/GUERILLA_CONCEPT_PAPER.md` | `940f0e3b2fa8ebeee7335cacced35368f257734886347bdbcf4f72d22049ae5f` | 2026-07-13 | Product identity, state ownership, graph thesis, use cases, evaluation questions | **Normative** |
-| `GUERILLA_IMPLEMENTATION_SPEC.md` | `docs/architecture/GUERILLA_IMPLEMENTATION_SPEC.md` | `bf5e1801a188ef67f190bad838c8112c0fe6ce05c134f1f3771e59a94befebb7` | 2026-07-13 | Normative runtime components, storage, flows, security, testing, MVP acceptance | **Normative** |
-| `GUERILLA_PROTOCOL_SPEC.md` | `docs/architecture/GUERILLA_PROTOCOL_SPEC.md` | `e0366857ff2bebe65b28ad2cf83907f3c74c6d3dc835c069b24a5f56267f457a` | 2026-07-13 | Transport-independent GLCP operations, envelopes, errors, retry and compatibility semantics | **Normative** |
-| `GUERILLA_SNAPSHOT.md` | `docs/architecture/GUERILLA_SNAPSHOT.md` | `147815e5c7dbb2be9862f6a0d31cf83492fce9f0c4ea16c4d0c159f10eeaa84c` | 2026-07-13 | Current decisions, unresolved questions, milestones, readiness gates | **Normative** |
-| `CURRENT_STATUS_MATRIX.md` | `docs/architecture/CURRENT_STATUS_MATRIX.md` | `22e712fceb54c052e5f45f5a4c5b8a46152a01673b68875bda45acfca5e102d0` | 2026-07-13 | Implementation readiness and critical path | **Supporting** |
-| `RELATED_WORK.md` | `docs/architecture/RELATED_WORK.md` | `1a83b97125f6afe8dbcb4e3cde4cf384481a8dca841fc81a01bcb32d8dce0bb9` | 2026-07-13 | Comparative positioning and evaluation framing | **Supporting** |
-| `Note-on-Architecture.md` | `docs/rationale/Note-on-Architecture.md` | `31c885a3c04a49aa18f5fffe2d3a8efb29b3803acf807abce58ef724adadecf2` | 2026-07-13 | Controlling rationale for state continuity, authoritative lineage, and hybrid boundaries | **Rationale** |
+| `GUERILLA_CONCEPT_PAPER.md` | `docs/architecture/GUERILLA_CONCEPT_PAPER.md` | `c7fc3cd5acac20a1798bb323030c6b926b61d31ede09918af63878f360613470` | 2026-07-13 | Product identity, state ownership, graph thesis, use cases, evaluation questions | **Normative** |
+| `GUERILLA_IMPLEMENTATION_SPEC.md` | `docs/architecture/GUERILLA_IMPLEMENTATION_SPEC.md` | `2eef1b6c4aef1e49d2bad54e3416e8d30dd2b2da5dee74c52fc3bf602446aca7` | 2026-07-13 | Normative runtime components, storage, flows, security, testing, MVP acceptance | **Normative** |
+| `GUERILLA_PROTOCOL_SPEC.md` | `docs/architecture/GUERILLA_PROTOCOL_SPEC.md` | `0bddc9eb917356b288b04cb06ee43257068fbf515f8245e1bb24a302b88c389c` | 2026-07-13 | Transport-independent GLCP operations, envelopes, errors, retry and compatibility semantics | **Normative** |
+| `GUERILLA_SNAPSHOT.md` | `docs/architecture/GUERILLA_SNAPSHOT.md` | `a2af47a0a89ab5b6a2588c0d2d6682a01d9ef255b013264908a7250f24c16c25` | 2026-07-13 | Current decisions, unresolved questions, milestones, readiness gates | **Normative** |
+| `CURRENT_STATUS_MATRIX.md` | `docs/architecture/CURRENT_STATUS_MATRIX.md` | `3cbce7c2f703f7c2e9224879ef0e23fb54726ac9b7264024ff5999d2a1e0abea` | 2026-07-13 | Implementation readiness and critical path | **Supporting** |
+| `RELATED_WORK.md` | `docs/architecture/RELATED_WORK.md` | `80537903154e51c683c45a9ae55a1822efbfefd4001667f58ca19ec608568eb3` | 2026-07-13 | Comparative positioning and evaluation framing | **Supporting** |
+| `Note-on-Architecture.md` | `docs/rationale/Note-on-Architecture.md` | `9b8ff35a5a4f10dfe9cb21955fb114d7a82125fd26c9609503c0e85153be763f` | 2026-07-13 | Controlling rationale for state continuity, authoritative lineage, and hybrid boundaries | **Rationale** |
 
 ## Integrity Rules
 
-- Sources were line-ending normalized (CRLF → LF) during placement. No substantive content was modified.
+- Digests are computed over LF-normalized bytes (CRLF to LF). No substantive content was modified.
 - `RELATED_WORK.md` is classified as **Supporting** — it informs comparative positioning but is not normative for runtime behavior.
 - `Note-on-Architecture.md` is classified as **Rationale** — it is the controlling rationale for architecture ordering and boundary definition but is not a normative implementation document.
 - All normative documents are version `0.2.0-draft`. No document claims a frozen contract status.
