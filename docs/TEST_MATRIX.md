@@ -1,0 +1,75 @@
+# Test Matrix
+
+**Status:** PLACEHOLDER -- cross-phase (all phases)
+**Owner phase:** Cross-phase; populated by each phase
+**Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
+**Regeneration trigger:** Any phase completion that adds or modifies tests
+
+> **WARNING:** This document is a Phase 1 skeleton. Do not mark unimplemented tests as passing.
+
+---
+
+## Purpose
+
+Track every planned test, its owning phase, current status, and evidence. Each row maps a test requirement to its implementation and pass/fail status.
+
+---
+
+## Required Future Sections
+
+### Record Tests (Phase 3-4)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| REC-001 | Valid node records accepted | 3 | PLANNED | -- |
+| REC-002 | Invalid node records rejected | 3 | PLANNED | -- |
+| REC-003 | Valid edge records accepted | 3 | PLANNED | -- |
+| REC-004 | Invalid edge records rejected | 3 | PLANNED | -- |
+| REC-005 | Duplicate identifiers rejected | 3 | PLANNED | -- |
+| REC-006 | Hash mismatches detected | 3 | PLANNED | -- |
+| REC-007 | Unsupported versions rejected | 3 | PLANNED | -- |
+| REC-008 | Authority envelope validated | 3 | PLANNED | -- |
+
+### Transaction Tests (Phase 6)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| TXN-001 | Atomic commit | 6 | PLANNED | -- |
+| TXN-002 | Incomplete transaction ignored on replay | 6 | PLANNED | -- |
+| TXN-003 | Previous-commit mismatch rejected | 6 | PLANNED | -- |
+| TXN-004 | Transaction-hash mismatch rejected | 6 | PLANNED | -- |
+| TXN-005 | Monotonic graph revisions | 6 | PLANNED | -- |
+| TXN-006 | Concurrent append rejected | 6 | PLANNED | -- |
+
+### DAG Tests (Phase 7)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| DAG-001 | Linear ancestry | 7 | PLANNED | -- |
+| DAG-002 | Branching | 7 | PLANNED | -- |
+| DAG-003 | Multi-parent convergence | 7 | PLANNED | -- |
+| DAG-004 | Supersession | 7 | PLANNED | -- |
+| DAG-005 | Direct cycle rejection | 7 | PLANNED | -- |
+| DAG-006 | Self-loop rejection | 7 | PLANNED | -- |
+| DAG-007 | Missing endpoints rejected | 7 | PLANNED | -- |
+| DAG-008 | Reified symmetric relationships | 7 | PLANNED | -- |
+
+### Adapter Tests (Phase 9-12)
+### Action-Recovery Tests (Phase 11-12)
+### Projection Tests (Phase 13-14)
+### Security Tests (Phase 19)
+### Performance Tests (Phase 21)
+
+---
+
+## Status Legend
+
+- **PLANNED:** Test requirement exists, not yet implemented
+- **IMPLEMENTED:** Test code written, not yet passing
+- **PASSING:** Test passes reliably
+- **FAILING:** Known failure with documented reason
+- **BLOCKED:** Cannot run due to missing dependency
+- **DEFERRED:** Intentionally postponed beyond current phase
+
+---
+
+## Unresolved Items
+
+All test rows are PLANNED. No test evidence exists in Phase 1 beyond repository-contract and import/version tests.
