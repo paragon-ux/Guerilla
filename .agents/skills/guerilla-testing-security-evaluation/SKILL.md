@@ -1,3 +1,8 @@
+---
+name: guerilla-testing-security-evaluation
+description: Guides Guerilla conformance, repository, crash, security, performance, pilot, benchmark, CI, and release-evidence validation. Use whenever tests, evaluation, or completion evidence are being created or reviewed.
+---
+
 # guerilla-testing-security-evaluation
 
 **Skill:** Conformance testing, crash and corruption simulation, security review, capability escalation tests, performance measurement, pilots, benchmarks, and release evidence

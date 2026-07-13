@@ -1,3 +1,8 @@
+---
+name: guerilla-contracts-modeling
+description: Defines and reviews Guerilla architecture decisions, schemas, registries, canonicalization fixtures, and compatibility contracts. Use during Phases 2-4 or whenever record identity, transaction validity, authority, or replay semantics are affected.
+---
+
 # guerilla-contracts-modeling
 
 **Skill:** Contracts, schemas, registries, and fixture modeling

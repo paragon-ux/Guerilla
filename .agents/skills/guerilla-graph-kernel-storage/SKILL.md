@@ -1,3 +1,8 @@
+---
+name: guerilla-graph-kernel-storage
+description: Guides Guerilla graph kernel, append-only storage, transaction, replay, DAG integrity, payload, lock, and rebuildable index work. Use during Phases 5-7 or whenever authoritative graph storage behavior is affected.
+---
+
 # guerilla-graph-kernel-storage
 
 **Skill:** Graph kernel, append-only storage, transactions, DAG integrity, replay, and indexing

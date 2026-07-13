@@ -220,6 +220,8 @@ A failure at any step MUST reject the entire append transaction.
 Local test commands:
 
 ```bash
+uv lock --check
+uv sync --frozen --extra dev
 uv run ruff format --check .
 uv run ruff check .
 uv run mypy src tests

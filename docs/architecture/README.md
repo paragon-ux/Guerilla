@@ -25,8 +25,8 @@
 
 ## Verification
 
-Regenerate digests and compare:
+Run the repository-contract digest check:
 
 ```bash
-sha256sum docs/architecture/*.md docs/rationale/*.md
+uv run pytest tests/repository/test_repository_contract.py -k source_digests
 ```

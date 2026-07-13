@@ -1,3 +1,8 @@
+---
+name: guerilla-adapter-continuity-reconciliation
+description: Guides Guerilla adapter descriptors, state boundaries, observations, intent-before-action, idempotency, reconciliation, conflicts, and authority work. Use during Phases 8-12 or whenever external-system continuity is affected.
+---
+
 # guerilla-adapter-continuity-reconciliation
 
 **Skill:** Adapter SDK, continuity modes, observation ingestion, authority boundaries, intent-before-action, idempotency, reconciliation, conflicts, and decisions

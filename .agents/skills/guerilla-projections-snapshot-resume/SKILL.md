@@ -1,3 +1,8 @@
+---
+name: guerilla-projections-snapshot-resume
+description: Guides Guerilla derived views, manifests, snapshots, diffs, resume contexts, and deterministic regeneration. Use during Phases 13-14 or whenever projection or snapshot behavior is affected.
+---
+
 # guerilla-projections-snapshot-resume
 
 **Skill:** Derived views, manifests, snapshots, diffs, resume context, and deterministic regeneration

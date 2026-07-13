@@ -1,6 +1,6 @@
 # Phase Prompts
 
-**Status:** Phase 1 inventory complete; Phase 2-22 prompts pending
+**Status:** Phase 1 closure candidate; Phase 2 prompt created but blocked pending Phase 1 acceptance
 **Owner phase:** Cross-phase; each phase prompt is owned by its phase
 
 ---
@@ -24,8 +24,8 @@ This directory contains the ordered phase execution prompts that drive Guerilla'
 
 | Number | Prompt file | Gate | Status |
 |---|---|---|---|
-| 1 | `Guerilla-Kickoff-Prompt.md` | A | IN PROGRESS |
-| 2 | `PHASE_02_ARCHITECTURE_DECISIONS.md` | A | PENDING (not yet created) |
+| 1 | `Guerilla-Kickoff-Prompt.md` | A | CLOSURE CANDIDATE |
+| 2 | `PHASE_02_ARCHITECTURE_DECISIONS.md` | A | BLOCKED (prompt created; waits for Phase 1 acceptance) |
 | 3 | `PHASE_03_MACHINE_CONTRACTS.md` | A | PENDING |
 | 4 | `PHASE_04_CONFORMANCE_FIXTURES.md` | A | PENDING |
 | 5 | `PHASE_05_CODEC_CONFIG_IDENTIFIERS.md` | B | PENDING |

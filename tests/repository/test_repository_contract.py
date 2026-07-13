@@ -3,6 +3,8 @@
 These tests verify structural properties, not runtime behavior.
 """
 
+import hashlib
+import re
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
@@ -31,8 +33,35 @@ def test_gitignore_exists():
     assert (REPO_ROOT / ".gitignore").is_file(), ".gitignore is missing"
 
 
+def test_uv_lock_exists():
+    assert (REPO_ROOT / "uv.lock").is_file(), "uv.lock is missing"
+
+
+def test_uv_lock_not_ignored():
+    ignored_entries = {
+        line.strip()
+        for line in (REPO_ROOT / ".gitignore").read_text(encoding="utf-8").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    assert "uv.lock" not in ignored_entries, "uv.lock must be committed, not ignored"
+
+
 def test_editorconfig_exists():
     assert (REPO_ROOT / ".editorconfig").is_file(), ".editorconfig is missing"
+
+
+def test_ci_workflow_exists():
+    assert (REPO_ROOT / ".github" / "workflows" / "ci.yml").is_file(), "CI workflow is missing"
+
+
+def test_ci_uses_locked_install_and_isolated_wheel_smoke():
+    workflow = (REPO_ROOT / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "uv lock --check" in workflow
+    assert "uv sync --frozen --extra dev" in workflow
+    assert "uv venv" in workflow
+    assert "uv pip install --python" in workflow
+    assert "RUNNER_TEMP" in workflow
+    assert "uv run pip install" not in workflow
 
 
 # ── Skills ────────────────────────────────────────────────────────────
@@ -44,6 +73,40 @@ SKILL_NAMES = [
     "guerilla-projections-snapshot-resume",
     "guerilla-testing-security-evaluation",
 ]
+
+SKILL_NAME_PATTERN = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$")
+MANIFEST_ROW_PATTERN = re.compile(
+    r"^\| `(?P<original>[^`]+)` \| `(?P<path>[^`]+)` \| "
+    r"`(?P<digest>[0-9a-f]{64})` \|"
+)
+
+
+def _parse_skill_frontmatter(skill_path: Path) -> dict[str, str]:
+    lines = skill_path.read_text(encoding="utf-8").splitlines()
+    assert lines and lines[0] == "---", f"{skill_path} must start with YAML frontmatter"
+    try:
+        end_index = lines.index("---", 1)
+    except ValueError as exc:
+        raise AssertionError(f"{skill_path} frontmatter is not closed") from exc
+
+    metadata: dict[str, str] = {}
+    for line in lines[1:end_index]:
+        if not line.strip():
+            continue
+        key, separator, value = line.partition(":")
+        assert separator, f"{skill_path} frontmatter line is not key/value: {line!r}"
+        metadata[key.strip()] = value.strip().strip('"').strip("'")
+    return metadata
+
+
+def _architecture_manifest_rows() -> list[tuple[str, str]]:
+    manifest = (REPO_ROOT / "docs" / "architecture" / "README.md").read_text(encoding="utf-8")
+    rows: list[tuple[str, str]] = []
+    for line in manifest.splitlines():
+        match = MANIFEST_ROW_PATTERN.match(line)
+        if match:
+            rows.append((match.group("path"), match.group("digest")))
+    return rows
 
 
 def test_all_skills_exist():
@@ -60,6 +123,18 @@ def test_all_skills_non_empty():
         skill_path = skills_dir / name / "SKILL.md"
         content = skill_path.read_text(encoding="utf-8")
         assert len(content) > 500, f"Skill {name} appears too short ({len(content)} bytes)"
+
+
+def test_all_skills_have_valid_frontmatter():
+    skills_dir = REPO_ROOT / ".agents" / "skills"
+    for name in SKILL_NAMES:
+        skill_path = skills_dir / name / "SKILL.md"
+        metadata = _parse_skill_frontmatter(skill_path)
+        assert metadata.get("name") == name, f"Skill {name} frontmatter name mismatch"
+        assert SKILL_NAME_PATTERN.match(name), f"Skill name {name} violates Agent Skills format"
+        assert "--" not in name, f"Skill name {name} must not contain consecutive hyphens"
+        description = metadata.get("description", "")
+        assert 1 <= len(description) <= 1024, f"Skill {name} description length is invalid"
 
 
 # ── Build-document skeletons ──────────────────────────────────────────
@@ -133,11 +208,21 @@ def test_architecture_readme_exists():
 def test_source_digests_recorded():
     """The architecture README must contain SHA-256 digests."""
     manifest = (REPO_ROOT / "docs" / "architecture" / "README.md").read_text(encoding="utf-8")
-    # At least one 64-char hex digest
-    import re
-
     digests = re.findall(r"[0-9a-f]{64}", manifest)
     assert len(digests) >= 7, f"Expected at least 7 SHA-256 digests, found {len(digests)}"
+
+
+def test_source_digests_match_files():
+    """The architecture manifest must match the exact bytes of every listed source."""
+    rows = _architecture_manifest_rows()
+    assert len(rows) >= 7, f"Expected at least 7 architecture manifest rows, found {len(rows)}"
+    for rel_path, expected_digest in rows:
+        path = REPO_ROOT / rel_path
+        assert path.is_file(), f"Manifest source path is missing: {rel_path}"
+        actual_digest = hashlib.sha256(path.read_bytes()).hexdigest()
+        assert actual_digest == expected_digest, (
+            f"SHA-256 mismatch for {rel_path}: expected {expected_digest}, got {actual_digest}"
+        )
 
 
 # ── Schema and registry directories ───────────────────────────────────
@@ -237,6 +322,15 @@ def test_no_prohibited_runtime_modules():
 def test_phase_prompts_readme_exists():
     path = REPO_ROOT / "docs" / "phase_prompts" / "README.md"
     assert path.is_file(), "phase_prompts/README.md missing"
+
+
+def test_phase_2_prompt_placeholder_exists():
+    path = REPO_ROOT / "docs" / "phase_prompts" / "PHASE_02_ARCHITECTURE_DECISIONS.md"
+    assert path.is_file(), "Phase 2 architecture-decisions prompt is missing"
+    content = path.read_text(encoding="utf-8")
+    assert "Phase 2" in content
+    assert "BLOCKED" in content or "blocked" in content.lower()
+    assert "No Phase 2 work may begin" in content
 
 
 def test_prompt_inventory_complete():

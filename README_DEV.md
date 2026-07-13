@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Architecture-complete / pre-prototype
-**Phase:** 1 — Repository and Agent-Control Bootstrap
+**Current status:** Architecture-complete / pre-prototype; Phase 1 closure candidate
+**Phase:** 1 - Repository and Agent-Control Bootstrap; Phase 2 blocked pending Phase 1 acceptance
 
 ---
 
@@ -17,8 +17,9 @@
 git clone <repo-url>
 cd Guerilla
 
-# Create virtual environment and install all dependencies
-uv sync --extra dev
+# Verify the committed lockfile and install all dependencies without resolving
+uv lock --check
+uv sync --frozen --extra dev
 
 # Verify installation
 uv run python -c "import guerilla; print(guerilla.__version__)"
@@ -50,21 +51,32 @@ uv run pytest -v               # verbose output
 uv build                      # source distribution + wheel
 
 # Full validation sequence
-uv run ruff format --check . && uv run ruff check . && uv run mypy src tests && uv run pytest && uv build
+uv lock --check
+uv sync --frozen --extra dev
+uv run ruff format --check .
+uv run ruff check .
+uv run mypy src tests
+uv run pytest
+uv build
 ```
 
 ## Isolated Wheel Smoke Test
 
-```bash
+```powershell
 # Build the wheel
 uv build
 
-# Install in a clean environment and verify
-uv run pip install dist/*.whl --force-reinstall --no-deps
-python -c "import guerilla; print(guerilla.__version__)"
-guerilla --version
-guerilla --help
-guerilla version --json
+# Install in a clean environment and verify from outside the repository
+$wheel = (Get-Item dist\*.whl | Select-Object -First 1).FullName
+$wheelVenv = Join-Path ([System.IO.Path]::GetTempPath()) ("guerilla-wheel-test-" + [System.Guid]::NewGuid())
+uv venv $wheelVenv
+uv pip install --python (Join-Path $wheelVenv "Scripts\python.exe") $wheel --no-deps
+Push-Location ([System.IO.Path]::GetTempPath())
+& (Join-Path $wheelVenv "Scripts\python.exe") -c "import guerilla; print(guerilla.__version__)"
+& (Join-Path $wheelVenv "Scripts\guerilla.exe") --version
+& (Join-Path $wheelVenv "Scripts\guerilla.exe") --help
+& (Join-Path $wheelVenv "Scripts\guerilla.exe") version --json
+Pop-Location
 
 # Confirm no workspace, graph, database, cache, or external-state files are created
 ```
@@ -73,8 +85,7 @@ guerilla version --json
 
 ```bash
 # Verify architecture source digests match the manifest
-sha256sum docs/architecture/*.md docs/rationale/*.md
-# Compare against docs/architecture/README.md
+uv run pytest tests/repository/test_repository_contract.py -k source_digests
 ```
 
 ## Phase Discipline
@@ -97,7 +108,7 @@ Each phase completion must report:
 
 ## Phase 2 Handoff
 
-After Phase 1 completes:
+After Phase 1 closure is accepted:
 
 1. Confirm repository baseline passes all repository-contract tests.
 2. Verify architecture sources are present, classified, and hash-verified.

@@ -1,6 +1,6 @@
 # Codex Build Plan
 
-**Status:** PLACEHOLDER -- cross-phase (all phases)
+**Status:** PLACEHOLDER -- cross-phase (Phase 1 closure candidate)
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
@@ -19,7 +19,7 @@ Track the complete build sequence from repository bootstrap through research rel
 
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
-| A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phase 1 in progress |
+| A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phase 1 closure candidate; Phase 2 blocked pending acceptance |
 | B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | BLOCKED |
 | C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | BLOCKED |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
@@ -31,8 +31,8 @@ Track the complete build sequence from repository bootstrap through research rel
 
 | Phase | Name | Gate | Status |
 |---|---|---|---|
-| 1 | Repository and Agent-Control Bootstrap | A | IN PROGRESS |
-| 2 | Architecture Decisions | A | PENDING |
+| 1 | Repository and Agent-Control Bootstrap | A | CLOSURE CANDIDATE |
+| 2 | Architecture Decisions | A | BLOCKED |
 | 3 | Machine Contracts | A | PENDING |
 | 4 | Conformance Fixtures | A | PENDING |
 | 5 | Codec, Config, Identifiers | B | PENDING |
@@ -67,4 +67,4 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-No phase beyond Phase 1 has been executed. All phase statuses are PENDING.
+No phase beyond Phase 1 has been executed. Phase 2 remains blocked until Phase 1 closure is accepted with linked validation evidence.
