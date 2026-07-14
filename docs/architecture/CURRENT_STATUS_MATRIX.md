@@ -3,7 +3,9 @@
 **Status:** Gate B complete -- Kernel Ready
 **Last updated:** 2026-07-14
 **Current baseline:** `05183d61fecc668362e145624385832f50851f31`
-**Evidence:** `docs/GATE_B_COMPLETION_REPORT.md`, PR #1 merged to `main`
+**Evidence:** [Gate B completion report](../GATE_B_COMPLETION_REPORT.md), [PR #1](https://github.com/paragon-ux/Guerilla/pull/1) merged to `main` as [`05183d6`](https://github.com/paragon-ux/Guerilla/commit/05183d61fecc668362e145624385832f50851f31)
+
+**Hosted CI evidence:** [Gate A closure](https://github.com/paragon-ux/Guerilla/actions/runs/29302019930), [Phase 5](https://github.com/paragon-ux/Guerilla/actions/runs/29302731597), [Phase 6](https://github.com/paragon-ux/Guerilla/actions/runs/29303454247), [Phase 7](https://github.com/paragon-ux/Guerilla/actions/runs/29304114169), [Phase 8](https://github.com/paragon-ux/Guerilla/actions/runs/29304560354), [final Gate B PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29363456584)
 
 ---
 
@@ -26,9 +28,9 @@ empirical evaluation are implemented.
 | Frozen contracts and schemas | 90% | Gate A complete; schemas, registries, fixtures, and decision vectors are frozen for current protocol `0.2.0` |
 | Protocol design | 75% | GLCP core contracts exist; runtime transport bindings and parity tests remain future work |
 | Implementation design | 80% | Gate plan, storage/recovery model, state-boundary model, and test matrix are current through Gate B |
-| Reference implementation | 40% | Local graph kernel is implemented; continuity MVP behavior remains pending |
+| Reference implementation | 45-50% | Local graph kernel layers are substantially implemented; continuity orchestration remains pending |
 | Adapter SDK and integrations | 0% | Phase 9 synthetic adapter SDK has not started; real adapters remain prohibited |
-| Conformance and kernel testing | 60% | Gate A conformance and Gate B kernel/security/crash tests pass; adapter/projection/security/performance suites remain planned |
+| Conformance and kernel testing | 50-60% | Gate A conformance and Gate B kernel/security/crash tests pass; adapter, projection, transport interoperability, and performance suites remain planned |
 | Empirical evaluation | 0% | No pilots, benchmarks, or comparative evaluation have been run |
 | Production readiness | 5% | Local kernel durability and authority checks exist; operational hardening, isolation, archive, backup/restore, and threat-model completion remain future phases |
 
