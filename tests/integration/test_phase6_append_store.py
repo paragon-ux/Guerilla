@@ -274,6 +274,37 @@ def test_unknown_critical_graph_member_extension_rejected(
     assert store.replay().graph_revision == 0
 
 
+def test_known_extension_payload_extensions_key_is_safe_json(
+    contracts: ContractBundle, tmp_path: Path
+) -> None:
+    store, workspace_id = _initialized_store(tmp_path, contracts)
+    node = _node(_ids(), workspace_id, random_b=66)
+    node["extensions"] = {
+        "dev.guerilla.core-fixtures": {
+            "critical": False,
+            "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c900",
+            "value": {
+                "extensions": {
+                    "example.unknown.critical": {
+                        "critical": True,
+                        "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c901",
+                        "value": {},
+                    }
+                }
+            },
+        }
+    }
+    node["record_hash"] = record_hash(node)
+
+    assert contracts.validate("node.schema.json", node).valid
+    commit = store.append_transaction([node], actor=_actor(), created_at=TS, committed_at=TS)
+    replay = store.replay()
+
+    assert replay.graph_revision == 1
+    assert commit["committed_record_ids"] == [node["node_id"]]
+    assert replay.nodes[node["node_id"]]["extensions"] == node["extensions"]
+
+
 def test_replay_rejects_crlf_graph_records(contracts: ContractBundle, tmp_path: Path) -> None:
     store, workspace_id = _initialized_store(tmp_path, contracts)
     store.append_transaction(

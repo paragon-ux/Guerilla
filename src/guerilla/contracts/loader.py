@@ -47,18 +47,8 @@ def _json_pointer(parts: list[str]) -> str:
     return "/" + "/".join(escaped)
 
 
-def _iter_extension_maps(instance: Any) -> list[dict[str, Any]]:
-    maps: list[dict[str, Any]] = []
-    if isinstance(instance, dict):
-        extensions = instance.get("extensions")
-        if isinstance(extensions, dict):
-            maps.append(extensions)
-        for value in instance.values():
-            maps.extend(_iter_extension_maps(value))
-    elif isinstance(instance, list):
-        for value in instance:
-            maps.extend(_iter_extension_maps(value))
-    return maps
+def _declares_extension_map(schema: dict[str, Any]) -> bool:
+    return "extensions" in schema.get("properties", {})
 
 
 @dataclass(frozen=True, slots=True)
@@ -120,23 +110,28 @@ class ContractBundle:
             issues=issues,
         )
 
-    def assert_supported_extensions(self, instance: Any) -> None:
+    def assert_supported_extensions(self, schema_name: str, instance: Any) -> None:
+        schema = self.schema(schema_name)
+        if not _declares_extension_map(schema) or not isinstance(instance, dict):
+            return
         known_namespaces = {
             str(entry["namespace_id"])
             for entry in self.registries["extension_namespaces.json"]["entries"]
         }
-        for extensions in _iter_extension_maps(instance):
-            for name, extension in extensions.items():
-                if not isinstance(extension, dict):
-                    continue
-                if (
-                    extension.get("critical") is True
-                    and extension.get("namespace_id") not in known_namespaces
-                ):
-                    raise ContractError(
-                        "unknown_critical_extension",
-                        f"unknown critical extension namespace for {name}",
-                    )
+        extensions = instance.get("extensions", {})
+        if not isinstance(extensions, dict):
+            return
+        for name, extension in extensions.items():
+            if not isinstance(extension, dict):
+                continue
+            if (
+                extension.get("critical") is True
+                and extension.get("namespace_id") not in known_namespaces
+            ):
+                raise ContractError(
+                    "unknown_critical_extension",
+                    f"unknown critical extension namespace for {name}",
+                )
 
     def assert_valid(self, schema_name: str, instance: Any) -> None:
         result = self.validate(schema_name, instance)
@@ -149,7 +144,7 @@ class ContractBundle:
             issue = result.issues[0] if result.issues else None
             message = issue.message if issue else f"{schema_name} failed validation"
             raise ContractError("schema_violation", message)
-        self.assert_supported_extensions(instance)
+        self.assert_supported_extensions(schema_name, instance)
 
 
 def load_contract_bundle(root: Path) -> ContractBundle:
