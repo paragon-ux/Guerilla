@@ -7,9 +7,11 @@ from pathlib import Path
 from typing import Any
 
 from guerilla.authority.errors import BoundaryError, IdentityConflictError
+from guerilla.codec import canonical_bytes
 from guerilla.contracts import ContractBundle
 
 REGISTRY_METADATA_KEY = "guerilla_registry"
+OPERATION_CAPABILITIES = frozenset({"observe", "act", "evaluate", "reconcile", "snapshot"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -31,6 +33,11 @@ class BoundaryRegistry:
     def register(self, boundary: dict[str, Any]) -> None:
         self.contracts.assert_valid("state_boundary.schema.json", boundary)
         boundary_id = str(boundary["state_boundary_id"])
+        existing = self.boundaries.get(boundary_id)
+        if existing is not None:
+            if canonical_bytes(existing) == canonical_bytes(boundary):
+                return
+            raise BoundaryError("duplicate_id", "state boundary id is already registered")
         self._reject_ambiguous_writer(boundary)
         self.boundaries[boundary_id] = boundary
 
@@ -72,7 +79,15 @@ class BoundaryRegistry:
                 continue
             existing_namespaces = set(existing.get("resource_namespaces", []))
             existing_roots = {_normalize_root(root) for root in existing.get("permitted_roots", [])}
-            if candidate_namespaces & existing_namespaces or candidate_roots & existing_roots:
+            candidate_endpoints = set(candidate.get("permitted_endpoints", []))
+            existing_endpoints = set(existing.get("permitted_endpoints", []))
+            if (
+                _writer_scope_is_unbounded(candidate)
+                or _writer_scope_is_unbounded(existing)
+                or candidate_namespaces & existing_namespaces
+                or candidate_endpoints & existing_endpoints
+                or _root_sets_overlap(candidate_roots, existing_roots)
+            ):
                 raise BoundaryError("ambiguous_authority", "overlapping primary write boundary")
 
     @staticmethod
@@ -110,14 +125,35 @@ class AdapterIdentityRegistry:
     def register(self, descriptor: dict[str, Any]) -> None:
         self.contracts.assert_valid("adapter_descriptor.schema.json", descriptor)
         for boundary in descriptor["state_boundaries"]:
+            if boundary["system_id"] != descriptor["system_id"]:
+                raise BoundaryError(
+                    "state_boundary_violation",
+                    "adapter boundary system does not match descriptor system",
+                )
             if str(boundary["state_boundary_id"]) not in self.boundary_registry.boundaries:
                 self.boundary_registry.register(boundary)
-        known_boundaries = set(self.boundary_registry.boundaries)
+        known_boundaries = self.boundary_registry.boundaries
         for capability in descriptor["capabilities"]:
+            capability_value = str(capability["capability"])
             for boundary_id in capability["state_boundary_ids"]:
                 if boundary_id not in known_boundaries:
                     raise BoundaryError(
                         "state_boundary_violation", "capability references unknown boundary"
+                    )
+                boundary = known_boundaries[str(boundary_id)]
+                if boundary["system_id"] != descriptor["system_id"]:
+                    raise BoundaryError(
+                        "state_boundary_violation",
+                        "capability boundary system does not match descriptor system",
+                    )
+                if (
+                    capability.get("supported") is True
+                    and capability_value in OPERATION_CAPABILITIES
+                    and capability_value not in boundary["permitted_operations"]
+                ):
+                    raise BoundaryError(
+                        "state_boundary_violation",
+                        "capability exceeds boundary permitted operations",
                     )
         self.adapters[str(descriptor["adapter_id"])] = descriptor
 
@@ -204,3 +240,23 @@ def _identity_key(identity: dict[str, Any]) -> tuple[str, str, str, str, str, st
 
 def _normalize_root(root: str) -> str:
     return str(Path(root).resolve(strict=False))
+
+
+def _root_sets_overlap(left: set[str], right: set[str]) -> bool:
+    for left_root in left:
+        left_path = Path(left_root)
+        for right_root in right:
+            right_path = Path(right_root)
+            if left_path == right_path:
+                return True
+            if right_path in left_path.parents or left_path in right_path.parents:
+                return True
+    return False
+
+
+def _writer_scope_is_unbounded(boundary: dict[str, Any]) -> bool:
+    return not (
+        boundary.get("permitted_roots")
+        or boundary.get("permitted_endpoints")
+        or boundary.get("resource_namespaces")
+    )

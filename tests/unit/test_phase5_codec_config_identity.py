@@ -198,6 +198,17 @@ def test_protocol_validation_rejects_unknown_critical_extension():
     validate_protocol_request(request, contracts)
 
 
+def test_protocol_validation_rejects_calendar_invalid_timestamp():
+    contracts = load_contract_bundle(REPO_ROOT)
+    request = _valid_fixture("valid.protocol_request")
+    request["sent_at"] = "2026-02-31T00:00:00Z"
+
+    with pytest.raises(ContractError) as exc_info:
+        validate_protocol_request(request, contracts)
+
+    assert exc_info.value.code == "invalid_calendar_date"
+
+
 def test_config_loads_and_fails_closed(tmp_path: Path) -> None:
     config_path = tmp_path / ".guerilla" / "config.toml"
     config_path.parent.mkdir()

@@ -224,6 +224,33 @@ def test_boundary_operations_scope_and_ambiguous_writers(
         registry.register(competing_writer)
     assert ambiguous.value.code == "ambiguous_authority"
 
+    nested_writer = _boundary(
+        ids,
+        system_id=boundary["system_id"],
+        operations=["act"],
+        roots=[str(tmp_path / "allowed" / "nested")],
+        random_b=33,
+    )
+    with pytest.raises(BoundaryError) as nested:
+        registry.register(nested_writer)
+    assert nested.value.code == "ambiguous_authority"
+
+
+def test_boundary_registration_rejects_duplicate_id_changes(
+    contracts: ContractBundle,
+) -> None:
+    ids = IdentifierGenerator()
+    registry = BoundaryRegistry(contracts=contracts)
+    boundary = _boundary(ids, operations=["observe"], namespaces=["repo"], random_b=35)
+    registry.register(boundary)
+    registry.register(dict(boundary))
+
+    widened = dict(boundary)
+    widened["permitted_operations"] = ["observe", "act"]
+    with pytest.raises(BoundaryError) as duplicate:
+        registry.register(widened)
+    assert duplicate.value.code == "duplicate_id"
+
 
 def test_adapter_identity_registration_declares_but_does_not_invoke(
     contracts: ContractBundle, tmp_path: Path
@@ -259,6 +286,49 @@ def test_adapter_identity_registration_declares_but_does_not_invoke(
 
     assert descriptor["adapter_id"] in adapter_registry.adapters
     assert not hasattr(adapter_registry, "invoke")
+
+
+def test_adapter_identity_rejects_capability_boundary_escalation(
+    contracts: ContractBundle,
+) -> None:
+    ids = IdentifierGenerator()
+    boundary = _boundary(ids, operations=["observe"], namespaces=["repo"], random_b=45)
+    boundary_registry = BoundaryRegistry(contracts=contracts)
+    boundary_registry.register(boundary)
+    adapter_registry = AdapterIdentityRegistry(
+        contracts=contracts,
+        boundary_registry=boundary_registry,
+    )
+    descriptor = {
+        "adapter_id": str(ids.generate("adapter", now_ms=1_721_000_200_030, random_b=46)),
+        "system_id": boundary["system_id"],
+        "name": "phase8 descriptor",
+        "version": "0.2.0",
+        "trust_model": "trusted_in_process_python",
+        "state_boundaries": [boundary],
+        "capabilities": [
+            {
+                "capability": "act",
+                "supported": True,
+                "state_boundary_ids": [boundary["state_boundary_id"]],
+            }
+        ],
+        "authentication": {"required": False, "credential_storage": "none"},
+        "limitations": ["registration only"],
+        "extensions": {},
+    }
+
+    with pytest.raises(BoundaryError) as escalation:
+        adapter_registry.register(descriptor)
+    assert escalation.value.code == "state_boundary_violation"
+
+    descriptor["capabilities"][0]["capability"] = "observe"
+    descriptor["system_id"] = str(
+        ids.generate("external_system", now_ms=1_721_000_200_021, random_b=47)
+    )
+    with pytest.raises(BoundaryError) as system_mismatch:
+        adapter_registry.register(descriptor)
+    assert system_mismatch.value.code == "state_boundary_violation"
 
 
 def test_external_identity_lifecycle_preserves_revisions_and_conflicts(

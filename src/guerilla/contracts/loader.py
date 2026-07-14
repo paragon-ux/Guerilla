@@ -47,6 +47,20 @@ def _json_pointer(parts: list[str]) -> str:
     return "/" + "/".join(escaped)
 
 
+def _iter_extension_maps(instance: Any) -> list[dict[str, Any]]:
+    maps: list[dict[str, Any]] = []
+    if isinstance(instance, dict):
+        extensions = instance.get("extensions")
+        if isinstance(extensions, dict):
+            maps.append(extensions)
+        for value in instance.values():
+            maps.extend(_iter_extension_maps(value))
+    elif isinstance(instance, list):
+        for value in instance:
+            maps.extend(_iter_extension_maps(value))
+    return maps
+
+
 @dataclass(frozen=True, slots=True)
 class ContractBundle:
     """Loaded schema/registry bundle with independent validators."""
@@ -106,6 +120,24 @@ class ContractBundle:
             issues=issues,
         )
 
+    def assert_supported_extensions(self, instance: Any) -> None:
+        known_namespaces = {
+            str(entry["namespace_id"])
+            for entry in self.registries["extension_namespaces.json"]["entries"]
+        }
+        for extensions in _iter_extension_maps(instance):
+            for name, extension in extensions.items():
+                if not isinstance(extension, dict):
+                    continue
+                if (
+                    extension.get("critical") is True
+                    and extension.get("namespace_id") not in known_namespaces
+                ):
+                    raise ContractError(
+                        "unknown_critical_extension",
+                        f"unknown critical extension namespace for {name}",
+                    )
+
     def assert_valid(self, schema_name: str, instance: Any) -> None:
         result = self.validate(schema_name, instance)
         if result.python_valid != result.rust_valid:
@@ -117,6 +149,7 @@ class ContractBundle:
             issue = result.issues[0] if result.issues else None
             message = issue.message if issue else f"{schema_name} failed validation"
             raise ContractError("schema_violation", message)
+        self.assert_supported_extensions(instance)
 
 
 def load_contract_bundle(root: Path) -> ContractBundle:

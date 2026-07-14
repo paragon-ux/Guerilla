@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any
 
+from guerilla.codec import CanonicalJsonError, normalize_timestamp
 from guerilla.contracts import ContractBundle, ContractError
 
 
@@ -27,6 +28,11 @@ def _reject_unknown_critical_extensions(message: dict[str, Any], contracts: Cont
 
 def validate_protocol_request(message: dict[str, Any], contracts: ContractBundle) -> None:
     contracts.assert_valid("protocol_request.schema.json", message)
+    try:
+        if normalize_timestamp(str(message["sent_at"]), allow_offset=False) != message["sent_at"]:
+            raise ContractError("timestamp_not_canonical", "sent_at must be canonical UTC")
+    except CanonicalJsonError as exc:
+        raise ContractError(exc.code, str(exc)) from exc
     _reject_unknown_critical_extensions(message, contracts)
 
 

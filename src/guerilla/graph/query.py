@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import deque
 from dataclasses import asdict, dataclass
 from typing import Any, Literal
 
@@ -219,10 +220,10 @@ class GraphQuery:
     ) -> tuple[list[str], bool]:
         results: list[str] = []
         visited: set[str] = set()
-        queue: list[tuple[str, int]] = [(start, 0)]
+        queue: deque[tuple[str, int]] = deque([(start, 0)])
         truncated = False
         while queue:
-            current, depth = queue.pop(0)
+            current, depth = queue.popleft()
             if depth >= max_depth:
                 if adjacency.get(current):
                     truncated = True

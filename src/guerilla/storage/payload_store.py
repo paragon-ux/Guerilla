@@ -21,6 +21,8 @@ def write_payload(root: Path, payload: bytes) -> str:
     path = payload_path(root, digest)
     path.parent.mkdir(parents=True, exist_ok=True)
     if path.exists():
+        if payload_hash(path.read_bytes()) != digest:
+            raise StorageError("payload_hash_mismatch", "existing payload hash mismatch")
         return digest
     flags = os.O_CREAT | os.O_EXCL | os.O_WRONLY
     fd = os.open(path, flags)

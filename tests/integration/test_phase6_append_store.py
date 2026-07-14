@@ -6,7 +6,7 @@ from typing import Any
 import pytest
 
 from guerilla.codec import canonical_bytes, parse_raw_json, record_hash
-from guerilla.contracts import ContractBundle, load_contract_bundle
+from guerilla.contracts import ContractBundle, ContractError, load_contract_bundle
 from guerilla.identity import IdentifierGenerator
 from guerilla.storage import (
     GraphStore,
@@ -254,6 +254,43 @@ def test_replay_detects_noncanonical_committed_line(
     assert excinfo.value.code == "noncanonical_jsonl_record"
 
 
+def test_unknown_critical_graph_member_extension_rejected(
+    contracts: ContractBundle, tmp_path: Path
+) -> None:
+    store, workspace_id = _initialized_store(tmp_path, contracts)
+    node = _node(_ids(), workspace_id, random_b=65)
+    node["extensions"] = {
+        "example.unknown.critical": {
+            "critical": True,
+            "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c901",
+            "value": {},
+        }
+    }
+
+    with pytest.raises(ContractError) as excinfo:
+        store.append_transaction([node], actor=_actor(), created_at=TS, committed_at=TS)
+
+    assert excinfo.value.code == "unknown_critical_extension"
+    assert store.replay().graph_revision == 0
+
+
+def test_replay_rejects_crlf_graph_records(contracts: ContractBundle, tmp_path: Path) -> None:
+    store, workspace_id = _initialized_store(tmp_path, contracts)
+    store.append_transaction(
+        [_node(_ids(), workspace_id, random_b=67)],
+        actor=_actor(),
+        created_at=TS,
+        committed_at=TS,
+    )
+    active = tmp_path / ".guerilla" / "graph" / "active.jsonl"
+    active.write_bytes(active.read_bytes().replace(b"\n", b"\r\n"))
+
+    with pytest.raises(ReplayError) as excinfo:
+        store.replay()
+
+    assert excinfo.value.code == "noncanonical_jsonl_record"
+
+
 def test_payload_store_verifies_content_addressed_bytes(
     contracts: ContractBundle, tmp_path: Path
 ) -> None:
@@ -268,6 +305,9 @@ def test_payload_store_verifies_content_addressed_bytes(
 
     assert read_payload(tmp_path, digest) == payload
     payload_path(tmp_path, digest).write_bytes(b"tampered")
+    with pytest.raises(StorageError) as write_excinfo:
+        write_payload(tmp_path, payload)
+    assert write_excinfo.value.code == "payload_hash_mismatch"
     with pytest.raises(StorageError) as excinfo:
         read_payload(tmp_path, digest)
     assert excinfo.value.code == "payload_hash_mismatch"

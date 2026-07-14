@@ -75,10 +75,10 @@ def _complete_lines(active: Path) -> tuple[list[bytes], bool]:
     if not data:
         return [], False
     complete = data.endswith(b"\n")
-    lines = data.splitlines(keepends=False)
-    if not complete:
-        lines = lines[:-1]
-    return lines, not complete
+    parts = data.split(b"\n")
+    if complete:
+        return parts[:-1], False
+    return parts[:-1], True
 
 
 def _parse_record(raw_line: bytes) -> dict[str, Any]:

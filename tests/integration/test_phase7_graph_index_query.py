@@ -284,6 +284,21 @@ def test_bounded_traversal_truncates_and_index_matches(
     assert index_walk.truncated is True
 
 
+def test_bounded_traversal_handles_wide_custom_limits() -> None:
+    node_ids = [f"node-{index:05d}" for index in range(12_000)]
+    adjacency = {"root": set(node_ids)}
+
+    items, truncated = GraphQuery._bounded_walk(
+        adjacency,
+        "root",
+        max_depth=1,
+        limit=len(node_ids),
+    )
+
+    assert items == node_ids
+    assert truncated is False
+
+
 @given(data=st.data(), node_count=st.integers(min_value=2, max_value=6))
 @settings(max_examples=20, deadline=None)
 def test_property_generated_dag_rebuilds_and_rejects_reverse_cycle(
