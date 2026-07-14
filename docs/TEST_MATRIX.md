@@ -1,13 +1,13 @@
 # Test Matrix
 
-**Status:** Gate B evidence current -- Phases 1-6 PASS locally
+**Status:** Gate B evidence current -- Phases 1-7 PASS locally
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Phase 6 append storage and replay tests are passing locally.
-> DAG integrity, indexing, authority, security, performance, adapter,
-> projection, and transport tests remain planned until their owning phases.
+> **WARNING:** Phase 7 DAG integrity and index tests are passing locally.
+> Authority, security, performance, adapter, projection, and transport tests
+> remain planned until their owning phases.
 
 ---
 
@@ -87,14 +87,23 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 ### DAG Tests (Phase 7)
 | Test ID | Description | Phase | Status | Evidence |
 |---|---|---|---|---|
-| DAG-001 | Linear ancestry | 7 | PLANNED | -- |
-| DAG-002 | Branching | 7 | PLANNED | -- |
-| DAG-003 | Multi-parent convergence | 7 | PLANNED | -- |
-| DAG-004 | Supersession | 7 | PLANNED | -- |
-| DAG-005 | Direct cycle rejection | 7 | PLANNED | -- |
-| DAG-006 | Self-loop rejection | 7 | PLANNED | -- |
-| DAG-007 | Missing endpoints rejected | 7 | PLANNED | -- |
-| DAG-008 | Reified symmetric relationships | 7 | PLANNED | -- |
+| DAG-001 | Linear ancestry | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| DAG-002 | Branching | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| DAG-003 | Multi-parent convergence | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| DAG-004 | Supersession | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| DAG-005 | Direct cycle rejection | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| DAG-006 | Self-loop rejection | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| DAG-007 | Missing endpoints rejected | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| DAG-008 | Reified symmetric relationships | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+
+### Index and Query Tests (Phase 7)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| IXQ-001 | Exact-revision node, edge, and commit reads declare revision and commit hash | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| IXQ-002 | Replay and SQLite index heads/traversal query results agree | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| IXQ-003 | Deleted or corrupt index rebuilds from authoritative replay | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| IXQ-004 | Ahead/stale/corrupt index status is detected without changing graph truth | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
+| IXQ-005 | Bounded traversal truncates explicitly | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
 
 ### Adapter Tests (Phase 9-12)
 ### Action-Recovery Tests (Phase 11-12)
@@ -117,8 +126,8 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime DAG, authority, security, performance, adapter, projection, and transport
+Runtime authority, security, performance, adapter, projection, and transport
 rows remain PLANNED until their owning phases. Gate A evidence does not claim
-kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims only the
-local append store, payload store, writer lock, replay, and incomplete-tail
-recovery behavior covered by the listed tests.
+kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims local
+append/replay behavior; Phase 7 evidence claims DAG integrity and rebuildable
+index/query behavior covered by the listed tests.

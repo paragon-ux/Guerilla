@@ -476,6 +476,8 @@ def test_relationship_registry_preserves_phase2_directions():
         entry = relationships[relationship]
         assert entry["direction"] == direction
         assert entry["direct_edge_must_remain_acyclic"] is True
+        assert entry["from_node_types"], f"{relationship} must declare from-node types"
+        assert entry["to_node_types"], f"{relationship} must declare to-node types"
 
 
 def test_uuidv7_timestamp_number_and_authority_rules_are_machine_checkable():

@@ -339,7 +339,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 6 permits storage plus Phase 5 primitive packages only."""
+    """Phase 7 permits graph/index plus Phase 5-6 primitive and storage packages."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {
@@ -350,6 +350,8 @@ def test_no_prohibited_runtime_modules():
         "src/guerilla/payloads",
         "src/guerilla/identity",
         "src/guerilla/storage",
+        "src/guerilla/graph",
+        "src/guerilla/index",
     }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)
@@ -362,7 +364,7 @@ def test_no_prohibited_runtime_modules():
             or rel_posix == "src/guerilla/cli/main.py"
         ):
             continue
-        raise AssertionError(f"Prohibited post-Phase-6 runtime module: {rel}")
+        raise AssertionError(f"Prohibited post-Phase-7 runtime module: {rel}")
 
 
 # ── Prompt inventory ──────────────────────────────────────────────────

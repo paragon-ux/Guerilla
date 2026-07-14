@@ -8,6 +8,8 @@
       "direction": "prerequisite -> dependent",
       "from_role": "prerequisite",
       "to_role": "dependent",
+      "from_node_types": ["goal", "artifact", "operation", "event", "evaluation", "decision", "conflict", "snapshot"],
+      "to_node_types": ["goal", "artifact", "operation", "event", "evaluation", "decision", "conflict", "snapshot"],
       "causal": true,
       "direct_edge_must_remain_acyclic": true
     },
@@ -16,6 +18,8 @@
       "direction": "producer -> product",
       "from_role": "producer",
       "to_role": "product",
+      "from_node_types": ["operation", "event"],
+      "to_node_types": ["artifact"],
       "causal": true,
       "direct_edge_must_remain_acyclic": true
     },
@@ -24,6 +28,8 @@
       "direction": "source -> derived",
       "from_role": "source",
       "to_role": "derived",
+      "from_node_types": ["artifact", "snapshot"],
+      "to_node_types": ["artifact"],
       "causal": true,
       "direct_edge_must_remain_acyclic": true
     },
@@ -32,6 +38,8 @@
       "direction": "cause -> effect",
       "from_role": "cause",
       "to_role": "effect",
+      "from_node_types": ["operation", "event"],
+      "to_node_types": ["operation", "event"],
       "causal": true,
       "direct_edge_must_remain_acyclic": true
     },
@@ -40,6 +48,8 @@
       "direction": "evidence -> supported record",
       "from_role": "evidence",
       "to_role": "supported_record",
+      "from_node_types": ["artifact", "event", "evaluation"],
+      "to_node_types": ["goal", "artifact", "operation", "event", "evaluation", "decision", "conflict", "snapshot"],
       "causal": false,
       "direct_edge_must_remain_acyclic": true
     },
@@ -48,6 +58,8 @@
       "direction": "subject -> evaluation",
       "from_role": "subject",
       "to_role": "evaluation",
+      "from_node_types": ["goal", "artifact", "operation", "event", "decision", "conflict", "snapshot"],
+      "to_node_types": ["evaluation"],
       "causal": false,
       "direct_edge_must_remain_acyclic": true
     },
@@ -56,6 +68,8 @@
       "direction": "earlier -> later",
       "from_role": "earlier",
       "to_role": "later",
+      "from_node_types": ["goal", "artifact", "operation", "event", "evaluation", "decision", "conflict", "snapshot"],
+      "to_node_types": ["goal", "artifact", "operation", "event", "evaluation", "decision", "conflict", "snapshot"],
       "causal": false,
       "direct_edge_must_remain_acyclic": true
     },
@@ -64,6 +78,8 @@
       "direction": "unresolved item -> resolution",
       "from_role": "unresolved_item",
       "to_role": "resolution",
+      "from_node_types": ["conflict"],
+      "to_node_types": ["decision"],
       "causal": false,
       "direct_edge_must_remain_acyclic": true
     },
@@ -72,6 +88,8 @@
       "direction": "included source -> snapshot",
       "from_role": "included_source",
       "to_role": "snapshot",
+      "from_node_types": ["goal", "artifact", "operation", "event", "evaluation", "decision", "conflict"],
+      "to_node_types": ["snapshot"],
       "causal": false,
       "direct_edge_must_remain_acyclic": true
     }

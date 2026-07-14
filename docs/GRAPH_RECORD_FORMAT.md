@@ -51,12 +51,21 @@ Member records are ordered for `transaction_hash` as follows:
 Transaction begin and final commit records frame the transaction but are not
 member records. Duplicate member identifiers are rejected before hashing.
 
+Phase 7 validates the ordered member set against the committed graph plus node
+members in the same transaction. Direct edge endpoints must exist, must satisfy
+the relationship registry's endpoint-type restrictions, must not be self-loops,
+and must not create a direct authoritative cycle.
+
 ## Storage Boundary
 
 The final commit record is the durable graph-revision boundary. Replay ignores
 incomplete tails and never re-executes external actions. The durability sequence
 and interruption classifications are frozen in AD-005 and vectorized in
 `docs/decision_vectors/durability.json`.
+
+The rebuildable SQLite index stores canonical record JSON and the graph revision
+where each node or edge committed. It is never part of the authoritative record
+format and can be deleted and rebuilt from `active.jsonl`.
 
 ## Published Vectors
 
@@ -66,5 +75,5 @@ fixture corpus for canonical bytes and hash preimages.
 
 ## Phase Boundary
 
-This document defines byte contracts only. It does not implement a codec,
-append store, archive writer, replay engine, or recovery tool.
+This document defines byte contracts and graph-record ordering. The Phase 7
+index is derived from these records and remains non-authoritative.

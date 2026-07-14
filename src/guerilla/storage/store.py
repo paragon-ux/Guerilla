@@ -18,6 +18,7 @@ from guerilla.codec import (
     transaction_hash_envelope,
 )
 from guerilla.contracts import ContractBundle
+from guerilla.graph import GraphIntegrityError, validate_transaction_integrity
 from guerilla.identity import IdentifierGenerator
 from guerilla.storage.errors import ReplayError, StorageError
 from guerilla.storage.fsync import fsync_directory, fsync_file
@@ -39,6 +40,7 @@ class ReplayResult:
     last_commit_hash: str = ZERO_SHA256
     nodes: dict[str, dict[str, Any]] = field(default_factory=dict)
     edges: dict[str, dict[str, Any]] = field(default_factory=dict)
+    record_revisions: dict[str, int] = field(default_factory=dict)
     commits: list[CommitInfo] = field(default_factory=list)
     warnings: list[str] = field(default_factory=list)
 
@@ -168,6 +170,15 @@ class GraphStore:
             if expected_hash != actual_hash:
                 raise ReplayError("record_hash_mismatch", "record hash mismatch")
             self.contracts.assert_valid(_member_schema(member), member)
+        try:
+            validate_transaction_integrity(
+                committed_nodes=result.nodes,
+                committed_edges=result.edges,
+                members=ordered,
+                registries=self.contracts.registries,
+            )
+        except GraphIntegrityError as exc:
+            raise ReplayError(exc.code, str(exc)) from exc
         envelope = transaction_hash_envelope(
             actor=begin["actor"],
             created_at=begin["created_at"],
@@ -199,6 +210,7 @@ class GraphStore:
                 result.nodes[identifier] = member
             else:
                 result.edges[identifier] = member
+            result.record_revisions[identifier] = int(commit["graph_revision"])
         result.graph_revision = int(commit["graph_revision"])
         result.last_commit_hash = str(commit["commit_hash"])
         result.commits.append(
@@ -239,6 +251,12 @@ class GraphStore:
                 seen.add(identifier)
                 member["record_hash"] = record_hash(member)
                 self.contracts.assert_valid(_member_schema(member), member)
+            validate_transaction_integrity(
+                committed_nodes=head.nodes,
+                committed_edges=head.edges,
+                members=prepared_members,
+                registries=self.contracts.registries,
+            )
             transaction_id = str(self.ids.generate("transaction"))
             commit_id = str(self.ids.generate("commit"))
             begin = {
@@ -301,4 +319,13 @@ class GraphStore:
             fsync_directory(self.active_path.parent)
             staged.unlink()
             fsync_directory(self.tmp_dir)
+            self._refresh_index_after_commit()
             return commit
+
+    def _refresh_index_after_commit(self) -> None:
+        try:
+            from guerilla.index import SQLiteGraphIndex, mark_index_invalid
+
+            SQLiteGraphIndex(self.root).rebuild(self.replay())
+        except Exception as exc:  # pragma: no cover - defensive non-authoritative path
+            mark_index_invalid(self.root, f"{type(exc).__name__}: {exc}")

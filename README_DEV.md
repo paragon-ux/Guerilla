@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate B in progress; Phases 1-6 complete
-**Phase:** 7 next - DAG Integrity, Index, Query
+**Current status:** Gate B in progress; Phases 1-7 complete
+**Phase:** 8 next - Authority, Identity, Boundaries
 
 ---
 
@@ -95,9 +95,10 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
 - **Gate A (Contract Ready) is complete.** Phase 5 implemented deterministic
   codec/config/identifier/hash primitives.
 - Phase 6 implemented local append storage, payload persistence, writer locking,
-  replay, and incomplete-tail recovery only. Phase 7 is next. Do not implement
-  authority registry, adapters, projections, or transports before their owning
-  phases.
+  replay, and incomplete-tail recovery.
+- Phase 7 implemented DAG integrity, graph heads, exact-revision query helpers,
+  and a rebuildable non-authoritative SQLite index. Phase 8 is next. Do not
+  implement adapters, projections, or transports before their owning phases.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -111,11 +112,11 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Phase 7 Handoff
+## Phase 8 Handoff
 
-After Phase 6 completion:
+After Phase 7 completion:
 
-1. Confirm repository, conformance, Phase 5 unit, Phase 6 integration, and Phase 6 crash tests pass.
-2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-6 primitives as frozen Phase 7 inputs.
+1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, and Phase 7 graph/index tests pass.
+2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-7 primitives as frozen Phase 8 inputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
-4. Begin Phase 7 only after Phase 6 hosted CI passes.
+4. Begin Phase 8 only after Phase 7 hosted CI passes.

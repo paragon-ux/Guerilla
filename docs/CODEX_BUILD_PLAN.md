@@ -1,12 +1,12 @@
 # Codex Build Plan
 
-**Status:** Gate B in progress -- Phase 6 PASS
+**Status:** Gate B in progress -- Phase 7 PASS
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
-> **WARNING:** Phase 6 local append storage and replay are implemented. Phases
-> 7+ remain pending; do not treat DAG validation, indexing, authority registry,
+> **WARNING:** Phase 7 DAG integrity and rebuildable SQLite indexing are
+> implemented. Phase 8+ remains pending; do not treat authority registry,
 > adapters, projections, or transports as implemented.
 
 ---
@@ -22,7 +22,7 @@ Track the complete build sequence from repository bootstrap through research rel
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | COMPLETE |
-| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 6 PASS; Phase 7 next |
+| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 7 PASS; Phase 8 next |
 | C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | BLOCKED |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
 | E -- Research Validated | 20-22 | Real heterogeneous pilots, benchmark evidence, reproducible release | BLOCKED |
@@ -39,7 +39,7 @@ Track the complete build sequence from repository bootstrap through research rel
 | 4 | Conformance Fixtures | A | PASS |
 | 5 | Codec, Config, Identifiers | B | PASS |
 | 6 | Append Store, Transactions, Replay | B | PASS |
-| 7 | DAG Integrity, Index, Query | B | PENDING |
+| 7 | DAG Integrity, Index, Query | B | PASS |
 | 8 | Authority, Identity, Boundaries | B | PENDING |
 | 9 | Adapter SDK, Synthetic Systems | C | PENDING |
 | 10 | Observation Ingestion | C | PENDING |
@@ -69,7 +69,7 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-Gate A is complete and Phase 6 has passed local validation. Phase 7 is next.
+Gate A is complete and Phase 7 has passed local validation. Phase 8 is next.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
@@ -77,4 +77,7 @@ contract-loader, protocol-validation, payload-hash, and identifier primitives.
 Phase 6 added local workspace initialization, content-addressed payload
 persistence, writer locking, append transactions, replay, hash-chain
 verification, and incomplete-tail recovery only; it did not add DAG validation,
-indexing, authority registry, adapters, projections, or transports.
+indexing, authority registry, adapters, projections, or transports. Phase 7
+added endpoint validation, cycle rejection, graph-head and exact-revision query
+helpers, and a rebuildable non-authoritative SQLite index; it did not add
+authority registry, adapters, projections, or transports.

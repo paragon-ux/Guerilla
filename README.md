@@ -2,10 +2,11 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Gate B in progress. Phases 1-6 are complete: contracts are
-frozen, deterministic codec/config/identifier/hash primitives exist, and the
-local append store/replay path is implemented. No DAG validator, index,
-authority registry, adapter runtime, projection, or transport exists yet.
+**Current status:** Gate B in progress. Phases 1-7 are complete: contracts are
+frozen, deterministic codec/config/identifier/hash primitives exist, the local
+append store/replay path is implemented, and DAG integrity plus a rebuildable
+SQLite query index exist. No authority registry, adapter runtime, projection,
+or transport exists yet.
 
 ---
 
@@ -39,7 +40,7 @@ Guerilla does **not** own: canonical application content, external database tran
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
 | A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Complete |
-| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 6 complete; Phase 7 next |
+| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 7 complete; Phase 8 next |
 | C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Blocked by Gate B |
 | D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |
 | E — Research Validated | 20–22 | Real heterogeneous pilots, benchmark evidence, reproducible release | Blocked by Gate D |
@@ -66,10 +67,9 @@ uv run pytest
 
 ## Non-Claims
 
-- No DAG validator, graph index/query service, authority registry, adapter
-  runtime, projection engine, or transport exists yet. The implemented runtime
-  surface is limited to Phase 5 primitives and Phase 6 local append
-  storage/replay.
+- No authority registry, adapter runtime, projection engine, or transport exists
+  yet. The implemented runtime surface is limited to Phase 5 primitives, Phase
+  6 local append storage/replay, and Phase 7 DAG/index/query behavior.
 - Schemas, registries, conformance fixtures, and Phase 5 primitives are frozen
   for later Gate B phases.
 - No adapters, integrations, benchmarks, or empirical results are available.

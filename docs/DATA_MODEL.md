@@ -66,6 +66,9 @@ Edge endpoints must be node identifiers. Same-transaction endpoints are valid
 only when the referenced node member is part of the same canonical transaction
 member set. Self-loops, missing endpoints, incompatible endpoint types, and
 cycle-producing direct edges are rejected by later runtime validation phases.
+Phase 7 enforces these rules before staging a transaction. Endpoint compatibility
+is read from `registries/relationship_types.json`; missing compatibility data
+blocks mutation.
 
 ## Identifiers and Revisions
 
@@ -90,8 +93,13 @@ post-redaction bytes only.
 `authority_class: derived_non_authoritative`. Projections, manifests, snapshots,
 indexes, and caches never replace authoritative graph records.
 
+The Phase 7 SQLite index is explicitly rebuildable from authoritative replay. It
+may serve queries only when its source graph revision and commit hash match the
+durable graph.
+
 ## Phase Boundary
 
-This document publishes contracts only. It does not implement codecs,
-identifier generation, graph storage, adapters, transports, projections, or
-runtime validators.
+This document publishes contracts and current phase boundaries. Runtime graph
+storage, DAG validation, and indexing are implemented by Phases 6-7; adapters,
+transports, projections, and Phase 8 authority/boundary enforcement remain
+outside this document.
