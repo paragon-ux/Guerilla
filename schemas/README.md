@@ -1,37 +1,45 @@
 # Schemas
 
-**Status:** PLACEHOLDER -- owned by Phase 3
-**Owner phase:** Phase 3 (MACHINE_CONTRACTS)
+**Status:** FROZEN -- Phase 3 complete
+**Owner phase:** Phase 3 (Machine Contracts)
+**Contract version:** `0.2.0`
+**Draft:** JSON Schema Draft 2020-12
 
-> **WARNING:** No JSON Schemas are frozen in Phase 1. The expected Phase 3 contracts are listed below.
+The schema set encodes the frozen Phase 2 decisions for canonical JSON,
+UUIDv7-prefixed identifiers, timestamps, integer bounds, authority envelopes,
+state boundaries, payload references, extension handling, graph record types,
+protocol envelopes, and derived-versus-authoritative distinctions.
 
----
+## Published Schemas
 
-## Expected Phase 3 Contracts
+| Schema | Purpose |
+|---|---|
+| `common.schema.json` | Shared identifiers, timestamps, hashes, enums, safe JSON, extensions |
+| `actor.schema.json` | Actor attribution; not an authority grant |
+| `authority.schema.json` | Local authorization profile and external authority envelope |
+| `external_identity.schema.json` | Authority-scoped external identity tuple |
+| `payload_ref.schema.json` | Payload retention, redaction, hash, and external references |
+| `provenance.schema.json` | Source, causation, observation, and external identity metadata |
+| `node.schema.json` | Immutable authoritative node record |
+| `edge.schema.json` | Immutable authoritative edge record |
+| `transaction_begin.schema.json` | Transaction begin frame |
+| `transaction_commit.schema.json` | Final commit-record frame and commit hash |
+| `graph_header.schema.json` | Authoritative graph header |
+| `archive_seal.schema.json` | Archive segment seal and integrity hash |
+| `state_boundary.schema.json` | External state-boundary declaration |
+| `capability.schema.json` | Adapter capability declaration |
+| `adapter_descriptor.schema.json` | Trusted in-process MVP adapter descriptor |
+| `protocol_envelope.schema.json` | GLCP message envelope |
+| `protocol_response.schema.json` | GLCP response body |
+| `error.schema.json` | Stable machine-readable error object |
+| `extension_namespace.schema.json` | Registered extension namespace metadata |
+| `derived_projection.schema.json` | Non-authoritative projection descriptor |
 
-```text
-schemas/
-├── graph-header.schema.json
-├── transaction.schema.json
-├── commit.schema.json
-├── node.schema.json
-├── edge.schema.json
-├── authority-envelope.schema.json
-├── state-boundary.schema.json
-├── provenance.schema.json
-├── payload-reference.schema.json
-├── adapter-descriptor.schema.json
-├── adapter-observe.schema.json
-├── adapter-act.schema.json
-├── adapter-evaluate.schema.json
-├── adapter-reconcile.schema.json
-├── conflict.schema.json
-├── snapshot.schema.json
-├── projection-metadata.schema.json
-├── protocol-envelope.schema.json
-├── protocol-request.schema.json
-├── protocol-response.schema.json
-└── protocol-error.schema.json
-```
+## Compatibility Rules
 
-All schemas use JSON Schema Draft 2020-12 and are versioned. None are frozen or normative until Phase 3 publishes and validates them.
+Unknown critical extension fields are rejected. Unknown optional extension fields
+may be ignored only under negotiated compatibility rules and may not redefine
+core semantics, grant authority, bypass DAG validation, or make derived data
+authoritative.
+
+No runtime implementation is provided by these schemas.

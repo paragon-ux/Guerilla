@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/edge.schema.json",
+  "title": "Guerilla edge record",
+  "type": "object",
+  "required": [
+    "record_type",
+    "protocol_version",
+    "workspace_id",
+    "edge_id",
+    "relationship_type",
+    "from_node_id",
+    "to_node_id",
+    "created_at",
+    "actor",
+    "provenance",
+    "metadata",
+    "extensions",
+    "record_hash"
+  ],
+  "properties": {
+    "record_type": {
+      "const": "edge"
+    },
+    "protocol_version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+    },
+    "workspace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/workspaceId"
+    },
+    "edge_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/edgeId"
+    },
+    "relationship_type": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/coreOrNamespacedRelationshipType"
+    },
+    "from_node_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+    },
+    "to_node_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+    },
+    "created_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "actor": {
+      "$ref": "https://guerilla.dev/schemas/actor.schema.json"
+    },
+    "provenance": {
+      "$ref": "https://guerilla.dev/schemas/provenance.schema.json"
+    },
+    "metadata": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    },
+    "record_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    }
+  },
+  "additionalProperties": false
+}

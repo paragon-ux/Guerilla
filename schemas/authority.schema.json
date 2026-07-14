@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/authority.schema.json",
+  "title": "Guerilla authority envelope",
+  "type": "object",
+  "required": ["authority_type", "principal_id", "profile"],
+  "properties": {
+    "authority_type": {
+      "enum": ["guerilla", "external"]
+    },
+    "principal_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "profile": {
+      "enum": ["local-owner-v1"]
+    },
+    "system_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/externalSystemId"
+    },
+    "state_boundary_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+    },
+    "authorized_operations": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "graph.read",
+          "graph.append",
+          "adapter.observe",
+          "adapter.act",
+          "conflict.decide",
+          "snapshot.read",
+          "payload.read",
+          "admin.configure"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "metadata": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "authority_type": {
+            "const": "external"
+          }
+        },
+        "required": ["authority_type"]
+      },
+      "then": {
+        "required": ["system_id", "state_boundary_id"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

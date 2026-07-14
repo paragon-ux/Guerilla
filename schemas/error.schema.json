@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/error.schema.json",
+  "title": "Guerilla error object",
+  "type": "object",
+  "required": ["code", "message", "retriable", "details"],
+  "properties": {
+    "code": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/errorCode"
+    },
+    "message": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "retriable": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/retryClassification"
+    },
+    "details": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    },
+    "evidence_node_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+      },
+      "uniqueItems": true
+    },
+    "state_boundary_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+    },
+    "current_graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "retry_after": {
+      "oneOf": [
+        {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+        },
+        {
+          "type": "string",
+          "pattern": "^P(T([0-9]+H)?([0-9]+M)?([0-9]+S)?)$"
+        }
+      ]
+    },
+    "documentation_ref": {
+      "type": "string",
+      "maxLength": 2048
+    }
+  },
+  "additionalProperties": false
+}

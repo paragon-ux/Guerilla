@@ -1,0 +1,57 @@
+{
+  "decision": "AD-002",
+  "uuidv7_regex": "^[a-z0-9]+_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+  "prefixes": {
+    "workspace": "grw_",
+    "logical_entity": "gri_",
+    "node": "grn_",
+    "edge": "gre_",
+    "transaction": "grt_",
+    "commit": "grm_",
+    "graph_segment": "gsg_",
+    "snapshot": "grs_",
+    "adapter": "gra_",
+    "projection": "grp_",
+    "protocol_message": "gmsg_",
+    "state_boundary": "gsb_",
+    "external_system": "gxs_",
+    "extension_namespace": "gxe_"
+  },
+  "valid": [
+    {
+      "family": "node",
+      "id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003"
+    },
+    {
+      "family": "edge",
+      "id": "gre_018f1f8e-5d4b-7fff-bfff-0c9b0b23c004"
+    }
+  ],
+  "invalid": [
+    {
+      "id": "grn_018f1f8e-5d4b-4a10-8a20-0c9b0b23c003",
+      "reason": "wrong_uuid_version"
+    },
+    {
+      "id": "grn_018f1f8e-5d4b-7a10-ca20-0c9b0b23c003",
+      "reason": "wrong_uuid_variant"
+    },
+    {
+      "id": "GRN_018F1F8E-5D4B-7A10-8A20-0C9B0B23C003",
+      "reason": "uppercase_not_canonical"
+    },
+    {
+      "id": "grn_018f1f8e5d4b7a108a200c9b0b23c003",
+      "reason": "hyphenless_uuid"
+    },
+    {
+      "id": "01HF7YAT00Z9M9P1K7A8V7E4M0",
+      "reason": "unsupported_family"
+    }
+  ],
+  "collision_policy": {
+    "generated_collision": "regenerate_before_validation",
+    "submitted_duplicate": "duplicate_id",
+    "legacy_import": "preserve_as_external_identity_or_migration_metadata"
+  }
+}

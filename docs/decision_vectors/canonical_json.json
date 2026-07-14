@@ -1,0 +1,31 @@
+{
+  "decision": "AD-001",
+  "canonicalization_id": "guerilla-cjson-v1",
+  "vectors": [
+    {
+      "name": "unicode_control_and_key_order",
+      "input": {
+        "z": "e\u0301",
+        "a": "\u00e9",
+        "control": "\u0001\b\t\n\f\r",
+        "solidus": "/",
+        "quote": "\"\\",
+        "emoji": "\ud83d\ude00"
+      },
+      "expected_canonical_hex": "7b2261223a22c3a9222c22636f6e74726f6c223a225c75303030315c625c745c6e5c665c72222c22656d6f6a69223a22f09f9880222c2271756f7465223a225c225c5c222c22736f6c69647573223a222f222c227a223a2265cc81227d",
+      "expected_vector_digest": "dc4144fa9d802003ceb09fe7f0f01a2af4fdffa27bd301eebadf14d4f29a152c",
+      "digest_preimage_prefix": "guerilla.cjson.vector.v1\\n"
+    },
+    {
+      "name": "timestamp_fraction_normalization",
+      "input_timestamp": "2026-07-13T09:30:05.120000000-04:00",
+      "expected_canonical_timestamp": "2026-07-13T13:30:05.12Z"
+    },
+    {
+      "name": "integer_bounds",
+      "valid_min": -9007199254740991,
+      "valid_max": 9007199254740991,
+      "invalid_forms": ["01", "+1", "-0", "1.0", "1e0", "NaN", "Infinity"]
+    }
+  ]
+}

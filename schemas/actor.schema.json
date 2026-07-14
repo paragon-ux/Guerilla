@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/actor.schema.json",
+  "title": "Guerilla actor attribution",
+  "type": "object",
+  "required": ["actor_id", "actor_kind"],
+  "properties": {
+    "actor_id": {
+      "anyOf": [
+        {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/entityId"
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      ]
+    },
+    "actor_kind": {
+      "enum": ["human", "model", "tool", "service", "automation", "system", "unknown"]
+    },
+    "display_name": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "provider": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "session_id": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "delegated_principal": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "metadata": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    }
+  },
+  "additionalProperties": false
+}

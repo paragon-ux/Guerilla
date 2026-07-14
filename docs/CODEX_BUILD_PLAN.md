@@ -1,11 +1,11 @@
 # Codex Build Plan
 
-**Status:** PLACEHOLDER -- cross-phase (Phase 2 complete)
+**Status:** Gate A complete -- Phases 1-4 PASS
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
-> **WARNING:** This document is a Phase 1 skeleton. Its content is non-normative until each phase completes.
+> **WARNING:** Phases beyond Gate A remain pending. Do not treat Phase 5+ entries as implemented.
 
 ---
 
@@ -19,8 +19,8 @@ Track the complete build sequence from repository bootstrap through research rel
 
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
-| A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phases 1-2 complete; Phase 3 next |
-| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | BLOCKED |
+| A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | COMPLETE |
+| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 5 next; NOT STARTED |
 | C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | BLOCKED |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
 | E -- Research Validated | 20-22 | Real heterogeneous pilots, benchmark evidence, reproducible release | BLOCKED |
@@ -33,8 +33,8 @@ Track the complete build sequence from repository bootstrap through research rel
 |---|---|---|---|
 | 1 | Repository and Agent-Control Bootstrap | A | PASS |
 | 2 | Architecture Decisions | A | PASS |
-| 3 | Machine Contracts | A | PENDING |
-| 4 | Conformance Fixtures | A | PENDING |
+| 3 | Machine Contracts | A | PASS |
+| 4 | Conformance Fixtures | A | PASS |
 | 5 | Codec, Config, Identifiers | B | PENDING |
 | 6 | Append Store, Transactions, Replay | B | PENDING |
 | 7 | DAG Integrity, Index, Query | B | PENDING |
@@ -67,4 +67,4 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-No phase beyond Phase 2 has been executed. Phase 3 is the next Gate A phase and must publish machine-readable schemas and registries before runtime implementation begins.
+Gate A is complete. Phase 5 is the next phase, but no Phase 5 runtime work has started in this thread. The frozen inputs for Phase 5 are `docs/ARCHITECTURE_DECISIONS.md`, `schemas/`, `registries/`, and `tests/fixtures/contracts/`.

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/external_identity.schema.json",
+  "title": "Guerilla external identity tuple",
+  "type": "object",
+  "required": ["system_id", "state_boundary_id", "external_kind", "external_id"],
+  "properties": {
+    "system_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/externalSystemId"
+    },
+    "state_boundary_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+    },
+    "external_kind": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "external_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "namespace": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "external_revision": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "lifecycle_state": {
+      "enum": ["observed", "renamed", "deleted", "reused", "aliased"]
+    },
+    "metadata": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    }
+  },
+  "additionalProperties": false
+}

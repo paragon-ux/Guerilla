@@ -1,33 +1,70 @@
 # Graph Record Format
 
-**Status:** PLACEHOLDER -- owned by Phase 3
-**Owner phase:** Phase 3 (MACHINE_CONTRACTS)
-**Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 6 (Canonical Encoding and Hashing)
-**Regeneration trigger:** Any hash or encoding change or Phase 3 completion
+**Status:** FROZEN -- Phase 3 complete
+**Owner phase:** Phase 3 (Machine Contracts)
+**Contract version:** `0.2.0`
+**Canonicalization:** `guerilla-cjson-v1`
+**Hash algorithm:** `sha256`
 
-> **WARNING:** This document is a Phase 1 skeleton. Its content is non-normative until Phase 3.
+## Canonical Bytes
 
----
+Graph records are stored as JSON Lines. Each stored record is one canonical JSON
+object followed by exactly one LF byte. Hash inputs use the canonical JSON bytes
+without the trailing JSONL LF terminator.
 
-## Purpose
+Canonicalization follows `ARCHITECTURE_DECISIONS.md` AD-001:
 
-Define the byte-level record layout, canonical encoding rules, and exact hash construction for all Guerilla records and messages.
+- UTF-8 without BOM;
+- sorted object members by Unicode scalar value sequence;
+- no insignificant whitespace;
+- array order preserved;
+- exact string escaping rules;
+- Unicode scalar values only;
+- canonical UTC timestamps with `Z`;
+- integers only within the JSON-safe range.
 
----
+## Hash Fields
 
-## Required Future Sections
+All SHA-256 digest fields are exactly 64 lowercase hexadecimal characters.
 
-1. Canonical encoding rules (UTF-8, LF, sorted keys, RFC 3339 timestamps)
-2. Record hash construction (`record_hash` input fields)
-3. Payload hash construction
-4. Transaction hash construction (ordered member record hashes)
-5. Commit hash construction (previous commit hash + graph revision + transaction hash)
-6. Segment hash construction (ordered commit hashes)
-7. Canonicalization identifier format
-8. Published test vectors for every hash type
+| Hash | Domain prefix | Covered bytes |
+|---|---|---|
+| `record_hash` | `guerilla.record.v1\n` | Canonical record JSON with `record_hash` removed |
+| `payload_hash` | none | Exact retained post-redaction payload bytes |
+| `transaction_hash` | `guerilla.transaction.v1\n` | Canonical transaction-hash envelope |
+| `commit_hash` | `guerilla.commit.v1\n` | Canonical final commit record with `commit_hash` removed |
+| `segment_hash` | `guerilla.segment.v1\n` | Canonical segment-hash envelope |
+| `archive_seal_hash` | `guerilla.archive-seal.v1\n` | Canonical archive seal with `archive_seal_hash` removed |
 
----
+The genesis previous-commit and previous-segment values are exactly 64 zero
+characters.
 
-## Unresolved Items
+## Transaction Ordering
 
-Depends on Phase 2 decisions: canonical JSON profile selection and exact hash-input field ordering. See `docs/ARCHITECTURE_DECISIONS.md`.
+Member records are ordered for `transaction_hash` as follows:
+
+1. Core node records.
+2. Core edge records.
+3. Registered extension record families, ordered by family name.
+4. Within a family, the primary Guerilla identifier in lexicographic order.
+
+Transaction begin and final commit records frame the transaction but are not
+member records. Duplicate member identifiers are rejected before hashing.
+
+## Storage Boundary
+
+The final commit record is the durable graph-revision boundary. Replay ignores
+incomplete tails and never re-executes external actions. The durability sequence
+and interruption classifications are frozen in AD-005 and vectorized in
+`docs/decision_vectors/durability.json`.
+
+## Published Vectors
+
+Phase 2 decision vectors are under `docs/decision_vectors/`. Phase 4
+conformance fixtures under `tests/fixtures/contracts/` contain the executable
+fixture corpus for canonical bytes and hash preimages.
+
+## Phase Boundary
+
+This document defines byte contracts only. It does not implement a codec,
+append store, archive writer, replay engine, or recovery tool.

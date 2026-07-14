@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/archive_seal.schema.json",
+  "title": "Guerilla archive seal",
+  "type": "object",
+  "required": [
+    "record_type",
+    "protocol_version",
+    "workspace_id",
+    "segment_id",
+    "first_graph_revision",
+    "last_graph_revision",
+    "previous_segment_hash",
+    "segment_hash",
+    "archive_seal_hash",
+    "record_count",
+    "commit_count",
+    "created_at",
+    "canonicalization_id",
+    "hash_algorithm",
+    "extensions"
+  ],
+  "properties": {
+    "record_type": {
+      "const": "archive_seal"
+    },
+    "protocol_version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+    },
+    "workspace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/workspaceId"
+    },
+    "segment_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/segmentId"
+    },
+    "first_graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "last_graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "previous_segment_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "segment_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "archive_seal_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "record_count": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/positiveCount"
+    },
+    "commit_count": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/positiveCount"
+    },
+    "created_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "canonicalization_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/canonicalizationId"
+    },
+    "hash_algorithm": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/hashAlgorithm"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/protocol_response.schema.json",
+  "title": "GLCP response body",
+  "type": "object",
+  "required": ["request_message_id", "status", "errors", "conflicts", "retry", "warnings"],
+  "properties": {
+    "request_message_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/messageId"
+    },
+    "status": {
+      "enum": ["success", "accepted", "partial", "rejected", "error"]
+    },
+    "graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "commit_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/commitId"
+    },
+    "result": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/safeJson"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "https://guerilla.dev/schemas/error.schema.json"
+      }
+    },
+    "conflicts": {
+      "type": "array",
+      "items": {
+        "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+      },
+      "uniqueItems": true
+    },
+    "retry": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/retryClassification"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "additionalProperties": false
+}

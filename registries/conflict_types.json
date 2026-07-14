@@ -1,0 +1,17 @@
+{
+  "registry": "conflict_types",
+  "version": "0.2.0",
+  "status": "FROZEN -- Phase 3 complete",
+  "entries": [
+    {"value": "stale_external_revision", "description": "Observed external revision is no longer current."},
+    {"value": "identity_collision", "description": "Identifier reuse or aliasing is incompatible with evidence."},
+    {"value": "ambiguous_authority", "description": "More than one possible authority appears to own the boundary."},
+    {"value": "state_boundary_violation", "description": "Operation exceeds the declared state boundary."},
+    {"value": "lineage_cycle", "description": "A direct authoritative edge would create a cycle."},
+    {"value": "missing_endpoint", "description": "A relationship endpoint is unavailable."},
+    {"value": "idempotency_conflict", "description": "A reused idempotency key has different request content."},
+    {"value": "external_outcome_unknown", "description": "External action outcome remains unknown."},
+    {"value": "failed_evaluation", "description": "A declared evaluator rejected the subject."},
+    {"value": "incomplete_lineage", "description": "Required provenance or source evidence is missing."}
+  ]
+}

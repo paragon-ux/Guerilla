@@ -17,6 +17,29 @@ The decisions below are normative for Phases 3-5. They do not create schemas, re
 
 ---
 
+## Core Relationship Directions
+
+Every direct authoritative relationship has one permitted direction:
+
+| Relationship | Direction |
+|---|---|
+| `depends_on` | prerequisite -> dependent |
+| `produces` | producer -> product |
+| `derives` | source -> derived |
+| `causes` | cause -> effect |
+| `evidences` | evidence -> supported record |
+| `evaluated_by` | subject -> evaluation |
+| `superseded_by` | earlier -> later |
+| `resolved_by` | unresolved item -> resolution |
+| `captured_by` | included source -> snapshot |
+
+Relationship schemas, registries, fixtures, and runtime validators must preserve
+these directions exactly. Any symmetric, cyclic, non-causal, or otherwise
+non-DAG assertion is represented through a reified event or conflict node rather
+than by reversing or weakening these direct edge directions.
+
+---
+
 ## Decision Summary
 
 | ID | Decision | Status | Downstream owner |
@@ -42,19 +65,44 @@ The decisions below are normative for Phases 3-5. They do not create schemas, re
 
 **Decision:** Guerilla uses `guerilla-cjson-v1`, a deterministic UTF-8 JSON profile for hash input and stored graph records.
 
-Profile rules:
+Canonical byte rules:
 
-- JSON text is encoded as UTF-8 with no byte-order mark.
-- Stored JSON Lines records use exactly one JSON object per line with LF line terminators.
-- Hash input is the JSON object bytes without the trailing JSONL line terminator.
-- Object keys are sorted lexicographically by Unicode code point.
-- No insignificant whitespace is emitted in hash input.
+- Canonical JSON is a single JSON value encoded as UTF-8 with no byte-order mark.
+- Stored graph records are JSON Lines: exactly one canonical JSON object followed by exactly one LF byte (`0x0a`).
+- Hash input is the canonical JSON object bytes without the stored JSONL LF terminator.
+- Object members are sorted lexicographically by Unicode scalar value sequence before escaping.
+- Duplicate object member names are invalid before canonicalization.
+- No insignificant whitespace is emitted.
 - Array order is preserved and is semantically meaningful.
-- Strings are emitted using JSON escaping only as required by the JSON grammar.
-- Unicode strings are not normalized implicitly.
-- Timestamps are RFC 3339 UTC strings with `Z`; offset forms are normalized before hashing.
-- Numbers are restricted to integers within the JSON-safe integer range unless a later schema explicitly represents a decimal as a string.
-- Floating-point `NaN`, infinity, negative zero, and implementation-dependent numeric spellings are prohibited.
+- Canonical bytes are independent of locale, process, platform newline settings, and filesystem encoding.
+
+String and Unicode rules:
+
+- Input JSON text MUST be valid UTF-8.
+- Strings MUST contain only Unicode scalar values; isolated surrogate code points are invalid.
+- Guerilla does not normalize Unicode. NFC, NFD, and other equivalent-looking forms remain distinct bytes when their scalar sequences differ.
+- Canonical output emits non-control Unicode scalar values directly as UTF-8 except for quotation mark (`"`), reverse solidus (`\`), and JSON control characters.
+- Quotation mark and reverse solidus are escaped as `\"` and `\\`.
+- The solidus (`/`) is not escaped.
+- Control characters use the shortest required JSON escape: `\b`, `\t`, `\n`, `\f`, and `\r` for those five characters; other U+0000 through U+001F values use lowercase six-byte `\u00xx`.
+- Hex digits in escapes emitted by the canonicalizer are lowercase.
+
+Timestamp rules:
+
+- Stored timestamp fields use canonical UTC RFC 3339 form with `Z`.
+- The canonical grammar is `YYYY-MM-DDTHH:MM:SSZ` or `YYYY-MM-DDTHH:MM:SS.fractionZ`.
+- Fractional seconds are allowed only when non-zero precision is needed.
+- Fractional seconds are normalized by trimming trailing zeroes and retaining at most 9 digits.
+- Offset input may be accepted by parsers only before storage; it is converted to UTC before hashing.
+- Lowercase `t` or `z`, missing timezone, offset timestamps in stored records, and leap seconds (`:60`) are invalid.
+- Valid timestamp years are `0001` through `9999`.
+
+Number rules:
+
+- JSON numbers are permitted only for integers.
+- Integers MUST be in the inclusive JSON-safe range `-9007199254740991` through `9007199254740991`.
+- Negative zero, leading plus signs, leading zeroes other than the single value `0`, decimal points, exponents, `NaN`, and infinity are invalid.
+- Decimal, money, duration, or arbitrary-precision values MUST be represented by strings under a schema that defines their grammar.
 
 **Rationale:** The architecture already requires UTF-8, LF, sorted keys, no insignificant whitespace, array-order preservation, RFC 3339 UTC timestamps, and no implicit Unicode normalization. This decision freezes those assumptions into one named profile while avoiding floating-point ambiguity.
 
@@ -74,6 +122,21 @@ Identifier format:
 <prefix><uuidv7-lowercase-rfc4122>
 ```
 
+The UUID portion MUST match this grammar:
+
+```text
+[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}
+```
+
+Validation rules:
+
+- The UUID version nibble MUST be `7`.
+- The RFC 4122 variant bits MUST be `10`, represented by lowercase `8`, `9`, `a`, or `b` as the first hex digit of the fourth UUID group.
+- UUID hex digits MUST be lowercase.
+- Braces, uppercase UUID text, hyphenless UUID text, URNs, base32/base64 encodings, and raw UUIDv4/ULID identifiers are invalid as Guerilla core identifiers.
+- Prefix and UUID family are validated together; a node field cannot carry an edge, transaction, message, or extension prefix.
+- The UUIDv7 timestamp bits are not authority, causation, or graph order. Graph revision and committed edges are authoritative.
+
 Required prefixes:
 
 | Object | Prefix |
@@ -84,6 +147,7 @@ Required prefixes:
 | Edge | `gre_` |
 | Transaction | `grt_` |
 | Commit | `grm_` |
+| Graph segment | `gsg_` |
 | Snapshot | `grs_` |
 | Adapter | `gra_` |
 | Projection | `grp_` |
@@ -93,6 +157,16 @@ Required prefixes:
 | Extension namespace | `gxe_` |
 
 Identifiers are opaque. Sorting by identifier is permitted only as a deterministic tie-breaker, not as proof of causation or graph order.
+
+Collision and import rules:
+
+- A generated collision in the target identifier scope MUST be regenerated before transaction validation.
+- A submitted duplicate identifier within the transaction or already committed graph is rejected with `duplicate_id`.
+- A reused UUID value with a different registered prefix is a distinct identifier family but MUST still satisfy that field's prefix rule.
+- Legacy Guerilla identifiers from unsupported families MUST NOT be accepted as core record identifiers.
+- Imported legacy identifiers MAY be preserved only as authority-scoped external identifiers or explicit migration metadata.
+- Migrating legacy Guerilla records creates new UUIDv7-prefixed records and records a migration decision; committed records are not rewritten.
+- External system identifiers are never coerced into Guerilla UUIDv7 identifiers.
 
 **Rationale:** UUIDv7 is standards-track, time-sortable for operations, and widely implementable without requiring Crockford-base32 parsing. Prefixes preserve object-family readability without transferring authority to the identifier text.
 
@@ -106,17 +180,73 @@ Identifiers are opaque. Sorting by identifier is permitted only as a determinist
 
 **Decision:** Guerilla uses SHA-256 with explicit domain-separated byte inputs.
 
-Required hash forms:
+Digest representation:
+
+- All SHA-256 digest fields store exactly 64 lowercase hexadecimal characters.
+- The hash algorithm is identified by an adjacent schema field or contract version, not by prefixing digest values with `sha256:`.
+- The genesis previous-commit hash is exactly 64 zero characters.
+- The genesis previous-segment hash is exactly 64 zero characters.
+- A graph revision used in a hash preimage is encoded as unsigned decimal ASCII with no leading zeroes, except the genesis value `0`.
+
+Required hash forms and preimages:
 
 | Hash | Input |
 |---|---|
-| `record_hash` | `b"guerilla.record.v1\n"` + canonical JSON bytes of the record excluding `record_hash` |
-| `payload_hash` | exact retained payload bytes after any required redaction |
-| `transaction_hash` | `b"guerilla.transaction.v1\n"` + LF-joined canonical member `record_hash` values in transaction order + final LF |
-| `commit_hash` | `b"guerilla.commit.v1\n"` + previous commit hash + LF + decimal graph revision + LF + transaction hash + LF |
-| `segment_hash` | `b"guerilla.segment.v1\n"` + LF-joined commit hashes in segment order + final LF |
+| `record_hash` | ASCII bytes `guerilla.record.v1\n` followed by canonical JSON bytes of the record with `record_hash` removed |
+| `payload_hash` | Exact retained payload bytes after required redaction, with no domain prefix |
+| `transaction_hash` | ASCII bytes `guerilla.transaction.v1\n` followed by canonical JSON bytes of the transaction-hash envelope |
+| `commit_hash` | ASCII bytes `guerilla.commit.v1\n` followed by canonical JSON bytes of the final commit record with `commit_hash` removed |
+| `segment_hash` | ASCII bytes `guerilla.segment.v1\n` followed by canonical JSON bytes of the segment-hash envelope |
+| `archive_seal_hash` | ASCII bytes `guerilla.archive-seal.v1\n` followed by canonical JSON bytes of the archive seal record with `archive_seal_hash` removed |
 
-The genesis previous-commit value is exactly 64 zero characters.
+The transaction-hash envelope covers transaction metadata and ordered members exactly:
+
+```json
+{
+  "actor": "<canonical actor object>",
+  "created_at": "<canonical timestamp>",
+  "expected_graph_revision": "<graph revision integer>",
+  "expected_previous_commit_hash": "<64 hex>",
+  "member_record_hashes": ["<64 hex in canonical transaction order>"],
+  "transaction_id": "<grt_ UUIDv7 identifier>",
+  "workspace_id": "<grw_ UUIDv7 identifier>"
+}
+```
+
+The final commit record covers commit metadata exactly:
+
+```json
+{
+  "canonicalization_id": "guerilla-cjson-v1",
+  "commit_id": "<grm_ UUIDv7 identifier>",
+  "committed_at": "<canonical timestamp>",
+  "graph_revision": "<graph revision integer>",
+  "hash_algorithm": "sha256",
+  "previous_commit_hash": "<64 hex>",
+  "transaction_hash": "<64 hex>",
+  "transaction_id": "<grt_ UUIDv7 identifier>",
+  "workspace_id": "<grw_ UUIDv7 identifier>"
+}
+```
+
+The segment-hash envelope covers segment identity and ordered commits exactly:
+
+```json
+{
+  "commit_hashes": ["<64 hex in graph-revision order>"],
+  "first_graph_revision": "<graph revision integer>",
+  "last_graph_revision": "<graph revision integer>",
+  "previous_segment_hash": "<64 hex>",
+  "segment_id": "<gsg_ UUIDv7 identifier>",
+  "workspace_id": "<grw_ UUIDv7 identifier>"
+}
+```
+
+Newline policy:
+
+- Domain separators are ASCII strings ending in exactly one LF byte.
+- Canonical JSON bytes following the domain separator are not followed by an additional newline for hash input.
+- Stored JSONL records still include exactly one LF byte after the canonical JSON object; that storage terminator is never part of `record_hash`, `transaction_hash`, `commit_hash`, `segment_hash`, or `archive_seal_hash`.
 
 **Rationale:** Domain separation prevents accidental cross-use of hashes. The selected inputs preserve the implementation specification's required record, payload, transaction, commit, and segment integrity chain without adding unstated authority.
 
@@ -134,10 +264,25 @@ Ordering rules:
 
 1. Graph header records are not transaction members.
 2. Transaction begin and commit envelopes frame the transaction but are not member records.
-3. Member records are ordered by record family rank: node before edge.
-4. Within a family, records are ordered by identifier lexicographically.
-5. `transaction_hash` uses member `record_hash` values in that canonical order.
-6. Semantic causation is determined only by edges and identifiers, not by line position or timestamp order.
+3. Member records are ordered by record family rank.
+4. Core family rank is `node` before `edge`.
+5. Registered extension record families sort after core records by registered family name, then by identifier.
+6. Within one family, records are ordered by their primary Guerilla identifier lexicographically as Unicode scalar values.
+7. `transaction_hash` uses member `record_hash` values in canonical transaction order.
+8. Semantic causation is determined only by edges and identifiers, not by line position, timestamp order, UUID timestamp bits, or input order.
+
+Duplicate and endpoint rules:
+
+- Duplicate member identifiers in one transaction are rejected before hashing with `duplicate_id`.
+- A member identifier that already exists in the committed graph is rejected with `duplicate_id`.
+- A namespaced extension family whose ordering, schema, or critical compatibility rule is unknown is rejected before hashing.
+- Unknown optional extension fields that are permitted by compatibility rules remain part of the stored canonical bytes when retained; ignored optional fields cannot alter core semantics.
+- Edge endpoints MUST be node identifiers, never edge, transaction, commit, message, adapter, projection, state-boundary, or extension identifiers.
+- Edge endpoints are valid when each endpoint exists in a prior committed graph revision or as a node member of the same transaction.
+- Same-transaction endpoints are validated against the full canonical node-member set, not against original input order.
+- Self-loops are rejected.
+- Direct authoritative edges that would create a cycle are rejected after endpoint existence and relationship-type compatibility are established.
+- Relationship-specific endpoint restrictions are enforced from the relationship registry; missing restrictions block mutation rather than falling back to best effort.
 
 **Rationale:** Nodes must be known before edges can pass endpoint validation. Lexicographic identifier ordering gives stable cross-process ordering without allowing timestamps or append order to create hidden causation.
 
@@ -156,8 +301,50 @@ Policy:
 - A writer obtains an exclusive lock file under `.guerilla/locks/`.
 - Lock metadata records process id, host, user, workspace id, acquisition time, and runtime version.
 - Stale locks are not automatically broken; an explicit verify or recovery command must classify the lock before retry.
-- A transaction is staged under `.guerilla/tmp/`, validated fully, appended to the active graph segment, flushed, fsynced, and then committed by a final commit record.
-- Replay ignores incomplete transactions and reports them as recovery diagnostics.
+- A transaction is staged under `.guerilla/tmp/`, validated fully, appended to the active graph segment, flushed, fsynced, and committed only by a final commit record.
+- The final commit record is the only durable graph-revision boundary.
+- Replay ignores incomplete tails and reports them as recovery diagnostics without re-executing external actions.
+
+Durability sequence:
+
+1. Create the lock file with exclusive create semantics.
+2. Flush and fsync the lock file.
+3. Fsync the `.guerilla/locks/` directory.
+4. Write the staged transaction bytes under `.guerilla/tmp/`.
+5. Flush and fsync the staged transaction file.
+6. Fsync the `.guerilla/tmp/` directory.
+7. Append transaction-begin and canonical member records to the active graph segment.
+8. Flush and fsync the active segment.
+9. Append the final commit record containing `transaction_hash`, `graph_revision`, `previous_commit_hash`, and `commit_hash`.
+10. Flush and fsync the active segment again after the final commit record.
+11. Fsync the active segment directory.
+12. Remove the staged transaction file.
+13. Fsync `.guerilla/tmp/`.
+14. Release the writer lock.
+15. Fsync `.guerilla/locks/`.
+
+Interruption classifications:
+
+| Interruption point | Recovery classification | Replay behavior |
+|---|---|---|
+| Before durable lock file | no graph mutation | retry may acquire lock |
+| After durable lock before staged transaction | stale lock, no staged mutation | verify lock owner before retry |
+| During staged transaction write | incomplete staged transaction | ignore staged file after verification |
+| After staged fsync before active append | staged but uncommitted | ignore staged file after verifying no active tail |
+| During active begin/member append | incomplete active tail | ignore bytes after last valid committed graph revision |
+| After begin/member fsync before final commit record | prepared without commit | ignore transaction members and report `transaction_incomplete` |
+| During final commit-record write | torn commit record | ignore incomplete commit and report `transaction_incomplete` |
+| After final commit record write before final segment fsync | commit uncertain | verify segment; accept only if complete commit hash chain validates |
+| After final segment fsync before directory fsync | committed, directory uncertain | verify active segment path and parent directory state |
+| After directory fsync before lock release | committed with leftover lock | verify graph, then classify lock as stale committed writer |
+| During archive seal write | archive seal incomplete | active graph remains authoritative; archive seal is ignored until valid |
+
+Incomplete-tail policy:
+
+- Replay scans only complete LF-terminated JSONL records.
+- Bytes after the last complete LF-terminated record are an incomplete tail.
+- A complete but invalid JSON object after the last valid commit record is treated as an incomplete transaction tail unless it is part of a valid later committed transaction.
+- Recovery tools MAY truncate or quarantine incomplete tails only after writing separate recovery evidence; replay itself does not rewrite authoritative files.
 
 **Rationale:** This preserves the local single-writer MVP and avoids inventing distributed locking before Gate B.
 
@@ -237,11 +424,14 @@ Rules:
 
 Rules:
 
+- The fixed profile id is `local-owner-v1`; it is mandatory for the local single-writer MVP.
 - The effective principal is the local OS principal unless a transport profile later supplies an authenticated principal.
 - Actor fields are lineage attribution only and do not grant authority.
 - Policy decisions cover graph reads, graph appends, adapter observations, external actions, conflict decisions, snapshot access, payload access, and administrative configuration.
 - Default bootstrap policy grants local workspace administrator privileges only to the workspace owner profile created at initialization.
 - A model actor cannot receive broader authority than the effective principal and policy allow.
+- A general programmable policy engine is deferred and MUST NOT be introduced before the fixed local profile is implemented and tested.
+- Payload content, adapter descriptors, client actor fields, and extension metadata cannot grant authority.
 
 **Rationale:** This freezes the distinction between actor attribution and authorization while staying inside the local single-writer MVP.
 
@@ -306,6 +496,8 @@ Default thresholds:
 - active segment commit count: 50,000 commits;
 - retained active segment minimum: one current writable segment;
 - archive seal includes first and last graph revision, previous segment hash, segment hash, record count, commit count, creation time, canonicalization id, and hash algorithm.
+- archive seal includes `archive_seal_hash` computed by AD-003 after all other seal fields are finalized.
+- archive seal verification must confirm the previous-segment hash, ordered commit hashes, segment hash, seal hash, graph-revision range, record count, commit count, canonicalization id, and hash algorithm.
 
 Thresholds are configuration values, but changing them must not change record or commit hashes.
 
@@ -360,6 +552,26 @@ Rules:
 **Alternatives considered:** Free-form extension fields were rejected because they would make compatibility and security review impossible.
 
 **Impact:** Phase 3 must create an extension namespace registry and schemas for extension metadata.
+
+---
+
+## Normative Decision Vectors
+
+Phase 2 publishes machine-readable decision vectors under `docs/decision_vectors/`.
+They are closure evidence for decisions that schemas and conformance fixtures must
+preserve:
+
+| Vector | Governing decision | Purpose |
+|---|---|---|
+| `canonical_json.json` | AD-001 | Canonical Unicode, escaping, timestamp, and integer-boundary behavior |
+| `identifiers.json` | AD-002 | UUIDv7 grammar, prefix families, invalid families, and collision policy |
+| `hashes.json` | AD-003 | Exact domain-separated preimages and expected SHA-256 digests |
+| `transaction_ordering.json` | AD-004 | Canonical family ordering, duplicate handling, same-transaction endpoint policy |
+| `durability.json` | AD-005 | Required fsync sequence, final commit-record boundary, recovery classifications |
+
+These vectors are normative examples, not schemas, registries, runtime code, or
+graph records. Phase 3 schemas and Phase 4 fixtures must remain compatible with
+them.
 
 ---
 

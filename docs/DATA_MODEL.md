@@ -1,35 +1,87 @@
 # Data Model
 
-**Status:** PLACEHOLDER -- owned by Phase 3
-**Owner phase:** Phase 3 (MACHINE_CONTRACTS)
-**Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Sections 8-23, `GUERILLA_CONCEPT_PAPER.md` Section 5
-**Regeneration trigger:** Any schema change or Phase 3 completion
-
-> **WARNING:** This document is a Phase 1 skeleton. Its content is non-normative until Phase 3 publishes machine-readable contracts.
-
----
+**Status:** FROZEN -- Phase 3 complete
+**Owner phase:** Phase 3 (Machine Contracts)
+**Contract version:** `0.2.0`
+**Controlling sources:** `ARCHITECTURE_DECISIONS.md`, `MVP_SCOPE.md`, `schemas/*.schema.json`, `registries/*.json`
+**Regeneration trigger:** Schema, registry, or frozen architecture-decision change
 
 ## Purpose
 
-Define the complete Guerilla data model: node types, edge types, record structures, identifier formats, and relationship semantics.
+The Guerilla data model is the machine-checkable surface for authoritative
+graph records, external authority references, payload references, extensions,
+and derived-view descriptors.
 
----
+The schemas under `schemas/` are normative for field shape. The registries under
+`registries/` are normative for enum values, relationship directions, extension
+namespaces, and error/capability names.
 
-## Required Future Sections
+## Authoritative Record Types
 
-1. Node record model (all eight core types + namespaced subtypes)
-2. Edge record model (all nine core relationship types)
-3. Identifier format and prefix rules
-4. Authority envelope structure
-5. State-boundary declaration structure
-6. Provenance metadata
-7. Payload reference model
-8. External identity mapping
-9. Logical entity identity and revision model
-10. Timestamp and ordering conventions
+| Record | Schema | Authority |
+|---|---|---|
+| Graph header | `schemas/graph_header.schema.json` | Authoritative graph metadata |
+| Node | `schemas/node.schema.json` | Authoritative graph record |
+| Edge | `schemas/edge.schema.json` | Authoritative graph record |
+| Transaction begin | `schemas/transaction_begin.schema.json` | Transaction frame |
+| Transaction commit | `schemas/transaction_commit.schema.json` | Final commit boundary |
+| Archive seal | `schemas/archive_seal.schema.json` | Authoritative segment integrity record |
 
----
+## Core Node Types
 
-## Unresolved Items
+The core node types are `goal`, `artifact`, `operation`, `event`,
+`evaluation`, `decision`, `conflict`, and `snapshot`. The normative registry is
+`registries/node_types.json`.
 
-The data model depends on Phase 2 decisions: identifier scheme (UUIDv7/ULID), canonical JSON profile, record hash construction, and exact field specifications. See `docs/ARCHITECTURE_DECISIONS.md` (to be created in Phase 2).
+Namespaced node types are permitted only through registered extensions and must
+not redefine core semantics.
+
+## Core Relationship Directions
+
+The normative registry is `registries/relationship_types.json`.
+
+| Relationship | Direction |
+|---|---|
+| `depends_on` | prerequisite -> dependent |
+| `produces` | producer -> product |
+| `derives` | source -> derived |
+| `causes` | cause -> effect |
+| `evidences` | evidence -> supported record |
+| `evaluated_by` | subject -> evaluation |
+| `superseded_by` | earlier -> later |
+| `resolved_by` | unresolved item -> resolution |
+| `captured_by` | included source -> snapshot |
+
+Edge endpoints must be node identifiers. Same-transaction endpoints are valid
+only when the referenced node member is part of the same canonical transaction
+member set. Self-loops, missing endpoints, incompatible endpoint types, and
+cycle-producing direct edges are rejected by later runtime validation phases.
+
+## Identifiers and Revisions
+
+Guerilla identifiers are UUIDv7 with registered lowercase prefixes. Field
+schemas select the required prefix family. Graph revisions are non-negative
+JSON-safe integers and are authoritative for committed graph order.
+
+## Authority, State Boundaries, and Payloads
+
+Authority is represented by `schemas/authority.schema.json` and
+`schemas/state_boundary.schema.json`. Actor fields remain attribution and never
+grant authority. External identifiers remain authority-scoped tuples described
+by `schemas/external_identity.schema.json`.
+
+Payload references are described by `schemas/payload_ref.schema.json`. The
+default is metadata-first retention. Retained payload hashes cover retained
+post-redaction bytes only.
+
+## Derived Data
+
+`schemas/derived_projection.schema.json` requires `authoritative: false` and
+`authority_class: derived_non_authoritative`. Projections, manifests, snapshots,
+indexes, and caches never replace authoritative graph records.
+
+## Phase Boundary
+
+This document publishes contracts only. It does not implement codecs,
+identifier generation, graph storage, adapters, transports, projections, or
+runtime validators.

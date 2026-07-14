@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/graph_header.schema.json",
+  "title": "Guerilla graph header",
+  "type": "object",
+  "required": [
+    "record_type",
+    "protocol_version",
+    "workspace_id",
+    "graph_format_version",
+    "canonicalization_id",
+    "hash_algorithm",
+    "created_at",
+    "authority_class",
+    "extensions"
+  ],
+  "properties": {
+    "record_type": {
+      "const": "graph_header"
+    },
+    "protocol_version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+    },
+    "workspace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/workspaceId"
+    },
+    "graph_format_version": {
+      "const": "guerilla-graph-jsonl-v1"
+    },
+    "canonicalization_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/canonicalizationId"
+    },
+    "hash_algorithm": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/hashAlgorithm"
+    },
+    "created_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "authority_class": {
+      "const": "authoritative_graph"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

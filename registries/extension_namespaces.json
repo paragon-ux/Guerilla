@@ -1,0 +1,32 @@
+{
+  "registry": "extension_namespaces",
+  "version": "0.2.0",
+  "status": "FROZEN -- Phase 3 complete",
+  "entries": [
+    {
+      "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c900",
+      "name": "dev.guerilla.core-fixtures",
+      "owner": "Guerilla project",
+      "version": "0.2.0",
+      "compatibility": {
+        "min_protocol": "0.2.0",
+        "max_protocol": "0.2.0"
+      },
+      "schemas": [
+        "https://guerilla.dev/schemas/extension_namespace.schema.json"
+      ],
+      "invariants": [
+        "MUST NOT redefine core fields or relationship directions",
+        "MUST NOT grant authority from payload content"
+      ],
+      "downgrade_behavior": "reject_if_critical",
+      "security_implications": [
+        "Optional fields may be ignored only when compatibility allows",
+        "Critical fields require explicit support"
+      ],
+      "affected_capabilities": [
+        "describe"
+      ]
+    }
+  ]
+}

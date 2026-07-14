@@ -1,0 +1,29 @@
+{
+  "decision": "AD-005",
+  "final_commit_record_is_boundary": true,
+  "required_fsyncs": [
+    "lock_file",
+    "locks_directory_after_lock_create",
+    "staged_transaction_file",
+    "tmp_directory_after_stage",
+    "active_segment_after_members",
+    "active_segment_after_final_commit_record",
+    "active_segment_directory_after_final_commit_record",
+    "tmp_directory_after_stage_removal",
+    "locks_directory_after_lock_release"
+  ],
+  "interruption_classifications": [
+    "no_graph_mutation",
+    "stale_lock_no_staged_mutation",
+    "incomplete_staged_transaction",
+    "staged_but_uncommitted",
+    "incomplete_active_tail",
+    "prepared_without_commit",
+    "torn_commit_record",
+    "commit_uncertain",
+    "committed_directory_uncertain",
+    "committed_with_leftover_lock",
+    "archive_seal_incomplete"
+  ],
+  "incomplete_tail_policy": "ignore_after_last_valid_committed_graph_revision_without_rewriting_authoritative_files"
+}

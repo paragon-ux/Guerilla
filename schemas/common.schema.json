@@ -1,0 +1,290 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/common.schema.json",
+  "title": "Guerilla common contract definitions",
+  "type": "object",
+  "$defs": {
+    "protocolVersion": {
+      "const": "0.2.0"
+    },
+    "canonicalizationId": {
+      "const": "guerilla-cjson-v1"
+    },
+    "hashAlgorithm": {
+      "const": "sha256"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9](\\.[0-9]*[1-9])?Z$"
+    },
+    "jsonSafeInteger": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "graphRevision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "positiveCount": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "uuidv7": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "workspaceId": {
+      "type": "string",
+      "pattern": "^grw_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "entityId": {
+      "type": "string",
+      "pattern": "^gri_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "nodeId": {
+      "type": "string",
+      "pattern": "^grn_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "edgeId": {
+      "type": "string",
+      "pattern": "^gre_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "transactionId": {
+      "type": "string",
+      "pattern": "^grt_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "commitId": {
+      "type": "string",
+      "pattern": "^grm_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "segmentId": {
+      "type": "string",
+      "pattern": "^gsg_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "snapshotId": {
+      "type": "string",
+      "pattern": "^grs_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "adapterId": {
+      "type": "string",
+      "pattern": "^gra_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "projectionId": {
+      "type": "string",
+      "pattern": "^grp_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "messageId": {
+      "type": "string",
+      "pattern": "^gmsg_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "stateBoundaryId": {
+      "type": "string",
+      "pattern": "^gsb_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "externalSystemId": {
+      "type": "string",
+      "pattern": "^gxs_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "extensionNamespaceId": {
+      "type": "string",
+      "pattern": "^gxe_[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "semver": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:[-+][0-9A-Za-z.-]+)?$"
+    },
+    "namespacedName": {
+      "type": "string",
+      "pattern": "^(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9_-]*[a-z0-9])?$"
+    },
+    "coreNodeType": {
+      "enum": [
+        "goal",
+        "artifact",
+        "operation",
+        "event",
+        "evaluation",
+        "decision",
+        "conflict",
+        "snapshot"
+      ]
+    },
+    "coreRelationshipType": {
+      "enum": [
+        "depends_on",
+        "produces",
+        "derives",
+        "causes",
+        "evidences",
+        "evaluated_by",
+        "superseded_by",
+        "resolved_by",
+        "captured_by"
+      ]
+    },
+    "coreOrNamespacedNodeType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/coreNodeType"
+        },
+        {
+          "$ref": "#/$defs/namespacedName"
+        }
+      ]
+    },
+    "coreOrNamespacedRelationshipType": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/coreRelationshipType"
+        },
+        {
+          "$ref": "#/$defs/namespacedName"
+        }
+      ]
+    },
+    "capabilityValue": {
+      "enum": [
+        "describe",
+        "observe",
+        "act",
+        "evaluate",
+        "reconcile",
+        "snapshot",
+        "replay",
+        "event_subscription",
+        "read_consistency",
+        "write_idempotency",
+        "identity_mapping",
+        "projection_generation"
+      ]
+    },
+    "conflictType": {
+      "enum": [
+        "stale_external_revision",
+        "identity_collision",
+        "ambiguous_authority",
+        "state_boundary_violation",
+        "lineage_cycle",
+        "missing_endpoint",
+        "idempotency_conflict",
+        "external_outcome_unknown",
+        "failed_evaluation",
+        "incomplete_lineage"
+      ]
+    },
+    "errorCode": {
+      "enum": [
+        "invalid_message",
+        "unsupported_version",
+        "unsupported_operation",
+        "schema_violation",
+        "authentication_required",
+        "unauthorized",
+        "forbidden",
+        "unknown_workspace",
+        "unknown_node",
+        "unknown_adapter",
+        "unsupported_capability",
+        "duplicate_id",
+        "identity_collision",
+        "idempotency_conflict",
+        "stale_graph_revision",
+        "stale_external_revision",
+        "ambiguous_authority",
+        "state_boundary_violation",
+        "lineage_cycle",
+        "missing_endpoint",
+        "record_hash_mismatch",
+        "payload_hash_mismatch",
+        "transaction_incomplete",
+        "adapter_unavailable",
+        "adapter_error",
+        "external_rejection",
+        "external_outcome_unknown",
+        "conflict_open",
+        "invalid_cursor",
+        "projection_invalid",
+        "rate_limited",
+        "internal_error"
+      ]
+    },
+    "retryClassification": {
+      "enum": [
+        "never",
+        "after_reconcile",
+        "after_refresh",
+        "after_backoff",
+        "idempotent_replay",
+        "not_applicable"
+      ]
+    },
+    "safeJson": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/jsonSafeInteger"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/safeJson"
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/safeJson"
+          }
+        }
+      ]
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/safeJson"
+      }
+    },
+    "extensionValue": {
+      "type": "object",
+      "required": ["critical", "namespace_id", "value"],
+      "properties": {
+        "critical": {
+          "type": "boolean"
+        },
+        "namespace_id": {
+          "$ref": "#/$defs/extensionNamespaceId"
+        },
+        "value": {
+          "$ref": "#/$defs/safeJson"
+        }
+      },
+      "additionalProperties": false
+    },
+    "extensions": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/namespacedName"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/extensionValue"
+      }
+    }
+  },
+  "properties": {},
+  "additionalProperties": false
+}

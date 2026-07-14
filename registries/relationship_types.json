@@ -1,0 +1,79 @@
+{
+  "registry": "relationship_types",
+  "version": "0.2.0",
+  "status": "FROZEN -- Phase 3 complete",
+  "entries": [
+    {
+      "value": "depends_on",
+      "direction": "prerequisite -> dependent",
+      "from_role": "prerequisite",
+      "to_role": "dependent",
+      "causal": true,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "produces",
+      "direction": "producer -> product",
+      "from_role": "producer",
+      "to_role": "product",
+      "causal": true,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "derives",
+      "direction": "source -> derived",
+      "from_role": "source",
+      "to_role": "derived",
+      "causal": true,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "causes",
+      "direction": "cause -> effect",
+      "from_role": "cause",
+      "to_role": "effect",
+      "causal": true,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "evidences",
+      "direction": "evidence -> supported record",
+      "from_role": "evidence",
+      "to_role": "supported_record",
+      "causal": false,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "evaluated_by",
+      "direction": "subject -> evaluation",
+      "from_role": "subject",
+      "to_role": "evaluation",
+      "causal": false,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "superseded_by",
+      "direction": "earlier -> later",
+      "from_role": "earlier",
+      "to_role": "later",
+      "causal": false,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "resolved_by",
+      "direction": "unresolved item -> resolution",
+      "from_role": "unresolved_item",
+      "to_role": "resolution",
+      "causal": false,
+      "direct_edge_must_remain_acyclic": true
+    },
+    {
+      "value": "captured_by",
+      "direction": "included source -> snapshot",
+      "from_role": "included_source",
+      "to_role": "snapshot",
+      "causal": false,
+      "direct_edge_must_remain_acyclic": true
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "corpus": "canonicalization_and_hash_vectors",
+  "contract_version": "0.2.0",
+  "fixtures": [
+    {
+      "fixture_id": "canon.unicode_control_key_order",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-001",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "canonical_json",
+      "input": {
+        "z": "e\u0301",
+        "a": "\u00e9",
+        "control": "\u0001\b\t\n\f\r",
+        "solidus": "/",
+        "quote": "\"\\",
+        "emoji": "\ud83d\ude00"
+      },
+      "exact_bytes_hex": "7b2261223a22c3a9222c22636f6e74726f6c223a225c75303030315c625c745c6e5c665c72222c22656d6f6a69223a22f09f9880222c2271756f7465223a225c225c5c222c22736f6c69647573223a222f222c227a223a2265cc81227d",
+      "digest_domain": "guerilla.cjson.vector.v1\\n",
+      "expected_digest": "dc4144fa9d802003ceb09fe7f0f01a2af4fdffa27bd301eebadf14d4f29a152c"
+    },
+    {
+      "fixture_id": "canon.timestamp_offset_normalized",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-001",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "timestamp",
+      "input_timestamp": "2026-07-13T09:30:05.120000000-04:00",
+      "expected_canonical_timestamp": "2026-07-13T13:30:05.12Z"
+    },
+    {
+      "fixture_id": "canon.integer_bounds_valid",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-001",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "integer_bounds",
+      "valid_values": [-9007199254740991, 0, 9007199254740991]
+    },
+    {
+      "fixture_id": "canon.numeric_forms_rejected",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "prohibited_numeric_forms",
+      "kind": "numeric_forms",
+      "invalid_json_texts": ["{\"n\":01}", "{\"n\":+1}", "{\"n\":-0}", "{\"n\":1.0}", "{\"n\":1e0}", "{\"n\":NaN}", "{\"n\":Infinity}"]
+    },
+    {
+      "fixture_id": "ids.every_family_valid",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-002",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "identifier_families",
+      "identifiers": {
+        "workspace": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+        "logical_entity": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c002",
+        "node": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003",
+        "edge": "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020",
+        "transaction": "grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005",
+        "commit": "grm_018f1f8e-5d4b-7a10-8a20-0c9b0b23c006",
+        "graph_segment": "gsg_018f1f8e-5d4b-7a10-8a20-0c9b0b23c007",
+        "snapshot": "grs_018f1f8e-5d4b-7a10-8a20-0c9b0b23c008",
+        "adapter": "gra_018f1f8e-5d4b-7a10-8a20-0c9b0b23c030",
+        "projection": "grp_018f1f8e-5d4b-7a10-8a20-0c9b0b23c040",
+        "protocol_message": "gmsg_018f1f8e-5d4b-7a10-8a20-0c9b0b23c050",
+        "state_boundary": "gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060",
+        "external_system": "gxs_018f1f8e-5d4b-7a10-8a20-0c9b0b23c070",
+        "extension_namespace": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c900"
+      }
+    },
+    {
+      "fixture_id": "ids.unsupported_families_rejected",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-002",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "unsupported_identifier_family",
+      "kind": "identifier_invalid",
+      "identifiers": [
+        "grn_018f1f8e-5d4b-4a10-8a20-0c9b0b23c003",
+        "grn_018f1f8e-5d4b-7a10-ca20-0c9b0b23c003",
+        "GRN_018F1F8E-5D4B-7A10-8A20-0C9B0B23C003",
+        "01HF7YAT00Z9M9P1K7A8V7E4M0"
+      ]
+    },
+    {
+      "fixture_id": "hash.record",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-003",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "hash",
+      "hash_name": "record_hash",
+      "domain": "guerilla.record.v1\\n",
+      "preimage_canonical_json": "{\"actor\":{\"actor_id\":\"gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001\",\"actor_kind\":\"human\"},\"authority\":{\"authority_type\":\"guerilla\",\"principal_id\":\"local-user\",\"profile\":\"local-owner-v1\"},\"created_at\":\"2026-07-13T00:00:00Z\",\"entity_id\":\"gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c002\",\"extensions\":{},\"metadata\":{},\"node_id\":\"grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003\",\"node_type\":\"goal\",\"payload_ref\":{\"retention_class\":\"none\"},\"protocol_version\":\"0.2.0\",\"provenance\":{\"source\":\"phase2-vector\",\"source_record_ids\":[]},\"record_type\":\"node\",\"status\":\"open\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "4dc50be466305f9d0d503a4190be077aabea747bc7a90726b85d9eb2cab4f646"
+    },
+    {
+      "fixture_id": "hash.payload",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-007",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "payload_hash",
+      "payload_bytes_hex": "72656461637465642066697874757265207061796c6f61640a",
+      "expected_digest": "f729fcf88a2c20e8e3f777c709290791df50c491f3545867777ac5b5b5144682"
+    },
+    {
+      "fixture_id": "hash.transaction",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-003",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "hash",
+      "hash_name": "transaction_hash",
+      "domain": "guerilla.transaction.v1\\n",
+      "preimage_canonical_json": "{\"actor\":{\"actor_id\":\"gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001\",\"actor_kind\":\"human\"},\"created_at\":\"2026-07-13T00:00:01Z\",\"expected_graph_revision\":0,\"expected_previous_commit_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"member_record_hashes\":[\"4dc50be466305f9d0d503a4190be077aabea747bc7a90726b85d9eb2cab4f646\"],\"transaction_id\":\"grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "5fba606737ab299f52d9293c6ca09affaa094002afef07d5be2cb35c83550150"
+    },
+    {
+      "fixture_id": "hash.commit",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-003",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "hash",
+      "hash_name": "commit_hash",
+      "domain": "guerilla.commit.v1\\n",
+      "preimage_canonical_json": "{\"canonicalization_id\":\"guerilla-cjson-v1\",\"commit_id\":\"grm_018f1f8e-5d4b-7a10-8a20-0c9b0b23c006\",\"committed_at\":\"2026-07-13T00:00:02Z\",\"graph_revision\":1,\"hash_algorithm\":\"sha256\",\"previous_commit_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"transaction_hash\":\"5fba606737ab299f52d9293c6ca09affaa094002afef07d5be2cb35c83550150\",\"transaction_id\":\"grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "340952bccc1feecac61df7dd4f6dd3e1a2369861eddd77f0adc21a09a6ef1d0b"
+    },
+    {
+      "fixture_id": "hash.segment",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-003",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "hash",
+      "hash_name": "segment_hash",
+      "domain": "guerilla.segment.v1\\n",
+      "preimage_canonical_json": "{\"commit_hashes\":[\"340952bccc1feecac61df7dd4f6dd3e1a2369861eddd77f0adc21a09a6ef1d0b\"],\"first_graph_revision\":1,\"last_graph_revision\":1,\"previous_segment_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"segment_id\":\"gsg_018f1f8e-5d4b-7a10-8a20-0c9b0b23c007\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "ba867dd49ae0a91c587f8a06019dd1a67cb811fb576a00f63b07d000ade2cdc3"
+    },
+    {
+      "fixture_id": "hash.archive_seal",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-012",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "hash",
+      "hash_name": "archive_seal_hash",
+      "domain": "guerilla.archive-seal.v1\\n",
+      "preimage_canonical_json": "{\"canonicalization_id\":\"guerilla-cjson-v1\",\"commit_count\":1,\"created_at\":\"2026-07-13T00:00:03Z\",\"first_graph_revision\":1,\"hash_algorithm\":\"sha256\",\"last_graph_revision\":1,\"previous_segment_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"record_count\":3,\"record_type\":\"archive_seal\",\"segment_hash\":\"ba867dd49ae0a91c587f8a06019dd1a67cb811fb576a00f63b07d000ade2cdc3\",\"segment_id\":\"gsg_018f1f8e-5d4b-7a10-8a20-0c9b0b23c007\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "f84f882c6d9a60931fe3cf6789f3c0766e1aa59bc79df030120af231ebd4b7ed"
+    },
+    {
+      "fixture_id": "relationship.directions",
+      "contract_version": "0.2.0",
+      "governing_decision": "AD-004",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "kind": "relationship_directions",
+      "directions": {
+        "depends_on": "prerequisite -> dependent",
+        "produces": "producer -> product",
+        "derives": "source -> derived",
+        "causes": "cause -> effect",
+        "evidences": "evidence -> supported record",
+        "evaluated_by": "subject -> evaluation",
+        "superseded_by": "earlier -> later",
+        "resolved_by": "unresolved item -> resolution",
+        "captured_by": "included source -> snapshot"
+      }
+    }
+  ]
+}

@@ -1,36 +1,62 @@
 # GLCP Core Specification
 
-**Status:** PLACEHOLDER -- owned by Phase 3
-**Owner phase:** Phase 3 (MACHINE_CONTRACTS)
-**Controlling source documents:** `GUERILLA_PROTOCOL_SPEC.md`
-**Regeneration trigger:** Any protocol contract change, Phase 3 completion, or Phase 16 (reference client/server)
-
-> **WARNING:** This document is a Phase 1 skeleton. Its content is non-normative until Phase 3.
-
----
+**Status:** FROZEN -- Phase 3 complete
+**Owner phase:** Phase 3 (Machine Contracts)
+**Protocol version:** `0.2.0`
+**Controlling schema:** `schemas/protocol_envelope.schema.json`
 
 ## Purpose
 
-Define the transport-independent Guerilla Lineage and Continuity Protocol (GLCP) operation contracts, message schemas, and conformance requirements.
+GLCP is the transport-independent Guerilla Lineage and Continuity Protocol.
+Phase 3 freezes message shape, identifiers, actor attribution, error objects,
+extension handling, and compatibility rules. It does not implement a client,
+server, transport binding, or mutation path.
 
----
+## Envelope
 
-## Required Future Sections
+Every request, response, and event uses `schemas/protocol_envelope.schema.json`.
 
-1. Message envelope specification
-2. Operation families and per-operation request/response schemas
-3. Version negotiation and compatibility rules
-4. Capability declaration format
-5. Actor and authorization context
-6. Correlation and causation semantics
-7. Idempotency specification
-8. Error model and registry reference
-9. Pagination and cursor semantics
-10. Transport binding requirements
-11. Conformance matrix
+Required envelope fields are:
 
----
+- `protocol: "glcp"`;
+- `version: "0.2.0"`;
+- `message_id` with the `gmsg_` UUIDv7 prefix;
+- `message_type`;
+- `operation`;
+- `sent_at` in canonical UTC timestamp form;
+- `correlation_id`;
+- `extensions`;
+- `body`.
 
-## Unresolved Items
+Actor fields are attribution only. Authorization comes from the effective
+principal and fixed local profile defined in AD-009.
 
-Depends on Phase 2 decisions for identifiers and canonicalization, and Phase 3 schema publication. See `docs/ARCHITECTURE_DECISIONS.md`.
+## Responses and Errors
+
+Response bodies use `schemas/protocol_response.schema.json`. Error objects use
+`schemas/error.schema.json` and `registries/error_codes.json`.
+
+Error objects must not include unredacted payload contents or credentials.
+
+## Compatibility
+
+Unknown critical extension fields are rejected. Unknown optional extension
+fields may be ignored only when negotiated compatibility permits and ignoring
+them does not weaken authorization, integrity, canonical bytes, graph
+invariants, or derived-versus-authoritative boundaries.
+
+Protocol extensions must not create a second mutation path, redefine GLCP
+semantics, grant authority from payload content, bypass graph cycle validation,
+or mark derived views authoritative.
+
+## Operation Families
+
+Phase 3 freezes schemas for message envelopes and common response/error
+objects. Operation-specific request and response bodies remain future Phase 16
+transport/client work unless already represented by graph, adapter, boundary, or
+derived-view schemas.
+
+## Phase Boundary
+
+No transport, client, server, adapter host, graph mutation, or projection
+runtime is implemented by this specification.

@@ -1,6 +1,6 @@
 # AGENTS.md -- Guerilla Agent Control Surface
 
-**Status:** Phase 2 -- architecture decisions frozen; agent governance active
+**Status:** Gate A complete -- phases 1-4 frozen; agent governance active
 **Owner phase:** Phase 1 (Kickoff), updated by every subsequent phase
 **Regeneration trigger:** Any phase completion, architecture decision change, or agent-rule update
 

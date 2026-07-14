@@ -1,0 +1,112 @@
+{
+  "corpus": "compatibility_cases",
+  "contract_version": "0.2.0",
+  "fixtures": [
+    {
+      "fixture_id": "compat.optional_known_extension_valid",
+      "contract_version": "0.2.0",
+      "schema": "node.schema.json",
+      "base_fixture_id": "valid.node.goal",
+      "governing_decision": "AD-014",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "compatibility_behavior": "optional_supported_extension_retained",
+      "mutation": {
+        "op": "set",
+        "path": "/extensions",
+        "value": {
+          "dev.guerilla.core-fixtures.note": {
+            "critical": false,
+            "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c900",
+            "value": {
+              "note": "optional fixture extension"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fixture_id": "compat.optional_unknown_extension_downgrade",
+      "contract_version": "0.2.0",
+      "schema": "node.schema.json",
+      "base_fixture_id": "valid.node.goal",
+      "governing_decision": "AD-014",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "compatibility_behavior": "unknown_optional_extension_ignored_with_warning",
+      "mutation": {
+        "op": "set",
+        "path": "/extensions",
+        "value": {
+          "example.unknown.optional": {
+            "critical": false,
+            "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c901",
+            "value": {
+              "note": "may be ignored"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fixture_id": "compat.critical_unknown_extension_rejected",
+      "contract_version": "0.2.0",
+      "schema": "node.schema.json",
+      "base_fixture_id": "valid.node.goal",
+      "governing_decision": "AD-014",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "unknown_critical_extension",
+      "compatibility_behavior": "reject_if_critical",
+      "mutation": {
+        "op": "set",
+        "path": "/extensions",
+        "value": {
+          "example.unknown.critical": {
+            "critical": true,
+            "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c901",
+            "value": {
+              "note": "must be rejected"
+            }
+          }
+        }
+      }
+    },
+    {
+      "fixture_id": "compat.unsupported_major_version_rejected",
+      "contract_version": "0.2.0",
+      "schema": "protocol_envelope.schema.json",
+      "base_fixture_id": "valid.protocol_envelope",
+      "governing_decision": "AD-014",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "unsupported_version",
+      "compatibility_behavior": "reject_incompatible_version",
+      "mutation": {"op": "set", "path": "/version", "value": "1.0.0"}
+    },
+    {
+      "fixture_id": "compat.derived_view_cannot_upgrade_authority",
+      "contract_version": "0.2.0",
+      "schema": "derived_projection.schema.json",
+      "base_fixture_id": "valid.derived_projection",
+      "governing_decision": "AD-011",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "derived_view_not_authoritative",
+      "compatibility_behavior": "extensions_cannot_make_projection_authoritative",
+      "mutations": [
+        {"op": "set", "path": "/authoritative", "value": true},
+        {
+          "op": "set",
+          "path": "/extensions",
+          "value": {
+            "dev.guerilla.core-fixtures.authority": {
+              "critical": false,
+              "namespace_id": "gxe_018f1f8e-5d4b-7a10-8a20-0c9b0b23c900",
+              "value": {
+                "claims_authoritative": true
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

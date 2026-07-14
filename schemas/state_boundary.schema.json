@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/state_boundary.schema.json",
+  "title": "Guerilla state boundary declaration",
+  "type": "object",
+  "required": [
+    "state_boundary_id",
+    "system_id",
+    "name",
+    "system_of_record",
+    "continuity_mode",
+    "ownership",
+    "permitted_operations",
+    "lineage_crossing",
+    "conflict_behavior",
+    "extensions"
+  ],
+  "properties": {
+    "state_boundary_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+    },
+    "system_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/externalSystemId"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "system_of_record": {
+      "const": true
+    },
+    "continuity_mode": {
+      "enum": ["online", "offline", "reconstructed"]
+    },
+    "ownership": {
+      "enum": ["external_application_state", "guerilla_lineage_only"]
+    },
+    "permitted_operations": {
+      "type": "array",
+      "items": {
+        "enum": ["observe", "act", "evaluate", "reconcile", "snapshot"]
+      },
+      "uniqueItems": true
+    },
+    "permitted_roots": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "permitted_endpoints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "resource_namespaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "lineage_crossing": {
+      "enum": ["observation_only", "intent_before_action", "reconciliation_required"]
+    },
+    "conflict_behavior": {
+      "enum": ["reject", "record_conflict", "require_reconciliation"]
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

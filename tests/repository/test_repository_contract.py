@@ -163,10 +163,21 @@ REQUIRED_SKELETONS = [
     "EVALUATION_PLAN.md",
 ]
 
-FROZEN_PHASE2_DOCS = {
+FROZEN_DOCS = {
     "ARCHITECTURE_DECISIONS.md",
     "GLOSSARY.md",
     "MVP_SCOPE.md",
+    "DATA_MODEL.md",
+    "GRAPH_RECORD_FORMAT.md",
+    "GLCP_CORE_SPEC.md",
+    "ADAPTER_CONTRACT.md",
+    "STATE_BOUNDARY_MODEL.md",
+    "ERROR_REGISTRY.md",
+}
+
+GATE_A_STATUS_DOCS = {
+    "CODEX_BUILD_PLAN.md",
+    "TEST_MATRIX.md",
 }
 
 
@@ -248,22 +259,46 @@ def test_registries_readme_exists():
     assert (REPO_ROOT / "registries" / "README.md").is_file(), "registries/README.md missing"
 
 
-def test_no_frozen_schemas_in_phase1():
-    """schemas/ must not contain frozen .schema.json files in Phase 1."""
+def test_phase3_schema_inventory_is_frozen():
+    """schemas/ contains exactly the frozen Phase 3 machine contracts."""
     schema_dir = REPO_ROOT / "schemas"
-    json_files = list(schema_dir.glob("*.schema.json"))
-    assert len(json_files) == 0, (
-        f"Phase 1 must not freeze schemas; found: {[f.name for f in json_files]}"
-    )
+    json_files = {path.name for path in schema_dir.glob("*.schema.json")}
+    assert json_files == {
+        "common.schema.json",
+        "actor.schema.json",
+        "authority.schema.json",
+        "external_identity.schema.json",
+        "payload_ref.schema.json",
+        "provenance.schema.json",
+        "node.schema.json",
+        "edge.schema.json",
+        "transaction_begin.schema.json",
+        "transaction_commit.schema.json",
+        "graph_header.schema.json",
+        "archive_seal.schema.json",
+        "state_boundary.schema.json",
+        "capability.schema.json",
+        "adapter_descriptor.schema.json",
+        "protocol_envelope.schema.json",
+        "protocol_response.schema.json",
+        "error.schema.json",
+        "extension_namespace.schema.json",
+        "derived_projection.schema.json",
+    }
 
 
-def test_no_frozen_registries_in_phase1():
-    """registries/ must not contain frozen .json files in Phase 1."""
+def test_phase3_registry_inventory_is_frozen():
+    """registries/ contains exactly the frozen Phase 3 registries."""
     registry_dir = REPO_ROOT / "registries"
-    json_files = list(registry_dir.glob("*.json"))
-    assert len(json_files) == 0, (
-        f"Phase 1 must not freeze registries; found: {[f.name for f in json_files]}"
-    )
+    json_files = {path.name for path in registry_dir.glob("*.json")}
+    assert json_files == {
+        "node_types.json",
+        "relationship_types.json",
+        "conflict_types.json",
+        "capabilities.json",
+        "error_codes.json",
+        "extension_namespaces.json",
+    }
 
 
 # ── Package directories ───────────────────────────────────────────────
@@ -342,7 +377,7 @@ def test_phase_2_prompt_placeholder_exists():
     content = path.read_text(encoding="utf-8")
     assert "Phase 2" in content
     assert "Architecture Decisions" in content
-    assert "runtime implementation remains blocked until Gate A completes" in content
+    assert "Runtime implementation remains out of scope" in content
 
 
 def test_prompt_inventory_complete():
@@ -369,8 +404,11 @@ def test_build_documents_identify_status():
     for name in REQUIRED_SKELETONS:
         path = docs_dir / name
         content = path.read_text(encoding="utf-8")
-        if name in FROZEN_PHASE2_DOCS:
-            assert "**Status:** FROZEN -- Phase 2 complete" in content
+        if name in FROZEN_DOCS:
+            assert "**Status:** FROZEN -- Phase" in content
+            assert "PLACEHOLDER" not in content
+        elif name in GATE_A_STATUS_DOCS:
+            assert "**Status:** Gate A" in content
             assert "PLACEHOLDER" not in content
         else:
             assert "PLACEHOLDER" in content or "placeholder" in content.lower(), (

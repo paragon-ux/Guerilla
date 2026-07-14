@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/extension_namespace.schema.json",
+  "title": "Guerilla extension namespace registration",
+  "type": "object",
+  "required": [
+    "namespace_id",
+    "name",
+    "owner",
+    "version",
+    "compatibility",
+    "schemas",
+    "invariants",
+    "downgrade_behavior",
+    "security_implications",
+    "affected_capabilities"
+  ],
+  "properties": {
+    "namespace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensionNamespaceId"
+    },
+    "name": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/namespacedName"
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/semver"
+    },
+    "compatibility": {
+      "type": "object",
+      "required": ["min_protocol", "max_protocol"],
+      "properties": {
+        "min_protocol": {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+        },
+        "max_protocol": {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+        }
+      },
+      "additionalProperties": false
+    },
+    "schemas": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      },
+      "minItems": 1
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "downgrade_behavior": {
+      "enum": ["reject_if_critical", "ignore_if_optional", "strip_optional_with_warning"]
+    },
+    "security_implications": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "affected_capabilities": {
+      "type": "array",
+      "items": {
+        "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/capabilityValue"
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}

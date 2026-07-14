@@ -1,0 +1,39 @@
+{
+  "registry": "node_types",
+  "version": "0.2.0",
+  "status": "FROZEN -- Phase 3 complete",
+  "entries": [
+    {
+      "value": "goal",
+      "description": "Desired outcome or work objective."
+    },
+    {
+      "value": "artifact",
+      "description": "Lineage-relevant input, output, or external object revision."
+    },
+    {
+      "value": "operation",
+      "description": "Planned, running, completed, blocked, failed, or reconciled unit of work."
+    },
+    {
+      "value": "event",
+      "description": "Observation, request, action result, external notification, or reconciliation occurrence."
+    },
+    {
+      "value": "evaluation",
+      "description": "Assessment of a subject node or artifact against criteria."
+    },
+    {
+      "value": "decision",
+      "description": "Explicit choice that resolves, defers, or supersedes alternatives."
+    },
+    {
+      "value": "conflict",
+      "description": "Evidence-backed incompatibility or unresolved condition."
+    },
+    {
+      "value": "snapshot",
+      "description": "Captured graph boundary and resume source at a graph revision."
+    }
+  ]
+}

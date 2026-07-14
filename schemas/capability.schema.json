@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/capability.schema.json",
+  "title": "Guerilla adapter capability declaration",
+  "type": "object",
+  "required": ["capability", "supported", "state_boundary_ids"],
+  "properties": {
+    "capability": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/capabilityValue"
+    },
+    "supported": {
+      "type": "boolean"
+    },
+    "state_boundary_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+      },
+      "uniqueItems": true
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "metadata": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    }
+  },
+  "additionalProperties": false
+}

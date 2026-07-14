@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Architecture-complete / pre-prototype; Phase 2 complete
-**Phase:** 3 next - Machine Contracts; runtime implementation remains blocked until Gate A completes
+**Current status:** Gate A complete / pre-prototype; Phases 1-4 complete
+**Phase:** 5 next - Codec, Config, Identifiers; runtime implementation has not started in this thread
 
 ---
 
@@ -45,6 +45,7 @@ uv run mypy src tests
 uv run pytest                  # all tests
 uv run pytest tests/unit/      # unit tests only
 uv run pytest tests/repository/ # repository-contract tests
+uv run pytest tests/conformance/ # schema and fixture conformance tests
 uv run pytest -v               # verbose output
 
 # Package build
@@ -91,7 +92,7 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
 ## Phase Discipline
 
 - **No phase or gate skipping.** Each phase must complete its exit criteria before the next begins.
-- **Gate A (Contract Ready) blocks Gate B (Kernel Ready).** No runtime code before contracts freeze.
+- **Gate A (Contract Ready) is complete.** Phase 5 may begin only in a later task; this thread stopped before runtime code.
 - Phase 1 is a **repository-contract phase**, not a runtime phase. Do not implement simplified Guerilla runtime.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
@@ -106,11 +107,11 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Phase 3 Handoff
+## Phase 5 Handoff
 
-After Phase 2 completion:
+After Gate A completion:
 
-1. Confirm repository baseline passes all repository-contract tests.
-2. Verify architecture sources are present, classified, and hash-verified.
-3. Use `ARCHITECTURE_DECISIONS.md`, `GLOSSARY.md`, and `MVP_SCOPE.md` as frozen Phase 3 inputs.
-4. Hand off to `PHASE_03_MACHINE_CONTRACTS.md` when that prompt is created.
+1. Confirm repository and conformance tests pass.
+2. Use `ARCHITECTURE_DECISIONS.md`, `schemas/`, `registries/`, and `tests/fixtures/contracts/` as frozen Phase 5 inputs.
+3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
+4. Begin with Phase 5 only when explicitly requested.

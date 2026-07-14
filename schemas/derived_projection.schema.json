@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/derived_projection.schema.json",
+  "title": "Guerilla derived projection descriptor",
+  "type": "object",
+  "required": [
+    "projection_id",
+    "workspace_id",
+    "authority_class",
+    "authoritative",
+    "source_graph_revision",
+    "source_node_ids",
+    "transformation_id",
+    "transformation_version",
+    "policy_version",
+    "generated_at",
+    "freshness",
+    "information_loss",
+    "result_hash",
+    "extensions"
+  ],
+  "properties": {
+    "projection_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/projectionId"
+    },
+    "workspace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/workspaceId"
+    },
+    "authority_class": {
+      "const": "derived_non_authoritative"
+    },
+    "authoritative": {
+      "const": false
+    },
+    "source_graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "source_node_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+      },
+      "uniqueItems": true
+    },
+    "source_query": {
+      "type": "string",
+      "maxLength": 2048
+    },
+    "transformation_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "transformation_version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/semver"
+    },
+    "policy_version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/semver"
+    },
+    "generated_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "freshness": {
+      "enum": ["graph_revision_bound", "requires_external_refresh", "stale"]
+    },
+    "information_loss": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "result_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,32 +1,46 @@
 # Adapter Contract
 
-**Status:** PLACEHOLDER -- owned by Phase 3
-**Owner phase:** Phase 3 (MACHINE_CONTRACTS)
-**Controlling source documents:** `GUERILLA_CONCEPT_PAPER.md` Section 8, `GUERILLA_IMPLEMENTATION_SPEC.md` Sections 4.7-4.8, 13-16, `GUERILLA_PROTOCOL_SPEC.md` Sections 10, 13-17
-**Regeneration trigger:** Any adapter contract change, Phase 3 completion, or Phase 9 (adapter SDK)
-
-> **WARNING:** This document is a Phase 1 skeleton. Its content is non-normative until Phase 3.
-
----
+**Status:** FROZEN -- Phase 3 complete
+**Owner phase:** Phase 3 (Machine Contracts)
+**Controlling schema:** `schemas/adapter_descriptor.schema.json`
 
 ## Purpose
 
-Define the adapter descriptor, capability declaration, invocation contract, state-boundary enforcement, and conformance requirements.
+Adapters are trusted integration components that translate between external
+systems and Guerilla contracts. Phase 3 freezes descriptor shape and capability
+vocabulary only. Adapter interfaces and synthetic adapters are later phases.
 
----
+## Descriptor
 
-## Required Future Sections
+Adapter descriptors must declare:
 
-1. Adapter descriptor schema and required fields
-2. Capability declaration (read consistency, write behavior, event ordering, concurrency, conflict handling, replay support, snapshot support, identity stability, lineage completeness, idempotency, mutating actions, state boundaries, schemas, authentication, limitations)
-3. Operation contracts: `describe`, `observe`, `act`, `evaluate`, `reconcile`
-4. State-boundary enforcement rules
-5. Adapter host behavior (load, validate, authorize, invoke, validate response, enforce timeouts)
-6. Synthetic adapter conformance requirements
-7. Adapter isolation models (in-process, subprocess, container, remote)
+- adapter id and external system id;
+- semantic version;
+- MVP trust model `trusted_in_process_python`;
+- state boundaries;
+- capabilities;
+- authentication requirements;
+- limitations;
+- extensions.
 
----
+The descriptor cannot expand authority. Authority comes from configuration,
+state-boundary declarations, and the local authorization profile.
 
-## Unresolved Items
+## Capabilities
 
-Depends on Phase 2 decisions for adapter execution model and isolation. See `docs/ARCHITECTURE_DECISIONS.md`.
+Capability values are registered in `registries/capabilities.json` and encoded
+by `schemas/capability.schema.json`. Mutating capability `act` is allowed only
+inside declared state boundaries and later runtime phases must record intent
+before invocation.
+
+## State Boundaries
+
+Each descriptor embeds or references state-boundary declarations governed by
+`schemas/state_boundary.schema.json`. External systems retain application-state
+authority for those boundaries.
+
+## Phase Boundary
+
+No adapter loading, invocation, subprocess/container isolation, network
+transport, observation ingestion, action execution, or reconciliation runtime is
+implemented in Phase 3.

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/payload_ref.schema.json",
+  "title": "Guerilla payload reference",
+  "type": "object",
+  "required": ["retention_class"],
+  "properties": {
+    "retention_class": {
+      "enum": ["none", "metadata", "content_addressed", "external_reference"]
+    },
+    "payload_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "media_type": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9!#$&^_.+-]*/[A-Za-z0-9][A-Za-z0-9!#$&^_.+-]*$"
+    },
+    "size_bytes": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/positiveCount"
+    },
+    "redacted": {
+      "type": "boolean"
+    },
+    "redaction_policy_version": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "external_identity": {
+      "$ref": "https://guerilla.dev/schemas/external_identity.schema.json"
+    },
+    "locator": {
+      "type": "string",
+      "maxLength": 4096
+    },
+    "metadata": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "retention_class": {
+            "const": "content_addressed"
+          }
+        },
+        "required": ["retention_class"]
+      },
+      "then": {
+        "required": ["payload_hash", "media_type", "size_bytes", "redacted"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "retention_class": {
+            "const": "external_reference"
+          }
+        },
+        "required": ["retention_class"]
+      },
+      "then": {
+        "required": ["external_identity", "locator"]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

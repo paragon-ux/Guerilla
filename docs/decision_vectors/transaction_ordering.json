@@ -1,0 +1,17 @@
+{
+  "decision": "AD-004",
+  "family_rank": ["node", "edge"],
+  "input_order": [
+    {"record_type": "edge", "id": "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020"},
+    {"record_type": "node", "id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c011"},
+    {"record_type": "node", "id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c010"}
+  ],
+  "expected_order": [
+    "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c010",
+    "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c011",
+    "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020"
+  ],
+  "duplicate_policy": "duplicate_id",
+  "same_transaction_endpoint_policy": "endpoints_may_reference_node_members_in_same_transaction",
+  "extension_family_policy": "registered_extension_families_sort_after_core_by_family_name_then_identifier"
+}

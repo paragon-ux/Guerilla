@@ -71,15 +71,15 @@ External revision tokens are preserved exactly as reported. They may be normaliz
 
 | Type | Direction |
 |---|---|
-| `depends_on` | dependent node to prerequisite node |
+| `depends_on` | prerequisite node to dependent node |
 | `produces` | producer operation or event to produced artifact/result |
-| `derives` | derived artifact/view to source node |
+| `derives` | source node to derived artifact/view |
 | `causes` | cause event/operation to caused event/operation |
 | `evidences` | evidence node to evidenced claim/conflict/evaluation |
 | `evaluated_by` | subject node to evaluation node |
 | `superseded_by` | earlier revision to later revision |
-| `resolved_by` | conflict or open item to resolving decision/event |
-| `captured_by` | source node or boundary to snapshot node |
+| `resolved_by` | unresolved item to resolving decision/event |
+| `captured_by` | included source to snapshot node |
 
 Symmetric, cyclic, or non-causal domain relationships are represented through reified nodes and may be rendered differently in derived views.
 

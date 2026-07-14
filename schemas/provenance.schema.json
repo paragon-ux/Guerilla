@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/provenance.schema.json",
+  "title": "Guerilla provenance metadata",
+  "type": "object",
+  "required": ["source", "source_record_ids"],
+  "properties": {
+    "source": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "source_record_ids": {
+      "type": "array",
+      "items": {
+        "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+      },
+      "uniqueItems": true
+    },
+    "causation_id": {
+      "oneOf": [
+        {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/messageId"
+        },
+        {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+        }
+      ]
+    },
+    "observed_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "external_identity": {
+      "$ref": "https://guerilla.dev/schemas/external_identity.schema.json"
+    },
+    "metadata": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/metadata"
+    }
+  },
+  "additionalProperties": false
+}

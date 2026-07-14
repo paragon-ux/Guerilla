@@ -1,0 +1,19 @@
+{
+  "registry": "capabilities",
+  "version": "0.2.0",
+  "status": "FROZEN -- Phase 3 complete",
+  "entries": [
+    {"value": "describe", "mutating": false},
+    {"value": "observe", "mutating": false},
+    {"value": "act", "mutating": true},
+    {"value": "evaluate", "mutating": false},
+    {"value": "reconcile", "mutating": false},
+    {"value": "snapshot", "mutating": false},
+    {"value": "replay", "mutating": false},
+    {"value": "event_subscription", "mutating": false},
+    {"value": "read_consistency", "mutating": false},
+    {"value": "write_idempotency", "mutating": false},
+    {"value": "identity_mapping", "mutating": false},
+    {"value": "projection_generation", "mutating": false}
+  ]
+}

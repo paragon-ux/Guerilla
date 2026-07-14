@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/transaction_begin.schema.json",
+  "title": "Guerilla transaction begin record",
+  "type": "object",
+  "required": [
+    "record_type",
+    "protocol_version",
+    "workspace_id",
+    "transaction_id",
+    "expected_previous_commit_hash",
+    "expected_graph_revision",
+    "actor",
+    "created_at",
+    "extensions"
+  ],
+  "properties": {
+    "record_type": {
+      "const": "transaction_begin"
+    },
+    "protocol_version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+    },
+    "workspace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/workspaceId"
+    },
+    "transaction_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/transactionId"
+    },
+    "expected_previous_commit_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "expected_graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "actor": {
+      "$ref": "https://guerilla.dev/schemas/actor.schema.json"
+    },
+    "created_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

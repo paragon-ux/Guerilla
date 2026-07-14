@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/transaction_commit.schema.json",
+  "title": "Guerilla final transaction commit record",
+  "type": "object",
+  "required": [
+    "record_type",
+    "protocol_version",
+    "workspace_id",
+    "transaction_id",
+    "commit_id",
+    "committed_record_ids",
+    "transaction_hash",
+    "graph_revision",
+    "previous_commit_hash",
+    "commit_hash",
+    "committed_at",
+    "canonicalization_id",
+    "hash_algorithm",
+    "extensions"
+  ],
+  "properties": {
+    "record_type": {
+      "const": "transaction_commit"
+    },
+    "protocol_version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+    },
+    "workspace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/workspaceId"
+    },
+    "transaction_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/transactionId"
+    },
+    "commit_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/commitId"
+    },
+    "committed_record_ids": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+          },
+          {
+            "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/edgeId"
+          }
+        ]
+      },
+      "uniqueItems": true
+    },
+    "transaction_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "previous_commit_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "commit_hash": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/sha256"
+    },
+    "committed_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "canonicalization_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/canonicalizationId"
+    },
+    "hash_algorithm": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/hashAlgorithm"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

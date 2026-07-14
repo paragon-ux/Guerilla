@@ -1,34 +1,45 @@
 # State Boundary Model
 
-**Status:** PLACEHOLDER -- owned by Phase 3
-**Owner phase:** Phase 3 (MACHINE_CONTRACTS)
-**Controlling source documents:** `GUERILLA_CONCEPT_PAPER.md` Sections 4, 8, `GUERILLA_IMPLEMENTATION_SPEC.md` Sections 4.7, 13-16
-**Regeneration trigger:** Any state-boundary change or Phase 3 completion
-
-> **WARNING:** This document is a Phase 1 skeleton. Its content is non-normative until Phase 3.
-
----
+**Status:** FROZEN -- Phase 3 complete
+**Owner phase:** Phase 3 (Machine Contracts)
+**Controlling schema:** `schemas/state_boundary.schema.json`
 
 ## Purpose
 
-Define the state-boundary model: what Guerilla owns, what external systems own, how boundaries are declared, and how authority crossing is governed.
+A state boundary declares where an external system remains the system of record
+and how Guerilla may observe, reference, request mutation, and preserve lineage
+without taking over application-state authority.
 
----
+## Required Boundary Fields
 
-## Required Future Sections
+Every state boundary declares:
 
-1. State-boundary declaration structure
-2. What Guerilla stores (graph records, identifiers, mappings, authority declarations, provenance, payloads)
-3. What Guerilla references (external objects without ownership transfer)
-4. What Guerilla derives (projections, manifests, snapshots)
-5. What Guerilla does not own
-6. Adapter obligations at each boundary
-7. Continuity modes: online, offline, reconstructed
-8. Authority crossing rules
-9. Conflict detection at boundaries
+- `state_boundary_id`;
+- `system_id`;
+- human-readable name;
+- `system_of_record: true`;
+- continuity mode: `online`, `offline`, or `reconstructed`;
+- ownership: external application state or Guerilla lineage only;
+- permitted operations;
+- permitted roots, endpoints, or resource namespaces when applicable;
+- lineage crossing behavior;
+- conflict behavior;
+- extensions.
 
----
+## Authority Rules
 
-## Unresolved Items
+Actor fields, adapter descriptors, payload content, and extension metadata do
+not grant authority. Access outside a declared boundary is rejected. Recording a
+reference to an external object does not transfer ownership of that object.
 
-Depends on Phase 2 decisions for authorization profile and identity lifecycle. See `docs/ARCHITECTURE_DECISIONS.md`.
+## Continuity Rules
+
+Boundaries state whether continuity is online, offline, or reconstructed. Stale
+external revisions, ambiguous authority, identity reuse, and unknown external
+outcomes remain explicit conflicts or reconciliation work rather than hidden
+defaults.
+
+## Phase Boundary
+
+This model publishes contracts only. Runtime authorization, identity registry,
+adapter enforcement, and reconciliation are later phases.

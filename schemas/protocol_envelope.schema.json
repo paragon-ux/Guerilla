@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/protocol_envelope.schema.json",
+  "title": "GLCP message envelope",
+  "type": "object",
+  "required": [
+    "protocol",
+    "version",
+    "message_id",
+    "message_type",
+    "operation",
+    "sent_at",
+    "correlation_id",
+    "extensions",
+    "body"
+  ],
+  "properties": {
+    "protocol": {
+      "const": "glcp"
+    },
+    "version": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/protocolVersion"
+    },
+    "message_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/messageId"
+    },
+    "message_type": {
+      "enum": ["request", "response", "event"]
+    },
+    "operation": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*\\.[a-z][a-z0-9_]*$"
+    },
+    "sent_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "workspace_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/workspaceId"
+    },
+    "actor": {
+      "$ref": "https://guerilla.dev/schemas/actor.schema.json"
+    },
+    "correlation_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/messageId"
+    },
+    "causation_id": {
+      "oneOf": [
+        {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/messageId"
+        },
+        {
+          "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+        }
+      ]
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{8,256}$"
+    },
+    "expected_graph_revision": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/graphRevision"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    },
+    "body": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/safeJson"
+    }
+  },
+  "additionalProperties": false
+}

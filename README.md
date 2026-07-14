@@ -2,7 +2,7 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Architecture-complete / pre-prototype. Phase 2 architecture decisions are frozen; Phase 3 machine contracts are next. No working graph runtime exists yet.
+**Current status:** Gate A complete / pre-prototype. Phases 1-4 are frozen: architecture decisions, schemas, registries, and conformance fixtures. No working graph runtime exists yet.
 
 ---
 
@@ -35,8 +35,8 @@ Guerilla does **not** own: canonical application content, external database tran
 
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
-| A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Phases 1-2 complete; Phase 3 next |
-| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Blocked by Gate A |
+| A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Complete |
+| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 5 next; not started |
 | C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Blocked by Gate B |
 | D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |
 | E — Research Validated | 20–22 | Real heterogeneous pilots, benchmark evidence, reproducible release | Blocked by Gate D |
@@ -64,7 +64,7 @@ uv run pytest
 ## Non-Claims
 
 - No executable graph runtime exists yet. All runtime components are planned (22-phase build sequence).
-- No schemas, registries, or machine-readable contracts are frozen.
+- Schemas, registries, and conformance fixtures are frozen, but no runtime implementation has started.
 - No adapters, integrations, benchmarks, or empirical results are available.
 - The architecture papers (v0.2.0-draft) are the current normative specification.
 

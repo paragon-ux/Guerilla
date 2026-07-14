@@ -5,7 +5,7 @@
 **Owner phase:** Phase 2 (Architecture Decisions)
 **Required predecessor:** Phase 1 PASS with reproducible lockfile, valid skills, source-integrity enforcement, isolated wheel smoke evidence, and updated status surfaces
 
-> **Completion note:** Phase 2 froze architecture decisions, glossary terminology, and MVP scope. Phase 3 may proceed only to machine-readable schemas, registries, and examples; runtime implementation remains blocked until Gate A completes.
+> **Completion note:** Phase 2 froze architecture decisions, glossary terminology, MVP scope, and decision vectors. Phase 3 and Phase 4 have since completed Gate A. Runtime implementation remains out of scope for this prompt.
 
 ---
 

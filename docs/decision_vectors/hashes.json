@@ -1,0 +1,29 @@
+{
+  "decision": "AD-003",
+  "hash_algorithm": "sha256",
+  "digest_format": "64_lowercase_hex",
+  "genesis_previous_commit_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "genesis_previous_segment_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "vectors": {
+    "record_hash": {
+      "domain": "guerilla.record.v1\\n",
+      "canonical_json": "{\"actor\":{\"actor_id\":\"gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001\",\"actor_kind\":\"human\"},\"authority\":{\"authority_type\":\"guerilla\",\"principal_id\":\"local-user\",\"profile\":\"local-owner-v1\"},\"created_at\":\"2026-07-13T00:00:00Z\",\"entity_id\":\"gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c002\",\"extensions\":{},\"metadata\":{},\"node_id\":\"grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003\",\"node_type\":\"goal\",\"payload_ref\":{\"retention_class\":\"none\"},\"protocol_version\":\"0.2.0\",\"provenance\":{\"source\":\"phase2-vector\",\"source_record_ids\":[]},\"record_type\":\"node\",\"status\":\"open\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "4dc50be466305f9d0d503a4190be077aabea747bc7a90726b85d9eb2cab4f646"
+    },
+    "transaction_hash": {
+      "domain": "guerilla.transaction.v1\\n",
+      "canonical_json": "{\"actor\":{\"actor_id\":\"gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001\",\"actor_kind\":\"human\"},\"created_at\":\"2026-07-13T00:00:01Z\",\"expected_graph_revision\":0,\"expected_previous_commit_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"member_record_hashes\":[\"4dc50be466305f9d0d503a4190be077aabea747bc7a90726b85d9eb2cab4f646\"],\"transaction_id\":\"grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "5fba606737ab299f52d9293c6ca09affaa094002afef07d5be2cb35c83550150"
+    },
+    "commit_hash": {
+      "domain": "guerilla.commit.v1\\n",
+      "canonical_json": "{\"canonicalization_id\":\"guerilla-cjson-v1\",\"commit_id\":\"grm_018f1f8e-5d4b-7a10-8a20-0c9b0b23c006\",\"committed_at\":\"2026-07-13T00:00:02Z\",\"graph_revision\":1,\"hash_algorithm\":\"sha256\",\"previous_commit_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"transaction_hash\":\"5fba606737ab299f52d9293c6ca09affaa094002afef07d5be2cb35c83550150\",\"transaction_id\":\"grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "340952bccc1feecac61df7dd4f6dd3e1a2369861eddd77f0adc21a09a6ef1d0b"
+    },
+    "segment_hash": {
+      "domain": "guerilla.segment.v1\\n",
+      "canonical_json": "{\"commit_hashes\":[\"340952bccc1feecac61df7dd4f6dd3e1a2369861eddd77f0adc21a09a6ef1d0b\"],\"first_graph_revision\":1,\"last_graph_revision\":1,\"previous_segment_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"segment_id\":\"gsg_018f1f8e-5d4b-7a10-8a20-0c9b0b23c007\",\"workspace_id\":\"grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004\"}",
+      "expected_digest": "ba867dd49ae0a91c587f8a06019dd1a67cb811fb576a00f63b07d000ade2cdc3"
+    }
+  }
+}

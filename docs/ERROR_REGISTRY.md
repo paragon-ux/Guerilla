@@ -1,29 +1,49 @@
 # Error Registry
 
-**Status:** PLACEHOLDER -- owned by Phase 3
-**Owner phase:** Phase 3 (MACHINE_CONTRACTS)
-**Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 29, `GUERILLA_PROTOCOL_SPEC.md` Section 25
-**Regeneration trigger:** Any error code change or Phase 3 completion
-
-> **WARNING:** This document is a Phase 1 skeleton. Its content is non-normative until Phase 3.
-
----
+**Status:** FROZEN -- Phase 3 complete
+**Owner phase:** Phase 3 (Machine Contracts)
+**Controlling registry:** `registries/error_codes.json`
+**Controlling schema:** `schemas/error.schema.json`
 
 ## Purpose
 
-Define every stable, machine-readable error code, its classification, retry behavior, and required response fields.
+Guerilla errors use stable machine-readable codes with retry classifications
+and safe diagnostic fields.
 
----
+## Error Object
 
-## Required Future Sections
+Every error object contains:
 
-1. Error response structure (code, message, retriable, details, evidence_node_ids, state_boundary_id, current_graph_revision, retry_after, documentation_ref)
-2. Complete error-code registry with classifications
-3. Retry classification for each code
-4. Error-code extension governance
+- `code`;
+- `message`;
+- `retriable`;
+- `details`;
+- optional evidence node ids;
+- optional state-boundary id;
+- optional current graph revision;
+- optional retry-after value;
+- optional documentation reference.
 
----
+Payloads, credentials, and removed secret bytes must not be copied into error
+text or details.
 
-## Unresolved Items
+## Registry
 
-The error codes are defined conceptually in the implementation and protocol specifications. Final codes and classifications require Phase 3 schema publication.
+The normative error list is `registries/error_codes.json`. The schema enum in
+`schemas/common.schema.json` must remain synchronized with that registry.
+
+## Retry Classification
+
+Retry values are:
+
+- `never`;
+- `after_reconcile`;
+- `after_refresh`;
+- `after_backoff`;
+- `idempotent_replay`;
+- `not_applicable`.
+
+## Phase Boundary
+
+This document does not implement error handling, retry behavior, logging, or
+transport responses. It freezes the contract vocabulary for later phases.
