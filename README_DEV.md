@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate B in progress; Phases 1-5 complete
-**Phase:** 6 next - Append Store, Transactions, Replay
+**Current status:** Gate B in progress; Phases 1-6 complete
+**Phase:** 7 next - DAG Integrity, Index, Query
 
 ---
 
@@ -92,10 +92,12 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
 ## Phase Discipline
 
 - **No phase or gate skipping.** Each phase must complete its exit criteria before the next begins.
-- **Gate A (Contract Ready) is complete.** Phase 5 has implemented deterministic
-  codec/config/identifier/hash primitives only.
-- Phase 6 is the next phase. Do not implement DAG indexing, authority registry,
-  adapters, projections, or transports before their owning phases.
+- **Gate A (Contract Ready) is complete.** Phase 5 implemented deterministic
+  codec/config/identifier/hash primitives.
+- Phase 6 implemented local append storage, payload persistence, writer locking,
+  replay, and incomplete-tail recovery only. Phase 7 is next. Do not implement
+  authority registry, adapters, projections, or transports before their owning
+  phases.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -109,11 +111,11 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Phase 6 Handoff
+## Phase 7 Handoff
 
-After Phase 5 completion:
+After Phase 6 completion:
 
-1. Confirm repository, conformance, and Phase 5 unit tests pass.
-2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5 primitives as frozen Phase 6 inputs.
+1. Confirm repository, conformance, Phase 5 unit, Phase 6 integration, and Phase 6 crash tests pass.
+2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-6 primitives as frozen Phase 7 inputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
-4. Begin Phase 6 only after Phase 5 hosted CI passes.
+4. Begin Phase 7 only after Phase 6 hosted CI passes.

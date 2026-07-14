@@ -1,13 +1,13 @@
 # Test Matrix
 
-**Status:** Gate A evidence current -- Phases 1-4 and entry closure PASS
+**Status:** Gate B evidence current -- Phases 1-6 PASS locally
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Phase 5 primitive runtime tests are passing. Append storage,
-> replay, crash, security, performance, adapter, projection, and transport tests
-> remain planned until their owning phases.
+> **WARNING:** Phase 6 append storage and replay tests are passing locally.
+> DAG integrity, indexing, authority, security, performance, adapter,
+> projection, and transport tests remain planned until their owning phases.
 
 ---
 
@@ -58,8 +58,8 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | REC-002 | Invalid node records rejected by schema fixtures | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | REC-003 | Valid edge records accepted by schema fixtures | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | REC-004 | Invalid edge endpoint shape rejected by schema fixtures | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
-| REC-005 | Duplicate committed identifiers rejected by runtime validator | 6 | PLANNED | -- |
-| REC-006 | Hash mismatches detected by runtime verifier | 6 | PLANNED | -- |
+| REC-005 | Duplicate committed identifiers rejected by runtime validator | 6 | PASSING | `uv run --frozen --extra dev pytest` |
+| REC-006 | Hash mismatches detected by runtime verifier | 6 | PASSING | `uv run --frozen --extra dev pytest` |
 | REC-007 | Unsupported versions rejected by schema fixtures | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | REC-008 | Authority envelope validated by schema fixtures | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 
@@ -77,12 +77,12 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 ### Transaction Tests (Phase 6)
 | Test ID | Description | Phase | Status | Evidence |
 |---|---|---|---|---|
-| TXN-001 | Atomic commit | 6 | PLANNED | -- |
-| TXN-002 | Incomplete transaction ignored on replay | 6 | PLANNED | -- |
-| TXN-003 | Previous-commit mismatch rejected | 6 | PLANNED | -- |
-| TXN-004 | Transaction-hash mismatch rejected | 6 | PLANNED | -- |
-| TXN-005 | Monotonic graph revisions | 6 | PLANNED | -- |
-| TXN-006 | Concurrent append rejected | 6 | PLANNED | -- |
+| TXN-001 | Atomic commit | 6 | PASSING | `tests/integration/test_phase6_append_store.py` |
+| TXN-002 | Incomplete transaction ignored on replay | 6 | PASSING | `tests/crash/test_phase6_recovery.py` |
+| TXN-003 | Previous-commit mismatch rejected by replay verifier | 6 | PASSING | `tests/integration/test_phase6_append_store.py` |
+| TXN-004 | Transaction-hash mismatch rejected by replay verifier | 6 | PASSING | `tests/integration/test_phase6_append_store.py` |
+| TXN-005 | Monotonic graph revisions | 6 | PASSING | `tests/integration/test_phase6_append_store.py` |
+| TXN-006 | Concurrent append rejected | 6 | PASSING | `tests/integration/test_phase6_append_store.py` |
 
 ### DAG Tests (Phase 7)
 | Test ID | Description | Phase | Status | Evidence |
@@ -117,4 +117,8 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime crash, security, performance, adapter, projection, and storage rows remain PLANNED until their owning phases. Gate A evidence does not claim codec, graph store, adapter, transport, projection, or replay implementation.
+Runtime DAG, authority, security, performance, adapter, projection, and transport
+rows remain PLANNED until their owning phases. Gate A evidence does not claim
+kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims only the
+local append store, payload store, writer lock, replay, and incomplete-tail
+recovery behavior covered by the listed tests.

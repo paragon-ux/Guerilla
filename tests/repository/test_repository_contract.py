@@ -178,6 +178,7 @@ FROZEN_DOCS = {
 
 GATE_STATUS_DOCS = {
     "CODEX_BUILD_PLAN.md",
+    "STORAGE_AND_RECOVERY.md",
     "TEST_MATRIX.md",
 }
 
@@ -338,7 +339,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 5 permits codec/config/contracts/protocol/payload/identity primitives only."""
+    """Phase 6 permits storage plus Phase 5 primitive packages only."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {
@@ -348,6 +349,7 @@ def test_no_prohibited_runtime_modules():
         "src/guerilla/protocol",
         "src/guerilla/payloads",
         "src/guerilla/identity",
+        "src/guerilla/storage",
     }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)
@@ -360,7 +362,7 @@ def test_no_prohibited_runtime_modules():
             or rel_posix == "src/guerilla/cli/main.py"
         ):
             continue
-        raise AssertionError(f"Prohibited post-Phase-5 runtime module: {rel}")
+        raise AssertionError(f"Prohibited post-Phase-6 runtime module: {rel}")
 
 
 # ── Prompt inventory ──────────────────────────────────────────────────

@@ -2,10 +2,10 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Gate B in progress. Phases 1-5 are complete: contracts are
-frozen and deterministic codec/config/identifier/hash primitives exist. No
-append store, replay engine, DAG validator, index, adapter runtime, projection,
-or transport exists yet.
+**Current status:** Gate B in progress. Phases 1-6 are complete: contracts are
+frozen, deterministic codec/config/identifier/hash primitives exist, and the
+local append store/replay path is implemented. No DAG validator, index,
+authority registry, adapter runtime, projection, or transport exists yet.
 
 ---
 
@@ -39,7 +39,7 @@ Guerilla does **not** own: canonical application content, external database tran
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
 | A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Complete |
-| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 5 complete; Phase 6 next |
+| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 6 complete; Phase 7 next |
 | C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Blocked by Gate B |
 | D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |
 | E — Research Validated | 20–22 | Real heterogeneous pilots, benchmark evidence, reproducible release | Blocked by Gate D |
@@ -66,11 +66,12 @@ uv run pytest
 
 ## Non-Claims
 
-- No executable graph append/replay runtime exists yet. The implemented runtime
-  primitives are Phase 5 codec, config, contract, protocol, payload-hash, and
-  identifier helpers only.
+- No DAG validator, graph index/query service, authority registry, adapter
+  runtime, projection engine, or transport exists yet. The implemented runtime
+  surface is limited to Phase 5 primitives and Phase 6 local append
+  storage/replay.
 - Schemas, registries, conformance fixtures, and Phase 5 primitives are frozen
-  for Phase 6 input.
+  for later Gate B phases.
 - No adapters, integrations, benchmarks, or empirical results are available.
 - The architecture papers (v0.2.0-draft) are the current normative specification.
 
