@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/payload_reference.schema.json",
+  "title": "Guerilla payload-reference canonical surface",
+  "allOf": [
+    {
+      "$ref": "https://guerilla.dev/schemas/payload_ref.schema.json"
+    }
+  ]
+}

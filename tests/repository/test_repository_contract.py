@@ -4,6 +4,7 @@ These tests verify structural properties, not runtime behavior.
 """
 
 import hashlib
+import json
 import re
 from pathlib import Path
 
@@ -171,12 +172,13 @@ FROZEN_DOCS = {
     "GRAPH_RECORD_FORMAT.md",
     "GLCP_CORE_SPEC.md",
     "ADAPTER_CONTRACT.md",
-    "STATE_BOUNDARY_MODEL.md",
     "ERROR_REGISTRY.md",
 }
 
-GATE_A_STATUS_DOCS = {
+GATE_STATUS_DOCS = {
     "CODEX_BUILD_PLAN.md",
+    "STATE_BOUNDARY_MODEL.md",
+    "STORAGE_AND_RECOVERY.md",
     "TEST_MATRIX.md",
 }
 
@@ -260,31 +262,25 @@ def test_registries_readme_exists():
 
 
 def test_phase3_schema_inventory_is_frozen():
-    """schemas/ contains exactly the frozen Phase 3 machine contracts."""
+    """schemas/ contains exactly the frozen Gate A machine contracts."""
     schema_dir = REPO_ROOT / "schemas"
-    json_files = {path.name for path in schema_dir.glob("*.schema.json")}
-    assert json_files == {
-        "common.schema.json",
+    inventory = json.loads(
+        (REPO_ROOT / "docs" / "contract_inventory.json").read_text(encoding="utf-8")
+    )
+    expected = {
         "actor.schema.json",
-        "authority.schema.json",
-        "external_identity.schema.json",
-        "payload_ref.schema.json",
-        "provenance.schema.json",
-        "node.schema.json",
-        "edge.schema.json",
-        "transaction_begin.schema.json",
-        "transaction_commit.schema.json",
-        "graph_header.schema.json",
         "archive_seal.schema.json",
-        "state_boundary.schema.json",
         "capability.schema.json",
-        "adapter_descriptor.schema.json",
-        "protocol_envelope.schema.json",
-        "protocol_response.schema.json",
-        "error.schema.json",
+        "common.schema.json",
         "extension_namespace.schema.json",
-        "derived_projection.schema.json",
+        "external_identity.schema.json",
+        "provenance.schema.json",
     }
+    for surface in inventory["surfaces"]:
+        expected.add(Path(surface["canonical_schema_path"]).name)
+        expected.update(Path(alias).name for alias in surface["aliases"])
+    json_files = {path.name for path in schema_dir.glob("*.schema.json")}
+    assert json_files == expected
 
 
 def test_phase3_registry_inventory_is_frozen():
@@ -343,24 +339,33 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Beyond __init__.py placeholders and cli/main.py, no substantive .py files exist."""
+    """Phase 8 permits authority plus Phase 5-7 kernel packages."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
-    # Allowed: __init__.py files (short), cli/main.py, _version.py, __main__.py
+    allowed_subtrees = {
+        "src/guerilla/codec",
+        "src/guerilla/config",
+        "src/guerilla/contracts",
+        "src/guerilla/protocol",
+        "src/guerilla/payloads",
+        "src/guerilla/identity",
+        "src/guerilla/storage",
+        "src/guerilla/graph",
+        "src/guerilla/index",
+        "src/guerilla/authority",
+    }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)
+        rel_posix = rel.as_posix()
         name = py_file.name
-        if name == "__init__.py":
-            # Must be a placeholder (short, no substantive logic beyond docstring)
-            content = py_file.read_text(encoding="utf-8")
-            assert len(content) < 300 or "cli" in str(rel), (
-                f"__init__.py at {rel} exceeds placeholder size ({len(content)} bytes)"
-            )
-        elif name in ("_version.py", "__main__.py") or "cli/main.py" in str(rel).replace("\\", "/"):
+        if any(rel_posix.startswith(subtree) for subtree in allowed_subtrees):
             continue  # permitted
-        else:
-            # Any other .py file is prohibited in Phase 1
-            raise AssertionError(f"Prohibited runtime module in Phase 1: {rel}")
+        if (
+            name in ("__init__.py", "_version.py", "__main__.py")
+            or rel_posix == "src/guerilla/cli/main.py"
+        ):
+            continue
+        raise AssertionError(f"Prohibited post-Phase-8 runtime module: {rel}")
 
 
 # ── Prompt inventory ──────────────────────────────────────────────────
@@ -407,8 +412,8 @@ def test_build_documents_identify_status():
         if name in FROZEN_DOCS:
             assert "**Status:** FROZEN -- Phase" in content
             assert "PLACEHOLDER" not in content
-        elif name in GATE_A_STATUS_DOCS:
-            assert "**Status:** Gate A" in content
+        elif name in GATE_STATUS_DOCS:
+            assert "**Status:** Gate " in content
             assert "PLACEHOLDER" not in content
         else:
             assert "PLACEHOLDER" in content or "placeholder" in content.lower(), (

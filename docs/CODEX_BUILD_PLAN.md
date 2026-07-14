@@ -1,11 +1,13 @@
 # Codex Build Plan
 
-**Status:** Gate A complete -- Phases 1-4 PASS
+**Status:** Gate B complete -- Kernel Ready
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
-> **WARNING:** Phases beyond Gate A remain pending. Do not treat Phase 5+ entries as implemented.
+> **WARNING:** Gate B local kernel behavior is implemented.
+> Do not treat adapters, projections, transports, or Phase 9+ behavior as
+> implemented.
 
 ---
 
@@ -20,8 +22,8 @@ Track the complete build sequence from repository bootstrap through research rel
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | COMPLETE |
-| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 5 next; NOT STARTED |
-| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | BLOCKED |
+| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | COMPLETE |
+| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | PENDING |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
 | E -- Research Validated | 20-22 | Real heterogeneous pilots, benchmark evidence, reproducible release | BLOCKED |
 
@@ -35,10 +37,10 @@ Track the complete build sequence from repository bootstrap through research rel
 | 2 | Architecture Decisions | A | PASS |
 | 3 | Machine Contracts | A | PASS |
 | 4 | Conformance Fixtures | A | PASS |
-| 5 | Codec, Config, Identifiers | B | PENDING |
-| 6 | Append Store, Transactions, Replay | B | PENDING |
-| 7 | DAG Integrity, Index, Query | B | PENDING |
-| 8 | Authority, Identity, Boundaries | B | PENDING |
+| 5 | Codec, Config, Identifiers | B | PASS |
+| 6 | Append Store, Transactions, Replay | B | PASS |
+| 7 | DAG Integrity, Index, Query | B | PASS |
+| 8 | Authority, Identity, Boundaries | B | PASS |
 | 9 | Adapter SDK, Synthetic Systems | C | PENDING |
 | 10 | Observation Ingestion | C | PENDING |
 | 11 | Action Intent, Idempotency | C | PENDING |
@@ -67,4 +69,20 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-Gate A is complete. Phase 5 is the next phase, but no Phase 5 runtime work has started in this thread. The frozen inputs for Phase 5 are `docs/ARCHITECTURE_DECISIONS.md`, `schemas/`, `registries/`, and `tests/fixtures/contracts/`.
+Gate A and Gate B are complete. Phase 9 has not started.
+Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
+`docs/contract_inventory.json`, `schemas/`, `registries/`, and
+`tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
+contract-loader, protocol-validation, payload-hash, and identifier primitives.
+Phase 6 added local workspace initialization, content-addressed payload
+persistence, writer locking, append transactions, replay, hash-chain
+verification, and incomplete-tail recovery only; it did not add DAG validation,
+indexing, authority registry, adapters, projections, or transports. Phase 7
+added endpoint validation, cycle rejection, graph-head and exact-revision query
+helpers, and a rebuildable non-authoritative SQLite index; it did not add
+authority registry, adapters, projections, or transports. Phase 8 added fixed
+local authorization, state-boundary enforcement helpers, adapter identity
+registration without invocation, and scoped external identity lifecycle handling;
+it did not add adapters, projections, transports, or Phase 9 behavior. The Gate
+B checklist verifies clean reopen/replay, invalid-mutation rollback, index loss
+rebuild, authority rejection, and replay/index query equivalence.

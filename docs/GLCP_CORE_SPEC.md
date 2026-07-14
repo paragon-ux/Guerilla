@@ -9,7 +9,10 @@
 
 GLCP is the transport-independent Guerilla Lineage and Continuity Protocol.
 Phase 3 freezes message shape, identifiers, actor attribution, error objects,
-extension handling, and compatibility rules. It does not implement a client,
+extension handling, and compatibility rules. Gate A entry closure adds
+canonical request and protocol-error wrappers:
+`schemas/protocol_request.schema.json` and
+`schemas/protocol_error.schema.json`. These wrappers do not implement a client,
 server, transport binding, or mutation path.
 
 ## Envelope
@@ -52,9 +55,10 @@ or mark derived views authoritative.
 ## Operation Families
 
 Phase 3 freezes schemas for message envelopes and common response/error
-objects. Operation-specific request and response bodies remain future Phase 16
-transport/client work unless already represented by graph, adapter, boundary, or
-derived-view schemas.
+objects. Gate A entry closure freezes a request-envelope wrapper. Operation-
+specific request and response bodies remain future Phase 16 transport/client
+work unless already represented by graph, adapter, boundary, or derived-view
+schemas.
 
 ## Phase Boundary
 

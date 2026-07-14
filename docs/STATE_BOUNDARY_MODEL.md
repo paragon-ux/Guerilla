@@ -1,7 +1,7 @@
 # State Boundary Model
 
-**Status:** FROZEN -- Phase 3 complete
-**Owner phase:** Phase 3 (Machine Contracts)
+**Status:** Gate B complete -- Phase 8 local enforcement implemented
+**Owner phase:** Phase 3 (Machine Contracts), Phase 8 (Authority/Identity/Boundaries)
 **Controlling schema:** `schemas/state_boundary.schema.json`
 
 ## Purpose
@@ -32,6 +32,12 @@ Actor fields, adapter descriptors, payload content, and extension metadata do
 not grant authority. Access outside a declared boundary is rejected. Recording a
 reference to an external object does not transfer ownership of that object.
 
+Phase 8 implements the fixed local `local-owner-v1` authorization profile and
+state-boundary checks for permitted operations, filesystem roots, endpoints, and
+resource namespaces. Overlapping read declarations are allowed; overlapping
+primary write authority for the same system and resource scope is rejected as
+ambiguous authority.
+
 ## Continuity Rules
 
 Boundaries state whether continuity is online, offline, or reconstructed. Stale
@@ -41,5 +47,7 @@ defaults.
 
 ## Phase Boundary
 
-This model publishes contracts only. Runtime authorization, identity registry,
-adapter enforcement, and reconciliation are later phases.
+This model now has Phase 8 local runtime enforcement for authorization,
+boundaries, adapter identity registration, and external identity lifecycle
+metadata. Adapter invocation, reconciliation, projection generation, transports,
+and broader Phase 19 security hardening remain later phases.

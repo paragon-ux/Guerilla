@@ -9,6 +9,23 @@
 
 ---
 
+## Gate B Local Authorization Baseline
+
+Phase 8 implements a fixed local `local-owner-v1` profile for the Gate B kernel.
+Only the configured workspace owner principal may perform graph reads and graph
+appends through the implemented runtime helpers. Actor fields, record authority
+envelopes, adapter descriptors, extensions, and payload content cannot grant or
+expand effective permissions.
+
+State-boundary checks reject undeclared operations, filesystem-root escape,
+endpoint escape, namespace escape, and overlapping primary write authority.
+Adapter identity descriptors can be registered for capability metadata only;
+there is no adapter invocation path.
+
+This Gate B baseline is complete and is not the full Phase 19 security model.
+
+---
+
 ## Required Future Sections
 
 1. Adapter trust model and threat analysis

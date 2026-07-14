@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/adapter_reconcile.schema.json",
+  "title": "Guerilla adapter reconcile contract",
+  "type": "object",
+  "required": [
+    "operation_type",
+    "adapter_id",
+    "system_id",
+    "state_boundary_id",
+    "intent_node_id",
+    "idempotency_key",
+    "actor",
+    "authority",
+    "requested_at",
+    "reported_outcome",
+    "evidence",
+    "extensions"
+  ],
+  "properties": {
+    "operation_type": {
+      "const": "adapter.reconcile"
+    },
+    "adapter_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/adapterId"
+    },
+    "system_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/externalSystemId"
+    },
+    "state_boundary_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+    },
+    "intent_node_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]{8,256}$"
+    },
+    "actor": {
+      "$ref": "https://guerilla.dev/schemas/actor.schema.json"
+    },
+    "authority": {
+      "$ref": "https://guerilla.dev/schemas/authority.schema.json"
+    },
+    "requested_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "reported_outcome": {
+      "enum": [
+        "confirmed_accepted",
+        "confirmed_rejected",
+        "confirmed_failed",
+        "still_pending",
+        "duplicated",
+        "externally_completed_missing_lineage",
+        "unknown"
+      ]
+    },
+    "evidence": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/safeJson"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

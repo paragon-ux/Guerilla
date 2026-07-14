@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/projection_metadata.schema.json",
+  "title": "Guerilla projection metadata canonical surface",
+  "allOf": [
+    {
+      "$ref": "https://guerilla.dev/schemas/derived_projection.schema.json"
+    }
+  ]
+}

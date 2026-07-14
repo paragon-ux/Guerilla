@@ -26,6 +26,21 @@ Adapter descriptors must declare:
 The descriptor cannot expand authority. Authority comes from configuration,
 state-boundary declarations, and the local authorization profile.
 
+## Operation Contracts
+
+Gate A entry closure freezes typed data contracts for adapter operation
+requests without implementing adapter execution:
+
+- `schemas/adapter_observe.schema.json`
+- `schemas/adapter_act.schema.json`
+- `schemas/adapter_evaluate.schema.json`
+- `schemas/adapter_reconcile.schema.json`
+
+`adapter_act` requires an `intent_node_id` so later runtime phases cannot model
+an external mutation without a committed intent. These schemas are contract
+surfaces only; loading, invoking, observing, acting, evaluating, and reconciling
+remain later phases.
+
 ## Capabilities
 
 Capability values are registered in `registries/capabilities.json` and encoded

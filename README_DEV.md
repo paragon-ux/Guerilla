@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate A complete / pre-prototype; Phases 1-4 complete
-**Phase:** 5 next - Codec, Config, Identifiers; runtime implementation has not started in this thread
+**Current status:** Gate B complete; Phases 1-8 complete
+**Phase:** Phase 9 pending; do not begin without explicit authorization
 
 ---
 
@@ -92,8 +92,19 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
 ## Phase Discipline
 
 - **No phase or gate skipping.** Each phase must complete its exit criteria before the next begins.
-- **Gate A (Contract Ready) is complete.** Phase 5 may begin only in a later task; this thread stopped before runtime code.
-- Phase 1 is a **repository-contract phase**, not a runtime phase. Do not implement simplified Guerilla runtime.
+- **Gate A (Contract Ready) is complete.** Phase 5 implemented deterministic
+  codec/config/identifier/hash primitives.
+- Phase 6 implemented local append storage, payload persistence, writer locking,
+  replay, and incomplete-tail recovery.
+- Phase 7 implemented DAG integrity, graph heads, exact-revision query helpers,
+  and a rebuildable non-authoritative SQLite index.
+- Phase 8 implemented fixed local authorization, state-boundary checks, adapter
+  identity registration without invocation, and scoped external identity
+  lifecycle handling. Do not implement adapters, projections, or transports
+  before their owning phases.
+- Gate B is complete. The kernel baseline is limited to contracts, codec,
+  local append/replay, DAG/index/query, and local authority/identity/boundary
+  behavior.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -107,11 +118,11 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Phase 5 Handoff
+## Gate B Handoff
 
-After Gate A completion:
+After Gate B completion:
 
-1. Confirm repository and conformance tests pass.
-2. Use `ARCHITECTURE_DECISIONS.md`, `schemas/`, `registries/`, and `tests/fixtures/contracts/` as frozen Phase 5 inputs.
+1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, Phase 8 security, and Gate B checklist tests pass.
+2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
-4. Begin with Phase 5 only when explicitly requested.
+4. Do not begin Phase 9 without an explicit Phase 9 prompt.
