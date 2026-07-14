@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/snapshot.schema.json",
+  "title": "Guerilla snapshot-node canonical surface",
+  "allOf": [
+    {
+      "$ref": "https://guerilla.dev/schemas/node.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "node_type": {
+          "const": "snapshot"
+        }
+      }
+    }
+  ]
+}

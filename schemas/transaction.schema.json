@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/transaction.schema.json",
+  "title": "Guerilla canonical transaction wrapper",
+  "type": "object",
+  "required": ["transaction_begin", "members", "transaction_commit"],
+  "properties": {
+    "transaction_begin": {
+      "$ref": "https://guerilla.dev/schemas/transaction_begin.schema.json"
+    },
+    "members": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "https://guerilla.dev/schemas/node.schema.json"
+          },
+          {
+            "$ref": "https://guerilla.dev/schemas/edge.schema.json"
+          }
+        ]
+      }
+    },
+    "transaction_commit": {
+      "$ref": "https://guerilla.dev/schemas/transaction_commit.schema.json"
+    }
+  },
+  "additionalProperties": false
+}

@@ -10,12 +10,12 @@
       "expected_failure_reason": null,
       "kind": "canonical_json",
       "input": {
-        "z": "e\u0301",
-        "a": "\u00e9",
+        "z": "é",
+        "a": "é",
         "control": "\u0001\b\t\n\f\r",
         "solidus": "/",
         "quote": "\"\\",
-        "emoji": "\ud83d\ude00"
+        "emoji": "😀"
       },
       "exact_bytes_hex": "7b2261223a22c3a9222c22636f6e74726f6c223a225c75303030315c625c745c6e5c665c72222c22656d6f6a69223a22f09f9880222c2271756f7465223a225c225c5c222c22736f6c69647573223a222f222c227a223a2265cc81227d",
       "digest_domain": "guerilla.cjson.vector.v1\\n",
@@ -38,7 +38,11 @@
       "expected_outcome": "valid",
       "expected_failure_reason": null,
       "kind": "integer_bounds",
-      "valid_values": [-9007199254740991, 0, 9007199254740991]
+      "valid_values": [
+        -9007199254740991,
+        0,
+        9007199254740991
+      ]
     },
     {
       "fixture_id": "canon.numeric_forms_rejected",
@@ -47,7 +51,15 @@
       "expected_outcome": "invalid",
       "expected_failure_reason": "prohibited_numeric_forms",
       "kind": "numeric_forms",
-      "invalid_json_texts": ["{\"n\":01}", "{\"n\":+1}", "{\"n\":-0}", "{\"n\":1.0}", "{\"n\":1e0}", "{\"n\":NaN}", "{\"n\":Infinity}"]
+      "invalid_json_texts": [
+        "{\"n\":01}",
+        "{\"n\":+1}",
+        "{\"n\":-0}",
+        "{\"n\":1.0}",
+        "{\"n\":1e0}",
+        "{\"n\":NaN}",
+        "{\"n\":Infinity}"
+      ]
     },
     {
       "fixture_id": "ids.every_family_valid",
@@ -174,6 +186,153 @@
         "superseded_by": "earlier -> later",
         "resolved_by": "unresolved item -> resolution",
         "captured_by": "included source -> snapshot"
+      }
+    },
+    {
+      "fixture_id": "raw.json.decimal_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "decimal_point",
+      "raw_json_hex": "7b226e223a312e317d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.exponent_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "exponent_notation",
+      "raw_json_hex": "7b226e223a3165317d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.negative_zero_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "negative_zero",
+      "raw_json_hex": "7b226e223a2d307d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.leading_plus_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "leading_plus",
+      "raw_json_hex": "7b226e223a2b317d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.leading_zero_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "invalid_leading_zero",
+      "raw_json_hex": "7b226e223a30317d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.nan_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "nan_or_infinity",
+      "raw_json_hex": "7b226e223a4e614e7d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.infinity_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "nan_or_infinity",
+      "raw_json_hex": "7b226e223a496e66696e6974797d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.safe_integer_overflow_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "json_safe_integer_exceeded",
+      "raw_json_hex": "7b226e223a393030373139393235343734303939327d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.duplicate_key_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "duplicate_key",
+      "raw_json_hex": "7b2261223a312c2261223a327d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.invalid_utf8_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "invalid_utf8",
+      "raw_json_hex": "7b2273223a22ff227d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.isolated_surrogate_rejected",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "isolated_surrogate",
+      "raw_json_hex": "7b2273223a225c7564383030227d",
+      "expected_error_code": "invalid_message"
+    },
+    {
+      "fixture_id": "raw.json.valid_integer_boundaries",
+      "contract_version": "0.2.0",
+      "kind": "raw_json_lexical",
+      "governing_decision": "AD-001",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "raw_json_hex": "7b226d6178223a393030373139393235343734303939312c226d696e223a2d393030373139393235343734303939312c227a65726f223a307d",
+      "expected_error_code": null
+    },
+    {
+      "fixture_id": "timestamp.calendar_semantics",
+      "contract_version": "0.2.0",
+      "kind": "timestamp_semantic",
+      "governing_decision": "AD-001",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "valid_timestamps": [
+        "0001-01-01T00:00:00Z",
+        "2024-02-29T23:59:59.1Z",
+        "2026-07-13T00:00:00.123456789Z",
+        "9999-12-31T23:59:59Z"
+      ],
+      "invalid_timestamps": {
+        "0000-01-01T00:00:00Z": "year_zero",
+        "2023-02-29T00:00:00Z": "invalid_leap_day",
+        "2026-02-31T00:00:00Z": "invalid_calendar_date",
+        "2026-07-13T00:00:60Z": "leap_second",
+        "2026-07-13t00:00:00Z": "lowercase_t",
+        "2026-07-13T00:00:00z": "lowercase_z",
+        "2026-07-13T00:00:00-04:00": "stored_offset",
+        "2026-07-13T00:00Z": "missing_seconds",
+        "2026-07-13T00:00:00.1234567891Z": "fraction_too_long",
+        "2026-07-13T00:00:00.Z": "empty_fraction",
+        "2026-07-13T00:00:00.120Z": "fraction_trailing_zero"
       }
     }
   ]

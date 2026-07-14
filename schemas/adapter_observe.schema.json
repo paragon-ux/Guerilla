@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/adapter_observe.schema.json",
+  "title": "Guerilla adapter observe contract",
+  "type": "object",
+  "required": [
+    "operation_type",
+    "adapter_id",
+    "system_id",
+    "state_boundary_id",
+    "actor",
+    "authority",
+    "requested_at",
+    "selector",
+    "extensions"
+  ],
+  "properties": {
+    "operation_type": {
+      "const": "adapter.observe"
+    },
+    "adapter_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/adapterId"
+    },
+    "system_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/externalSystemId"
+    },
+    "state_boundary_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+    },
+    "actor": {
+      "$ref": "https://guerilla.dev/schemas/actor.schema.json"
+    },
+    "authority": {
+      "$ref": "https://guerilla.dev/schemas/authority.schema.json"
+    },
+    "requested_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "selector": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/safeJson"
+    },
+    "external_identity": {
+      "$ref": "https://guerilla.dev/schemas/external_identity.schema.json"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

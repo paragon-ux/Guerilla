@@ -247,7 +247,11 @@
         "system_of_record": true,
         "continuity_mode": "reconstructed",
         "ownership": "external_application_state",
-        "permitted_operations": ["observe", "act", "reconcile"],
+        "permitted_operations": [
+          "observe",
+          "act",
+          "reconcile"
+        ],
         "lineage_crossing": "intent_before_action",
         "conflict_behavior": "require_reconciliation",
         "extensions": {}
@@ -263,7 +267,9 @@
       "instance": {
         "capability": "observe",
         "supported": true,
-        "state_boundary_ids": ["gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060"]
+        "state_boundary_ids": [
+          "gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060"
+        ]
       }
     },
     {
@@ -287,7 +293,11 @@
             "system_of_record": true,
             "continuity_mode": "reconstructed",
             "ownership": "external_application_state",
-            "permitted_operations": ["observe", "act", "reconcile"],
+            "permitted_operations": [
+              "observe",
+              "act",
+              "reconcile"
+            ],
             "lineage_crossing": "intent_before_action",
             "conflict_behavior": "require_reconciliation",
             "extensions": {}
@@ -297,14 +307,18 @@
           {
             "capability": "observe",
             "supported": true,
-            "state_boundary_ids": ["gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060"]
+            "state_boundary_ids": [
+              "gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060"
+            ]
           }
         ],
         "authentication": {
           "required": false,
           "credential_storage": "none"
         },
-        "limitations": ["fixture only"],
+        "limitations": [
+          "fixture only"
+        ],
         "extensions": {}
       }
     },
@@ -385,7 +399,9 @@
           "min_protocol": "0.2.0",
           "max_protocol": "0.2.0"
         },
-        "schemas": ["https://guerilla.dev/schemas/extension_namespace.schema.json"],
+        "schemas": [
+          "https://guerilla.dev/schemas/extension_namespace.schema.json"
+        ],
         "invariants": [
           "MUST NOT redefine core fields or relationship directions",
           "MUST NOT grant authority from payload content"
@@ -395,7 +411,9 @@
           "Optional fields may be ignored only when compatibility allows",
           "Critical fields require explicit support"
         ],
-        "affected_capabilities": ["describe"]
+        "affected_capabilities": [
+          "describe"
+        ]
       }
     },
     {
@@ -411,15 +429,434 @@
         "authority_class": "derived_non_authoritative",
         "authoritative": false,
         "source_graph_revision": 1,
-        "source_node_ids": ["grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003"],
+        "source_node_ids": [
+          "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003"
+        ],
         "transformation_id": "fixture.projection",
         "transformation_version": "0.2.0",
         "policy_version": "0.2.0",
         "generated_at": "2026-07-13T00:00:00Z",
         "freshness": "graph_revision_bound",
-        "information_loss": ["omits payload bytes"],
+        "information_loss": [
+          "omits payload bytes"
+        ],
         "result_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         "extensions": {}
+      }
+    },
+    {
+      "fixture_id": "valid.transaction.wrapper",
+      "contract_version": "0.2.0",
+      "schema": "transaction.schema.json",
+      "governing_decision": "AD-004",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "transaction_begin": {
+          "record_type": "transaction_begin",
+          "protocol_version": "0.2.0",
+          "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+          "transaction_id": "grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005",
+          "expected_previous_commit_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "expected_graph_revision": 0,
+          "actor": {
+            "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+            "actor_kind": "human"
+          },
+          "created_at": "2026-07-13T00:00:00Z",
+          "extensions": {}
+        },
+        "members": [
+          {
+            "record_type": "node",
+            "protocol_version": "0.2.0",
+            "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+            "node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003",
+            "entity_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c002",
+            "node_type": "goal",
+            "created_at": "2026-07-13T00:00:00Z",
+            "actor": {
+              "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+              "actor_kind": "human"
+            },
+            "authority": {
+              "authority_type": "guerilla",
+              "principal_id": "local-user",
+              "profile": "local-owner-v1"
+            },
+            "status": "open",
+            "provenance": {
+              "source": "phase4-fixture",
+              "source_record_ids": []
+            },
+            "payload_ref": {
+              "retention_class": "none"
+            },
+            "metadata": {},
+            "extensions": {},
+            "record_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          },
+          {
+            "record_type": "edge",
+            "protocol_version": "0.2.0",
+            "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+            "edge_id": "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020",
+            "relationship_type": "depends_on",
+            "from_node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003",
+            "to_node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c013",
+            "created_at": "2026-07-13T00:00:00Z",
+            "actor": {
+              "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+              "actor_kind": "human"
+            },
+            "provenance": {
+              "source": "phase4-fixture",
+              "source_record_ids": []
+            },
+            "metadata": {},
+            "extensions": {},
+            "record_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+          }
+        ],
+        "transaction_commit": {
+          "record_type": "transaction_commit",
+          "protocol_version": "0.2.0",
+          "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+          "transaction_id": "grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005",
+          "commit_id": "grm_018f1f8e-5d4b-7a10-8a20-0c9b0b23c006",
+          "committed_record_ids": [
+            "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003",
+            "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020"
+          ],
+          "transaction_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "graph_revision": 1,
+          "previous_commit_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+          "commit_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "committed_at": "2026-07-13T00:00:00Z",
+          "canonicalization_id": "guerilla-cjson-v1",
+          "hash_algorithm": "sha256",
+          "extensions": {}
+        }
+      }
+    },
+    {
+      "fixture_id": "valid.commit.wrapper",
+      "contract_version": "0.2.0",
+      "schema": "commit.schema.json",
+      "governing_decision": "AD-005",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "record_type": "transaction_commit",
+        "protocol_version": "0.2.0",
+        "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+        "transaction_id": "grt_018f1f8e-5d4b-7a10-8a20-0c9b0b23c005",
+        "commit_id": "grm_018f1f8e-5d4b-7a10-8a20-0c9b0b23c006",
+        "committed_record_ids": [
+          "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003",
+          "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020"
+        ],
+        "transaction_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "graph_revision": 1,
+        "previous_commit_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "commit_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "committed_at": "2026-07-13T00:00:00Z",
+        "canonicalization_id": "guerilla-cjson-v1",
+        "hash_algorithm": "sha256",
+        "extensions": {}
+      }
+    },
+    {
+      "fixture_id": "valid.authority_envelope.local",
+      "contract_version": "0.2.0",
+      "schema": "authority_envelope.schema.json",
+      "governing_decision": "AD-009",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "authority_type": "guerilla",
+        "principal_id": "local-user",
+        "profile": "local-owner-v1"
+      }
+    },
+    {
+      "fixture_id": "valid.payload_reference.none",
+      "contract_version": "0.2.0",
+      "schema": "payload_reference.schema.json",
+      "governing_decision": "AD-007",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "retention_class": "none"
+      }
+    },
+    {
+      "fixture_id": "valid.adapter_observe",
+      "contract_version": "0.2.0",
+      "schema": "adapter_observe.schema.json",
+      "governing_decision": "AD-008",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "operation_type": "adapter.observe",
+        "adapter_id": "gra_018f1f8e-5d4b-7a10-8a20-0c9b0b23c030",
+        "system_id": "gxs_018f1f8e-5d4b-7a10-8a20-0c9b0b23c070",
+        "state_boundary_id": "gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060",
+        "actor": {
+          "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+          "actor_kind": "human"
+        },
+        "authority": {
+          "authority_type": "guerilla",
+          "principal_id": "local-user",
+          "profile": "local-owner-v1"
+        },
+        "requested_at": "2026-07-13T00:00:00Z",
+        "selector": {
+          "kind": "file",
+          "path": "README.md"
+        },
+        "extensions": {}
+      }
+    },
+    {
+      "fixture_id": "valid.adapter_act",
+      "contract_version": "0.2.0",
+      "schema": "adapter_act.schema.json",
+      "governing_decision": "AD-008",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "operation_type": "adapter.act",
+        "adapter_id": "gra_018f1f8e-5d4b-7a10-8a20-0c9b0b23c030",
+        "system_id": "gxs_018f1f8e-5d4b-7a10-8a20-0c9b0b23c070",
+        "state_boundary_id": "gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060",
+        "intent_node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003",
+        "idempotency_key": "fixture-key-001",
+        "actor": {
+          "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+          "actor_kind": "human"
+        },
+        "authority": {
+          "authority_type": "guerilla",
+          "principal_id": "local-user",
+          "profile": "local-owner-v1"
+        },
+        "requested_at": "2026-07-13T00:00:00Z",
+        "action": "filesystem.write_file",
+        "arguments": {
+          "path": "README.md",
+          "mode": "append"
+        },
+        "extensions": {}
+      }
+    },
+    {
+      "fixture_id": "valid.adapter_evaluate",
+      "contract_version": "0.2.0",
+      "schema": "adapter_evaluate.schema.json",
+      "governing_decision": "AD-008",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "operation_type": "adapter.evaluate",
+        "adapter_id": "gra_018f1f8e-5d4b-7a10-8a20-0c9b0b23c030",
+        "system_id": "gxs_018f1f8e-5d4b-7a10-8a20-0c9b0b23c070",
+        "state_boundary_id": "gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060",
+        "subject_node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c013",
+        "actor": {
+          "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+          "actor_kind": "human"
+        },
+        "authority": {
+          "authority_type": "guerilla",
+          "principal_id": "local-user",
+          "profile": "local-owner-v1"
+        },
+        "requested_at": "2026-07-13T00:00:00Z",
+        "criteria": {
+          "check": "exists"
+        },
+        "extensions": {}
+      }
+    },
+    {
+      "fixture_id": "valid.adapter_reconcile",
+      "contract_version": "0.2.0",
+      "schema": "adapter_reconcile.schema.json",
+      "governing_decision": "AD-008",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "operation_type": "adapter.reconcile",
+        "adapter_id": "gra_018f1f8e-5d4b-7a10-8a20-0c9b0b23c030",
+        "system_id": "gxs_018f1f8e-5d4b-7a10-8a20-0c9b0b23c070",
+        "state_boundary_id": "gsb_018f1f8e-5d4b-7a10-8a20-0c9b0b23c060",
+        "intent_node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003",
+        "idempotency_key": "fixture-key-001",
+        "actor": {
+          "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+          "actor_kind": "human"
+        },
+        "authority": {
+          "authority_type": "guerilla",
+          "principal_id": "local-user",
+          "profile": "local-owner-v1"
+        },
+        "requested_at": "2026-07-13T00:00:00Z",
+        "reported_outcome": "unknown",
+        "evidence": {
+          "attempt": "fixture"
+        },
+        "extensions": {}
+      }
+    },
+    {
+      "fixture_id": "valid.conflict.node",
+      "contract_version": "0.2.0",
+      "schema": "conflict.schema.json",
+      "governing_decision": "AD-010",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "record_type": "node",
+        "protocol_version": "0.2.0",
+        "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+        "node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c080",
+        "entity_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c002",
+        "node_type": "conflict",
+        "created_at": "2026-07-13T00:00:00Z",
+        "actor": {
+          "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+          "actor_kind": "human"
+        },
+        "authority": {
+          "authority_type": "guerilla",
+          "principal_id": "local-user",
+          "profile": "local-owner-v1"
+        },
+        "status": "open",
+        "provenance": {
+          "source": "phase4-fixture",
+          "source_record_ids": []
+        },
+        "payload_ref": {
+          "retention_class": "none"
+        },
+        "metadata": {
+          "conflict_type": "identity_collision",
+          "summary": "fixture identity collision"
+        },
+        "extensions": {},
+        "record_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "fixture_id": "valid.snapshot.node",
+      "contract_version": "0.2.0",
+      "schema": "snapshot.schema.json",
+      "governing_decision": "AD-011",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "record_type": "node",
+        "protocol_version": "0.2.0",
+        "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+        "node_id": "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c081",
+        "entity_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c002",
+        "node_type": "snapshot",
+        "created_at": "2026-07-13T00:00:00Z",
+        "actor": {
+          "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+          "actor_kind": "human"
+        },
+        "authority": {
+          "authority_type": "guerilla",
+          "principal_id": "local-user",
+          "profile": "local-owner-v1"
+        },
+        "status": "open",
+        "provenance": {
+          "source": "phase4-fixture",
+          "source_record_ids": []
+        },
+        "payload_ref": {
+          "retention_class": "none"
+        },
+        "metadata": {
+          "snapshot_id": "grs_018f1f8e-5d4b-7a10-8a20-0c9b0b23c082",
+          "source_graph_revision": 1
+        },
+        "extensions": {},
+        "record_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    },
+    {
+      "fixture_id": "valid.projection_metadata",
+      "contract_version": "0.2.0",
+      "schema": "projection_metadata.schema.json",
+      "governing_decision": "AD-011",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "projection_id": "grp_018f1f8e-5d4b-7a10-8a20-0c9b0b23c040",
+        "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+        "authority_class": "derived_non_authoritative",
+        "authoritative": false,
+        "source_graph_revision": 1,
+        "source_node_ids": [
+          "grn_018f1f8e-5d4b-7a10-8a20-0c9b0b23c003"
+        ],
+        "transformation_id": "fixture.projection",
+        "transformation_version": "0.2.0",
+        "policy_version": "0.2.0",
+        "generated_at": "2026-07-13T00:00:00Z",
+        "freshness": "graph_revision_bound",
+        "information_loss": [
+          "omits payload bytes"
+        ],
+        "result_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "extensions": {}
+      }
+    },
+    {
+      "fixture_id": "valid.protocol_request",
+      "contract_version": "0.2.0",
+      "schema": "protocol_request.schema.json",
+      "governing_decision": "AD-009",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "protocol": "glcp",
+        "version": "0.2.0",
+        "message_id": "gmsg_018f1f8e-5d4b-7a10-8a20-0c9b0b23c050",
+        "message_type": "request",
+        "operation": "graph.append",
+        "sent_at": "2026-07-13T00:00:00Z",
+        "workspace_id": "grw_018f1f8e-5d4b-7a10-8a20-0c9b0b23c004",
+        "actor": {
+          "actor_id": "gri_018f1f8e-5d4b-7a10-8a20-0c9b0b23c001",
+          "actor_kind": "human"
+        },
+        "correlation_id": "gmsg_018f1f8e-5d4b-7a10-8a20-0c9b0b23c051",
+        "extensions": {},
+        "body": {
+          "dry_run": true
+        }
+      }
+    },
+    {
+      "fixture_id": "valid.protocol_error",
+      "contract_version": "0.2.0",
+      "schema": "protocol_error.schema.json",
+      "governing_decision": "AD-003",
+      "expected_outcome": "valid",
+      "expected_failure_reason": null,
+      "instance": {
+        "code": "schema_violation",
+        "message": "fixture error",
+        "retriable": "never",
+        "details": {}
       }
     }
   ]

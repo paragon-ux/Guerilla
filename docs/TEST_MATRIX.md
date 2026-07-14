@@ -1,6 +1,6 @@
 # Test Matrix
 
-**Status:** Gate A evidence current -- Phases 1-4 PASS
+**Status:** Gate A evidence current -- Phases 1-4 and entry closure PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
@@ -31,11 +31,12 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 ### Machine Contract Tests (Phase 3)
 | Test ID | Description | Phase | Status | Evidence |
 |---|---|---|---|---|
-| SCH-001 | All 20 Draft 2020-12 schemas are present and meta-valid | 3 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
+| SCH-001 | All Gate A Draft 2020-12 schemas are present and meta-valid | 3 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | SCH-002 | Schema references resolve in both validators | 3 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | SCH-003 | Registries synchronize with schema enums | 3 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | SCH-004 | Relationship directions match Phase 2 decisions | 3 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | SCH-005 | UUIDv7, timestamp, numeric, authority, extension, and derived-authority schema cases validate | 3 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
+| SCH-006 | Contract inventory maps every workflow surface to a canonical schema and fixtures | Gate A closure | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 
 ### Conformance Fixture Tests (Phase 4)
 | Test ID | Description | Phase | Status | Evidence |
@@ -45,6 +46,8 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | FIX-003 | Invalid fixtures cover every schema and fail deterministically | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | FIX-004 | Compatibility fixtures demonstrate optional/critical extension and version behavior | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | FIX-005 | Canonicalization, Unicode, timestamp, integer, identifier, and hash vectors reproduce exact expected bytes/digests | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
+| FIX-006 | Raw JSON lexical fixtures reject prohibited numeric spellings, duplicate keys, invalid UTF-8, and isolated surrogates through two paths | Gate A closure | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
+| FIX-007 | Timestamp fixtures check calendar validity, leap days, normalized fractions, and stored UTC grammar through two paths | Gate A closure | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 
 ### Record Tests (Phase 3-4)
 | Test ID | Description | Phase | Status | Evidence |

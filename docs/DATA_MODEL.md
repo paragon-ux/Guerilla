@@ -23,9 +23,19 @@ namespaces, and error/capability names.
 | Graph header | `schemas/graph_header.schema.json` | Authoritative graph metadata |
 | Node | `schemas/node.schema.json` | Authoritative graph record |
 | Edge | `schemas/edge.schema.json` | Authoritative graph record |
+| Transaction | `schemas/transaction.schema.json` | Canonical transaction wrapper |
 | Transaction begin | `schemas/transaction_begin.schema.json` | Transaction frame |
 | Transaction commit | `schemas/transaction_commit.schema.json` | Final commit boundary |
+| Commit | `schemas/commit.schema.json` | Canonical final commit surface |
 | Archive seal | `schemas/archive_seal.schema.json` | Authoritative segment integrity record |
+
+Gate A entry closure publishes `docs/contract_inventory.json`, which maps every
+workflow surface to its canonical schema, aliases, owning phase, and fixture
+coverage. Thin composed wrappers such as `commit.schema.json`,
+`authority_envelope.schema.json`, `payload_reference.schema.json`,
+`conflict.schema.json`, `snapshot.schema.json`, and
+`projection_metadata.schema.json` do not create additional authority; they make
+the workflow vocabulary machine-checkable.
 
 ## Core Node Types
 

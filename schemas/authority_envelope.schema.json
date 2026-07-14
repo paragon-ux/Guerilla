@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/authority_envelope.schema.json",
+  "title": "Guerilla authority-envelope canonical surface",
+  "allOf": [
+    {
+      "$ref": "https://guerilla.dev/schemas/authority.schema.json"
+    }
+  ]
+}

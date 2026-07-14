@@ -10,7 +10,11 @@
       "governing_decision": "AD-001",
       "expected_outcome": "invalid",
       "expected_failure_reason": "unexpected_field",
-      "mutation": {"op": "add", "path": "/unexpected_field", "value": true}
+      "mutation": {
+        "op": "add",
+        "path": "/unexpected_field",
+        "value": true
+      }
     },
     {
       "fixture_id": "invalid.actor.additional_property",
@@ -20,7 +24,13 @@
       "governing_decision": "AD-009",
       "expected_outcome": "invalid",
       "expected_failure_reason": "authority_escalation_from_actor",
-      "mutation": {"op": "add", "path": "/authorized_operations", "value": ["graph.append"]}
+      "mutation": {
+        "op": "add",
+        "path": "/authorized_operations",
+        "value": [
+          "graph.append"
+        ]
+      }
     },
     {
       "fixture_id": "invalid.authority.programmable_policy",
@@ -30,7 +40,11 @@
       "governing_decision": "AD-009",
       "expected_outcome": "invalid",
       "expected_failure_reason": "programmable_policy_engine_deferred",
-      "mutation": {"op": "set", "path": "/profile", "value": "programmable-policy"}
+      "mutation": {
+        "op": "set",
+        "path": "/profile",
+        "value": "programmable-policy"
+      }
     },
     {
       "fixture_id": "invalid.external_identity.missing_boundary",
@@ -40,7 +54,10 @@
       "governing_decision": "AD-010",
       "expected_outcome": "invalid",
       "expected_failure_reason": "missing_state_boundary",
-      "mutation": {"op": "remove", "path": "/state_boundary_id"}
+      "mutation": {
+        "op": "remove",
+        "path": "/state_boundary_id"
+      }
     },
     {
       "fixture_id": "invalid.payload.content_addressed_missing_hash",
@@ -51,10 +68,26 @@
       "expected_outcome": "invalid",
       "expected_failure_reason": "missing_payload_hash",
       "mutations": [
-        {"op": "set", "path": "/retention_class", "value": "content_addressed"},
-        {"op": "add", "path": "/media_type", "value": "text/plain"},
-        {"op": "add", "path": "/size_bytes", "value": 10},
-        {"op": "add", "path": "/redacted", "value": true}
+        {
+          "op": "set",
+          "path": "/retention_class",
+          "value": "content_addressed"
+        },
+        {
+          "op": "add",
+          "path": "/media_type",
+          "value": "text/plain"
+        },
+        {
+          "op": "add",
+          "path": "/size_bytes",
+          "value": 10
+        },
+        {
+          "op": "add",
+          "path": "/redacted",
+          "value": true
+        }
       ]
     },
     {
@@ -68,7 +101,9 @@
       "mutation": {
         "op": "set",
         "path": "/source_record_ids",
-        "value": ["gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020"]
+        "value": [
+          "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020"
+        ]
       }
     },
     {
@@ -93,7 +128,11 @@
       "governing_decision": "AD-001",
       "expected_outcome": "invalid",
       "expected_failure_reason": "leap_second_rejected",
-      "mutation": {"op": "set", "path": "/created_at", "value": "2026-07-13T00:00:60Z"}
+      "mutation": {
+        "op": "set",
+        "path": "/created_at",
+        "value": "2026-07-13T00:00:60Z"
+      }
     },
     {
       "fixture_id": "invalid.node.integer_out_of_range",
@@ -103,7 +142,13 @@
       "governing_decision": "AD-001",
       "expected_outcome": "invalid",
       "expected_failure_reason": "json_safe_integer_exceeded",
-      "mutation": {"op": "set", "path": "/metadata", "value": {"too_large": 9007199254740992}}
+      "mutation": {
+        "op": "set",
+        "path": "/metadata",
+        "value": {
+          "too_large": 9007199254740992
+        }
+      }
     },
     {
       "fixture_id": "invalid.edge.endpoint_not_node",
@@ -142,7 +187,11 @@
       "governing_decision": "AD-003",
       "expected_outcome": "invalid",
       "expected_failure_reason": "graph_revision_grammar",
-      "mutation": {"op": "set", "path": "/expected_graph_revision", "value": -1}
+      "mutation": {
+        "op": "set",
+        "path": "/expected_graph_revision",
+        "value": -1
+      }
     },
     {
       "fixture_id": "invalid.transaction_commit.commit_hash_shape",
@@ -152,7 +201,11 @@
       "governing_decision": "AD-003",
       "expected_outcome": "invalid",
       "expected_failure_reason": "digest_representation",
-      "mutation": {"op": "set", "path": "/commit_hash", "value": "sha256:aaaaaaaa"}
+      "mutation": {
+        "op": "set",
+        "path": "/commit_hash",
+        "value": "sha256:aaaaaaaa"
+      }
     },
     {
       "fixture_id": "invalid.graph_header.derived_authority",
@@ -162,7 +215,11 @@
       "governing_decision": "AD-011",
       "expected_outcome": "invalid",
       "expected_failure_reason": "authoritative_graph_required",
-      "mutation": {"op": "set", "path": "/authority_class", "value": "derived_non_authoritative"}
+      "mutation": {
+        "op": "set",
+        "path": "/authority_class",
+        "value": "derived_non_authoritative"
+      }
     },
     {
       "fixture_id": "invalid.archive_seal.segment_prefix",
@@ -186,7 +243,11 @@
       "governing_decision": "AD-009",
       "expected_outcome": "invalid",
       "expected_failure_reason": "external_state_authority_required",
-      "mutation": {"op": "set", "path": "/system_of_record", "value": false}
+      "mutation": {
+        "op": "set",
+        "path": "/system_of_record",
+        "value": false
+      }
     },
     {
       "fixture_id": "invalid.capability.unknown_value",
@@ -196,7 +257,11 @@
       "governing_decision": "AD-008",
       "expected_outcome": "invalid",
       "expected_failure_reason": "unsupported_capability_value",
-      "mutation": {"op": "set", "path": "/capability", "value": "shell_exec"}
+      "mutation": {
+        "op": "set",
+        "path": "/capability",
+        "value": "shell_exec"
+      }
     },
     {
       "fixture_id": "invalid.adapter_descriptor.trust_model",
@@ -206,7 +271,11 @@
       "governing_decision": "AD-008",
       "expected_outcome": "invalid",
       "expected_failure_reason": "mvp_trust_model_fixed",
-      "mutation": {"op": "set", "path": "/trust_model", "value": "remote"}
+      "mutation": {
+        "op": "set",
+        "path": "/trust_model",
+        "value": "remote"
+      }
     },
     {
       "fixture_id": "invalid.protocol_envelope.unsupported_version",
@@ -216,7 +285,11 @@
       "governing_decision": "AD-014",
       "expected_outcome": "invalid",
       "expected_failure_reason": "unsupported_version",
-      "mutation": {"op": "set", "path": "/version", "value": "0.1.0"}
+      "mutation": {
+        "op": "set",
+        "path": "/version",
+        "value": "0.1.0"
+      }
     },
     {
       "fixture_id": "invalid.protocol_response.retry_value",
@@ -226,7 +299,11 @@
       "governing_decision": "AD-003",
       "expected_outcome": "invalid",
       "expected_failure_reason": "unsupported_retry_classification",
-      "mutation": {"op": "set", "path": "/retry", "value": "soon"}
+      "mutation": {
+        "op": "set",
+        "path": "/retry",
+        "value": "soon"
+      }
     },
     {
       "fixture_id": "invalid.error.unknown_code",
@@ -236,7 +313,11 @@
       "governing_decision": "AD-003",
       "expected_outcome": "invalid",
       "expected_failure_reason": "unknown_error_code",
-      "mutation": {"op": "set", "path": "/code", "value": "made_up_error"}
+      "mutation": {
+        "op": "set",
+        "path": "/code",
+        "value": "made_up_error"
+      }
     },
     {
       "fixture_id": "invalid.extension_namespace.core_redefinition",
@@ -250,7 +331,9 @@
       "mutation": {
         "op": "set",
         "path": "/invariants",
-        "value": ["MAY redefine core relationship directions"]
+        "value": [
+          "MAY redefine core relationship directions"
+        ]
       }
     },
     {
@@ -261,7 +344,209 @@
       "governing_decision": "AD-011",
       "expected_outcome": "invalid",
       "expected_failure_reason": "derived_view_not_authoritative",
-      "mutation": {"op": "set", "path": "/authoritative", "value": true}
+      "mutation": {
+        "op": "set",
+        "path": "/authoritative",
+        "value": true
+      }
+    },
+    {
+      "fixture_id": "invalid.transaction.empty_members",
+      "contract_version": "0.2.0",
+      "schema": "transaction.schema.json",
+      "base_fixture_id": "valid.transaction.wrapper",
+      "governing_decision": "AD-004",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "empty_transaction_members",
+      "mutation": {
+        "op": "set",
+        "path": "/members",
+        "value": []
+      }
+    },
+    {
+      "fixture_id": "invalid.commit.wrong_record_type",
+      "contract_version": "0.2.0",
+      "schema": "commit.schema.json",
+      "base_fixture_id": "valid.commit.wrapper",
+      "governing_decision": "AD-005",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "commit_record_type_required",
+      "mutation": {
+        "op": "set",
+        "path": "/record_type",
+        "value": "node"
+      }
+    },
+    {
+      "fixture_id": "invalid.authority_envelope.programmable_policy",
+      "contract_version": "0.2.0",
+      "schema": "authority_envelope.schema.json",
+      "base_fixture_id": "valid.authority_envelope.local",
+      "governing_decision": "AD-009",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "programmable_policy_engine_deferred",
+      "mutation": {
+        "op": "set",
+        "path": "/profile",
+        "value": "programmable-policy"
+      }
+    },
+    {
+      "fixture_id": "invalid.payload_reference.content_addressed_missing_hash",
+      "contract_version": "0.2.0",
+      "schema": "payload_reference.schema.json",
+      "base_fixture_id": "valid.payload_reference.none",
+      "governing_decision": "AD-007",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "missing_payload_hash",
+      "mutations": [
+        {
+          "op": "set",
+          "path": "/retention_class",
+          "value": "content_addressed"
+        },
+        {
+          "op": "add",
+          "path": "/media_type",
+          "value": "text/plain"
+        },
+        {
+          "op": "add",
+          "path": "/size_bytes",
+          "value": 10
+        },
+        {
+          "op": "add",
+          "path": "/redacted",
+          "value": true
+        }
+      ]
+    },
+    {
+      "fixture_id": "invalid.adapter_observe.operation_type",
+      "contract_version": "0.2.0",
+      "schema": "adapter_observe.schema.json",
+      "base_fixture_id": "valid.adapter_observe",
+      "governing_decision": "AD-008",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "unsupported_operation",
+      "mutation": {
+        "op": "set",
+        "path": "/operation_type",
+        "value": "adapter.inspect"
+      }
+    },
+    {
+      "fixture_id": "invalid.adapter_act.missing_intent",
+      "contract_version": "0.2.0",
+      "schema": "adapter_act.schema.json",
+      "base_fixture_id": "valid.adapter_act",
+      "governing_decision": "AD-008",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "intent_before_action_required",
+      "mutation": {
+        "op": "remove",
+        "path": "/intent_node_id"
+      }
+    },
+    {
+      "fixture_id": "invalid.adapter_evaluate.subject_prefix",
+      "contract_version": "0.2.0",
+      "schema": "adapter_evaluate.schema.json",
+      "base_fixture_id": "valid.adapter_evaluate",
+      "governing_decision": "AD-002",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "wrong_identifier_family",
+      "mutation": {
+        "op": "set",
+        "path": "/subject_node_id",
+        "value": "gre_018f1f8e-5d4b-7a10-8a20-0c9b0b23c020"
+      }
+    },
+    {
+      "fixture_id": "invalid.adapter_reconcile.unknown_outcome",
+      "contract_version": "0.2.0",
+      "schema": "adapter_reconcile.schema.json",
+      "base_fixture_id": "valid.adapter_reconcile",
+      "governing_decision": "AD-008",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "unsupported_reconciliation_outcome",
+      "mutation": {
+        "op": "set",
+        "path": "/reported_outcome",
+        "value": "maybe"
+      }
+    },
+    {
+      "fixture_id": "invalid.conflict.node_type",
+      "contract_version": "0.2.0",
+      "schema": "conflict.schema.json",
+      "base_fixture_id": "valid.conflict.node",
+      "governing_decision": "AD-010",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "conflict_node_type_required",
+      "mutation": {
+        "op": "set",
+        "path": "/node_type",
+        "value": "goal"
+      }
+    },
+    {
+      "fixture_id": "invalid.snapshot.node_type",
+      "contract_version": "0.2.0",
+      "schema": "snapshot.schema.json",
+      "base_fixture_id": "valid.snapshot.node",
+      "governing_decision": "AD-011",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "snapshot_node_type_required",
+      "mutation": {
+        "op": "set",
+        "path": "/node_type",
+        "value": "goal"
+      }
+    },
+    {
+      "fixture_id": "invalid.projection_metadata.authoritative_true",
+      "contract_version": "0.2.0",
+      "schema": "projection_metadata.schema.json",
+      "base_fixture_id": "valid.projection_metadata",
+      "governing_decision": "AD-011",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "derived_view_not_authoritative",
+      "mutation": {
+        "op": "set",
+        "path": "/authoritative",
+        "value": true
+      }
+    },
+    {
+      "fixture_id": "invalid.protocol_request.message_type",
+      "contract_version": "0.2.0",
+      "schema": "protocol_request.schema.json",
+      "base_fixture_id": "valid.protocol_request",
+      "governing_decision": "AD-009",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "request_message_type_required",
+      "mutation": {
+        "op": "set",
+        "path": "/message_type",
+        "value": "response"
+      }
+    },
+    {
+      "fixture_id": "invalid.protocol_error.unknown_code",
+      "contract_version": "0.2.0",
+      "schema": "protocol_error.schema.json",
+      "base_fixture_id": "valid.protocol_error",
+      "governing_decision": "AD-003",
+      "expected_outcome": "invalid",
+      "expected_failure_reason": "unknown_error_code",
+      "mutation": {
+        "op": "set",
+        "path": "/code",
+        "value": "made_up_error"
+      }
     }
   ]
 }

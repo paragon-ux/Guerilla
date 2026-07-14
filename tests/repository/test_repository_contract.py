@@ -4,6 +4,7 @@ These tests verify structural properties, not runtime behavior.
 """
 
 import hashlib
+import json
 import re
 from pathlib import Path
 
@@ -260,31 +261,25 @@ def test_registries_readme_exists():
 
 
 def test_phase3_schema_inventory_is_frozen():
-    """schemas/ contains exactly the frozen Phase 3 machine contracts."""
+    """schemas/ contains exactly the frozen Gate A machine contracts."""
     schema_dir = REPO_ROOT / "schemas"
-    json_files = {path.name for path in schema_dir.glob("*.schema.json")}
-    assert json_files == {
-        "common.schema.json",
+    inventory = json.loads(
+        (REPO_ROOT / "docs" / "contract_inventory.json").read_text(encoding="utf-8")
+    )
+    expected = {
         "actor.schema.json",
-        "authority.schema.json",
-        "external_identity.schema.json",
-        "payload_ref.schema.json",
-        "provenance.schema.json",
-        "node.schema.json",
-        "edge.schema.json",
-        "transaction_begin.schema.json",
-        "transaction_commit.schema.json",
-        "graph_header.schema.json",
         "archive_seal.schema.json",
-        "state_boundary.schema.json",
         "capability.schema.json",
-        "adapter_descriptor.schema.json",
-        "protocol_envelope.schema.json",
-        "protocol_response.schema.json",
-        "error.schema.json",
+        "common.schema.json",
         "extension_namespace.schema.json",
-        "derived_projection.schema.json",
+        "external_identity.schema.json",
+        "provenance.schema.json",
     }
+    for surface in inventory["surfaces"]:
+        expected.add(Path(surface["canonical_schema_path"]).name)
+        expected.update(Path(alias).name for alias in surface["aliases"])
+    json_files = {path.name for path in schema_dir.glob("*.schema.json")}
+    assert json_files == expected
 
 
 def test_phase3_registry_inventory_is_frozen():

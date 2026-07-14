@@ -1,0 +1,233 @@
+{
+  "contract_version": "0.2.0",
+  "inventory_version": "0.2.1-gate-a-entry-closure",
+  "status": "FROZEN -- Gate A entry closure",
+  "surfaces": [
+    {
+      "workflow_surface": "graph header",
+      "canonical_schema_path": "schemas/graph_header.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.graph_header"],
+      "invalid_fixture_ids": ["invalid.graph_header.derived_authority"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "transaction",
+      "canonical_schema_path": "schemas/transaction.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [
+        "schemas/transaction_begin.schema.json",
+        "schemas/transaction_commit.schema.json"
+      ],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.transaction.wrapper"],
+      "invalid_fixture_ids": ["invalid.transaction.empty_members"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "commit",
+      "canonical_schema_path": "schemas/commit.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/transaction_commit.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.commit.wrapper"],
+      "invalid_fixture_ids": ["invalid.commit.wrong_record_type"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "node",
+      "canonical_schema_path": "schemas/node.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.node.goal"],
+      "invalid_fixture_ids": [
+        "invalid.node.uuidv7_version",
+        "invalid.node.leap_second",
+        "invalid.node.integer_out_of_range"
+      ],
+      "compatibility_fixture_ids": [
+        "compat.optional_known_extension_valid",
+        "compat.optional_unknown_extension_downgrade",
+        "compat.critical_unknown_extension_rejected"
+      ]
+    },
+    {
+      "workflow_surface": "edge",
+      "canonical_schema_path": "schemas/edge.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.edge.depends_on"],
+      "invalid_fixture_ids": [
+        "invalid.edge.endpoint_not_node",
+        "invalid.edge.self_loop_semantic"
+      ],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "authority envelope",
+      "canonical_schema_path": "schemas/authority_envelope.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/authority.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.authority_envelope.local"],
+      "invalid_fixture_ids": ["invalid.authority_envelope.programmable_policy"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "state boundary",
+      "canonical_schema_path": "schemas/state_boundary.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.state_boundary"],
+      "invalid_fixture_ids": ["invalid.state_boundary.not_system_of_record"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "provenance",
+      "canonical_schema_path": "schemas/provenance.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.provenance.source"],
+      "invalid_fixture_ids": ["invalid.provenance.source_record_id_prefix"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "payload reference",
+      "canonical_schema_path": "schemas/payload_reference.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/payload_ref.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.payload_reference.none"],
+      "invalid_fixture_ids": [
+        "invalid.payload_reference.content_addressed_missing_hash"
+      ],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "adapter descriptor",
+      "canonical_schema_path": "schemas/adapter_descriptor.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.adapter_descriptor"],
+      "invalid_fixture_ids": ["invalid.adapter_descriptor.trust_model"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "adapter observe",
+      "canonical_schema_path": "schemas/adapter_observe.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.adapter_observe"],
+      "invalid_fixture_ids": ["invalid.adapter_observe.operation_type"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "adapter act",
+      "canonical_schema_path": "schemas/adapter_act.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.adapter_act"],
+      "invalid_fixture_ids": ["invalid.adapter_act.missing_intent"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "adapter evaluate",
+      "canonical_schema_path": "schemas/adapter_evaluate.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.adapter_evaluate"],
+      "invalid_fixture_ids": ["invalid.adapter_evaluate.subject_prefix"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "adapter reconcile",
+      "canonical_schema_path": "schemas/adapter_reconcile.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.adapter_reconcile"],
+      "invalid_fixture_ids": ["invalid.adapter_reconcile.unknown_outcome"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "conflict",
+      "canonical_schema_path": "schemas/conflict.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/node.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.conflict.node"],
+      "invalid_fixture_ids": ["invalid.conflict.node_type"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "snapshot",
+      "canonical_schema_path": "schemas/snapshot.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/node.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.snapshot.node"],
+      "invalid_fixture_ids": ["invalid.snapshot.node_type"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "projection metadata",
+      "canonical_schema_path": "schemas/projection_metadata.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/derived_projection.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.projection_metadata"],
+      "invalid_fixture_ids": ["invalid.projection_metadata.authoritative_true"],
+      "compatibility_fixture_ids": ["compat.derived_view_cannot_upgrade_authority"]
+    },
+    {
+      "workflow_surface": "protocol envelope",
+      "canonical_schema_path": "schemas/protocol_envelope.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.protocol_envelope"],
+      "invalid_fixture_ids": ["invalid.protocol_envelope.unsupported_version"],
+      "compatibility_fixture_ids": ["compat.unsupported_major_version_rejected"]
+    },
+    {
+      "workflow_surface": "protocol request",
+      "canonical_schema_path": "schemas/protocol_request.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/protocol_envelope.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.protocol_request"],
+      "invalid_fixture_ids": ["invalid.protocol_request.message_type"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "protocol response",
+      "canonical_schema_path": "schemas/protocol_response.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": [],
+      "owning_phase": "Phase 3",
+      "valid_fixture_ids": ["valid.protocol_response"],
+      "invalid_fixture_ids": ["invalid.protocol_response.retry_value"],
+      "compatibility_fixture_ids": []
+    },
+    {
+      "workflow_surface": "protocol error",
+      "canonical_schema_path": "schemas/protocol_error.schema.json",
+      "contract_version": "0.2.0",
+      "aliases": ["schemas/error.schema.json"],
+      "owning_phase": "Gate A entry closure",
+      "valid_fixture_ids": ["valid.protocol_error"],
+      "invalid_fixture_ids": ["invalid.protocol_error.unknown_code"],
+      "compatibility_fixture_ids": []
+    }
+  ]
+}

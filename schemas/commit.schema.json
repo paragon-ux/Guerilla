@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/commit.schema.json",
+  "title": "Guerilla commit canonical surface",
+  "allOf": [
+    {
+      "$ref": "https://guerilla.dev/schemas/transaction_commit.schema.json"
+    }
+  ]
+}

@@ -18,28 +18,17 @@ from referencing import Registry, Resource
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 SCHEMA_DIR = REPO_ROOT / "schemas"
 REGISTRY_DIR = REPO_ROOT / "registries"
+FIXTURE_DIR = REPO_ROOT / "tests" / "fixtures" / "contracts"
+CONTRACT_INVENTORY = REPO_ROOT / "docs" / "contract_inventory.json"
 
-EXPECTED_SCHEMA_FILES = {
-    "common.schema.json",
+SUPPORT_SCHEMA_FILES = {
     "actor.schema.json",
-    "authority.schema.json",
-    "external_identity.schema.json",
-    "payload_ref.schema.json",
-    "provenance.schema.json",
-    "node.schema.json",
-    "edge.schema.json",
-    "transaction_begin.schema.json",
-    "transaction_commit.schema.json",
-    "graph_header.schema.json",
     "archive_seal.schema.json",
-    "state_boundary.schema.json",
     "capability.schema.json",
-    "adapter_descriptor.schema.json",
-    "protocol_envelope.schema.json",
-    "protocol_response.schema.json",
-    "error.schema.json",
+    "common.schema.json",
     "extension_namespace.schema.json",
-    "derived_projection.schema.json",
+    "external_identity.schema.json",
+    "provenance.schema.json",
 }
 
 RELATIONSHIP_DIRECTIONS = {
@@ -85,6 +74,19 @@ def _schemas() -> dict[str, dict[str, Any]]:
 
 def _registries() -> dict[str, dict[str, Any]]:
     return {path.name: _load_json(path) for path in sorted(REGISTRY_DIR.glob("*.json"))}
+
+
+def _contract_inventory() -> dict[str, Any]:
+    return cast(dict[str, Any], _load_json(CONTRACT_INVENTORY))
+
+
+def _expected_schema_files() -> set[str]:
+    inventory = _contract_inventory()
+    expected = set(SUPPORT_SCHEMA_FILES)
+    for surface in inventory["surfaces"]:
+        expected.add(Path(surface["canonical_schema_path"]).name)
+        expected.update(Path(alias).name for alias in surface["aliases"])
+    return expected
 
 
 def _jsonschema_registry(schemas: dict[str, dict[str, Any]]) -> Registry:
@@ -328,7 +330,7 @@ VALID_EXAMPLES: dict[str, Any] = {
 
 
 def test_schema_inventory_is_complete():
-    assert {path.name for path in SCHEMA_DIR.glob("*.schema.json")} == EXPECTED_SCHEMA_FILES
+    assert {path.name for path in SCHEMA_DIR.glob("*.schema.json")} == _expected_schema_files()
     assert set(_registries()) == {
         "node_types.json",
         "relationship_types.json",
@@ -337,6 +339,62 @@ def test_schema_inventory_is_complete():
         "error_codes.json",
         "extension_namespaces.json",
     }
+
+
+def test_contract_inventory_owns_workflow_surfaces_and_fixtures():
+    required_surfaces = {
+        "graph header",
+        "transaction",
+        "commit",
+        "node",
+        "edge",
+        "authority envelope",
+        "state boundary",
+        "provenance",
+        "payload reference",
+        "adapter descriptor",
+        "adapter observe",
+        "adapter act",
+        "adapter evaluate",
+        "adapter reconcile",
+        "conflict",
+        "snapshot",
+        "projection metadata",
+        "protocol envelope",
+        "protocol request",
+        "protocol response",
+        "protocol error",
+    }
+    inventory = _contract_inventory()
+    surfaces = inventory["surfaces"]
+    assert inventory["contract_version"] == "0.2.0"
+    assert {surface["workflow_surface"] for surface in surfaces} == required_surfaces
+    assert len(surfaces) == len({surface["workflow_surface"] for surface in surfaces})
+
+    valid_ids = {
+        fixture["fixture_id"]
+        for fixture in _load_json(FIXTURE_DIR / "valid" / "schema_examples.json")["fixtures"]
+    }
+    invalid_ids = {
+        fixture["fixture_id"]
+        for fixture in _load_json(FIXTURE_DIR / "invalid" / "schema_examples.json")["fixtures"]
+    }
+    compatibility_ids = {
+        fixture["fixture_id"]
+        for fixture in _load_json(FIXTURE_DIR / "compatibility" / "compatibility_cases.json")[
+            "fixtures"
+        ]
+    }
+    for surface in surfaces:
+        schema_path = REPO_ROOT / surface["canonical_schema_path"]
+        assert schema_path.exists(), surface["workflow_surface"]
+        assert surface["contract_version"] == "0.2.0"
+        assert surface["owning_phase"]
+        assert surface["valid_fixture_ids"], surface["workflow_surface"]
+        assert surface["invalid_fixture_ids"], surface["workflow_surface"]
+        assert set(surface["valid_fixture_ids"]) <= valid_ids
+        assert set(surface["invalid_fixture_ids"]) <= invalid_ids
+        assert set(surface["compatibility_fixture_ids"]) <= compatibility_ids
 
 
 def test_schemas_meta_validate_and_references_resolve():
@@ -349,7 +407,12 @@ def test_schemas_meta_validate_and_references_resolve():
 
 
 def test_valid_examples_pass_both_validators():
-    for schema_name, example in VALID_EXAMPLES.items():
+    examples = {
+        fixture["schema"]: fixture["instance"]
+        for fixture in _load_json(FIXTURE_DIR / "valid" / "schema_examples.json")["fixtures"]
+    }
+    assert set(examples) == _expected_schema_files()
+    for schema_name, example in examples.items():
         assert _validate_both(schema_name, example) == (True, True), schema_name
 
 

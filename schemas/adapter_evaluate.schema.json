@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/adapter_evaluate.schema.json",
+  "title": "Guerilla adapter evaluate contract",
+  "type": "object",
+  "required": [
+    "operation_type",
+    "adapter_id",
+    "system_id",
+    "state_boundary_id",
+    "subject_node_id",
+    "actor",
+    "authority",
+    "requested_at",
+    "criteria",
+    "extensions"
+  ],
+  "properties": {
+    "operation_type": {
+      "const": "adapter.evaluate"
+    },
+    "adapter_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/adapterId"
+    },
+    "system_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/externalSystemId"
+    },
+    "state_boundary_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/stateBoundaryId"
+    },
+    "subject_node_id": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/nodeId"
+    },
+    "actor": {
+      "$ref": "https://guerilla.dev/schemas/actor.schema.json"
+    },
+    "authority": {
+      "$ref": "https://guerilla.dev/schemas/authority.schema.json"
+    },
+    "requested_at": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/timestamp"
+    },
+    "criteria": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/safeJson"
+    },
+    "extensions": {
+      "$ref": "https://guerilla.dev/schemas/common.schema.json#/$defs/extensions"
+    }
+  },
+  "additionalProperties": false
+}

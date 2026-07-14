@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://guerilla.dev/schemas/conflict.schema.json",
+  "title": "Guerilla conflict-node canonical surface",
+  "allOf": [
+    {
+      "$ref": "https://guerilla.dev/schemas/node.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "node_type": {
+          "const": "conflict"
+        }
+      }
+    }
+  ]
+}
