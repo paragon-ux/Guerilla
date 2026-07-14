@@ -100,6 +100,6 @@ durable graph.
 ## Phase Boundary
 
 This document publishes contracts and current phase boundaries. Runtime graph
-storage, DAG validation, and indexing are implemented by Phases 6-7; adapters,
-transports, projections, and Phase 8 authority/boundary enforcement remain
-outside this document.
+storage, DAG validation, indexing, and local authority/boundary enforcement are
+implemented by Phases 6-8; adapters, transports, projections, and Phase 9+
+continuity behavior remain outside this document.

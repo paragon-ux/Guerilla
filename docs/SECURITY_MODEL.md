@@ -22,7 +22,7 @@ endpoint escape, namespace escape, and overlapping primary write authority.
 Adapter identity descriptors can be registered for capability metadata only;
 there is no adapter invocation path.
 
-This baseline is not the full Phase 19 security model.
+This Gate B baseline is complete and is not the full Phase 19 security model.
 
 ---
 

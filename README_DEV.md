@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate B in progress; Phases 1-8 complete
-**Phase:** Gate B checklist next
+**Current status:** Gate B complete; Phases 1-8 complete
+**Phase:** Phase 9 pending; do not begin without explicit authorization
 
 ---
 
@@ -102,6 +102,9 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
   identity registration without invocation, and scoped external identity
   lifecycle handling. Do not implement adapters, projections, or transports
   before their owning phases.
+- Gate B is complete. The kernel baseline is limited to contracts, codec,
+  local append/replay, DAG/index/query, and local authority/identity/boundary
+  behavior.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -117,9 +120,9 @@ Each phase completion must report:
 
 ## Gate B Handoff
 
-After Phase 8 completion:
+After Gate B completion:
 
-1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, and Phase 8 security tests pass.
-2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B checklist inputs.
+1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, Phase 8 security, and Gate B checklist tests pass.
+2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
-4. Run the Gate B checklist only after Phase 8 hosted CI passes. Do not begin Phase 9.
+4. Do not begin Phase 9 without an explicit Phase 9 prompt.

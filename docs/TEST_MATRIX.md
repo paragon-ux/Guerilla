@@ -1,11 +1,11 @@
 # Test Matrix
 
-**Status:** Gate B evidence current -- Phases 1-8 PASS locally
+**Status:** Gate B evidence current -- Gate B PASS locally
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Phase 8 local authority and boundary tests are passing locally.
+> **WARNING:** Gate B kernel tests are passing locally.
 > Security hardening, performance, adapter runtime, projection, and transport
 > tests remain planned until their owning phases.
 
@@ -116,6 +116,13 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | XID-001 | External revisions are preserved and rename/delete/reuse/alias behavior is explicit | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
 | REG-001 | Committed boundary registry state replays and indexes equivalently | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
 
+### Gate B Checklist Tests
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| GTB-001 | Clean workspace commit, reopen, replay, heads, and replay/index query equivalence | Gate B | PASSING | `tests/integration/test_gate_b_kernel_checklist.py` |
+| GTB-002 | Invalid duplicate, missing-endpoint, cycle, and unauthorized mutations leave reopened graph unchanged | Gate B | PASSING | `tests/integration/test_gate_b_kernel_checklist.py` |
+| GTB-003 | Deleted index rebuilds from authoritative replay without lineage loss | Gate B | PASSING | `tests/integration/test_gate_b_kernel_checklist.py` |
+
 ### Adapter Tests (Phase 9-12)
 ### Action-Recovery Tests (Phase 11-12)
 ### Projection Tests (Phase 13-14)
@@ -143,4 +150,5 @@ not claim kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims
 local append/replay behavior; Phase 7 evidence claims DAG integrity and
 rebuildable index/query behavior; Phase 8 evidence claims local authorization,
 boundary, adapter identity registration, and external identity lifecycle behavior
-covered by the listed tests.
+covered by the listed tests. Gate B checklist evidence confirms the Phase 5-8
+kernel surfaces together and does not claim Phase 9 adapter behavior.

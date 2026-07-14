@@ -1,6 +1,6 @@
 # State Boundary Model
 
-**Status:** Gate B in progress -- Phase 8 local enforcement implemented
+**Status:** Gate B complete -- Phase 8 local enforcement implemented
 **Owner phase:** Phase 3 (Machine Contracts), Phase 8 (Authority/Identity/Boundaries)
 **Controlling schema:** `schemas/state_boundary.schema.json`
 

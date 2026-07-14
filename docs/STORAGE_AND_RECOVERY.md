@@ -1,6 +1,6 @@
 # Storage and Recovery
 
-**Status:** Gate B in progress -- Phase 7 DAG/index implemented
+**Status:** Gate B complete -- local kernel storage/replay/index verified
 **Owner phase:** Phase 5 (Codec/Config), Phase 6 (Append Store/Transactions), Phase 19 (Security/Durability)
 **Controlling source documents:** `docs/ARCHITECTURE_DECISIONS.md`, `docs/decision_vectors/durability.json`, `GUERILLA_IMPLEMENTATION_SPEC.md` Sections 5-6 and 24-28
 **Regeneration trigger:** Any storage/recovery change, Phase 7 graph-integrity change, or Phase 19 durability/archive change
@@ -12,13 +12,13 @@
 Define the implemented local workspace layout, append-only active graph format,
 transaction durability sequence, replay verification, DAG integrity, payload
 persistence, crash recovery behavior, and the rebuildable query index through
-Phase 7.
+Gate B.
 
 ---
 
 ## Implemented Local Workspace Layout
 
-| Path | Authority | Phase 7 behavior |
+| Path | Authority | Gate B behavior |
 |---|---|---|
 | `.guerilla/graph/active.jsonl` | Authoritative lineage | One graph header followed by append-only transaction records |
 | `.guerilla/graph/archives/` | Authoritative archive target | Directory created; archive rotation remains Phase 19 |
@@ -32,7 +32,7 @@ Phase 7.
 
 ## Transaction Durability Sequence
 
-Phase 6 appends through one local JSONL path:
+Gate B appends through one local JSONL path:
 
 1. Acquire `.guerilla/locks/writer.lock` with exclusive creation.
 2. Replay the active graph to the last durable commit.
@@ -70,13 +70,17 @@ raise replay errors instead of being silently ignored.
 
 ---
 
-## DAG Integrity and Query Index
+## DAG Integrity, Authority, and Query Index
 
 Phase 7 validates direct edge transactions before staging. Validation checks
 duplicate node/edge identifiers, same-transaction node endpoints, missing
 endpoints, self-loops, relationship endpoint-type compatibility from
 `registries/relationship_types.json`, and direct cycle creation. A failed graph
 integrity check rejects the full transaction before any graph revision advances.
+
+Phase 8 adds the fixed local `local-owner-v1` authorization profile to graph
+reads and appends. Actor fields, authority envelopes, adapter descriptors,
+extensions, and payload content do not grant effective permissions.
 
 Graph queries are available from authoritative replay and from the SQLite index.
 Both serving paths declare workspace id, graph revision, commit hash, query name,
@@ -103,7 +107,7 @@ are never executed by storage or replay.
 
 ## Deferred Items
 
-Phase 7 does not implement authority registry enforcement, external identity
-mapping, adapters, projections, transport bindings, archive rotation,
+Gate B does not implement adapter invocation, observations, external actions,
+reconciliation, projections, transport bindings, archive rotation,
 backup/restore, network-filesystem support, or stale-lock breaking. Those remain
 owned by later phases.

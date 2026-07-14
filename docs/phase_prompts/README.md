@@ -1,6 +1,6 @@
 # Phase Prompts
 
-**Status:** Gate B in progress; Phase 8 PASS, Gate B checklist next
+**Status:** Gate B complete; Phase 9 pending
 **Owner phase:** Cross-phase; each phase prompt is owned by its phase
 
 ---

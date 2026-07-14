@@ -1,11 +1,11 @@
 # Codex Build Plan
 
-**Status:** Gate B in progress -- Phase 8 PASS
+**Status:** Gate B complete -- Kernel Ready
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
-> **WARNING:** Phase 8 local authority and boundary registries are implemented.
+> **WARNING:** Gate B local kernel behavior is implemented.
 > Do not treat adapters, projections, transports, or Phase 9+ behavior as
 > implemented.
 
@@ -22,8 +22,8 @@ Track the complete build sequence from repository bootstrap through research rel
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | COMPLETE |
-| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 8 PASS; Gate B checklist next |
-| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | BLOCKED |
+| B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | COMPLETE |
+| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | PENDING |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
 | E -- Research Validated | 20-22 | Real heterogeneous pilots, benchmark evidence, reproducible release | BLOCKED |
 
@@ -69,8 +69,7 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-Gate A is complete and Phase 8 has passed local validation. The Gate B checklist
-is next.
+Gate A and Gate B are complete. Phase 9 has not started.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
@@ -84,4 +83,6 @@ helpers, and a rebuildable non-authoritative SQLite index; it did not add
 authority registry, adapters, projections, or transports. Phase 8 added fixed
 local authorization, state-boundary enforcement helpers, adapter identity
 registration without invocation, and scoped external identity lifecycle handling;
-it did not add adapters, projections, transports, or Phase 9 behavior.
+it did not add adapters, projections, transports, or Phase 9 behavior. The Gate
+B checklist verifies clean reopen/replay, invalid-mutation rollback, index loss
+rebuild, authority rejection, and replay/index query equivalence.
