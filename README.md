@@ -2,7 +2,10 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Gate A complete / pre-prototype. Phases 1-4 are frozen: architecture decisions, schemas, registries, and conformance fixtures. No working graph runtime exists yet.
+**Current status:** Gate B in progress. Phases 1-5 are complete: contracts are
+frozen and deterministic codec/config/identifier/hash primitives exist. No
+append store, replay engine, DAG validator, index, adapter runtime, projection,
+or transport exists yet.
 
 ---
 
@@ -36,7 +39,7 @@ Guerilla does **not** own: canonical application content, external database tran
 | Gate | Phases | Meaning | Status |
 |---|---|---|---|
 | A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Complete |
-| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 5 next; not started |
+| B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Phase 5 complete; Phase 6 next |
 | C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Blocked by Gate B |
 | D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |
 | E — Research Validated | 20–22 | Real heterogeneous pilots, benchmark evidence, reproducible release | Blocked by Gate D |
@@ -63,8 +66,11 @@ uv run pytest
 
 ## Non-Claims
 
-- No executable graph runtime exists yet. All runtime components are planned (22-phase build sequence).
-- Schemas, registries, and conformance fixtures are frozen, but no runtime implementation has started.
+- No executable graph append/replay runtime exists yet. The implemented runtime
+  primitives are Phase 5 codec, config, contract, protocol, payload-hash, and
+  identifier helpers only.
+- Schemas, registries, conformance fixtures, and Phase 5 primitives are frozen
+  for Phase 6 input.
 - No adapters, integrations, benchmarks, or empirical results are available.
 - The architecture papers (v0.2.0-draft) are the current normative specification.
 

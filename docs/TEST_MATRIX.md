@@ -5,7 +5,9 @@
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Runtime, crash, security, performance, adapter, and projection tests remain planned until their owning phases. Gate A evidence covers repository controls, decisions, schemas, registries, and fixtures only.
+> **WARNING:** Phase 5 primitive runtime tests are passing. Append storage,
+> replay, crash, security, performance, adapter, projection, and transport tests
+> remain planned until their owning phases.
 
 ---
 
@@ -60,6 +62,17 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | REC-006 | Hash mismatches detected by runtime verifier | 6 | PLANNED | -- |
 | REC-007 | Unsupported versions rejected by schema fixtures | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
 | REC-008 | Authority envelope validated by schema fixtures | 4 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/conformance/` |
+
+### Codec, Config, Identifier Tests (Phase 5)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| CCI-001 | Production canonical JSON reproduces Gate A vectors and JSONL newline behavior | 5 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/unit/test_phase5_codec_config_identity.py` |
+| CCI-002 | Raw JSON byte validation rejects duplicate keys, invalid UTF-8, isolated surrogates, and prohibited numeric spellings | 5 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/unit/test_phase5_codec_config_identity.py` |
+| CCI-003 | Timestamp normalization validates calendar dates, leap days, UTC storage grammar, and offset normalization | 5 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/unit/test_phase5_codec_config_identity.py` |
+| CCI-004 | UUIDv7-prefixed identifiers validate every family and generate monotonic same-millisecond IDs | 5 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/unit/test_phase5_codec_config_identity.py` |
+| CCI-005 | Record, payload, transaction, commit, segment, and archive-seal hashes reproduce Gate A vectors | 5 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/unit/test_phase5_codec_config_identity.py` |
+| CCI-006 | Contract loader validates schemas with two independent implementations and immutable values cannot mutate | 5 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/unit/test_phase5_codec_config_identity.py` |
+| CCI-007 | Workspace config loads explicit supported profiles and fails closed for unsupported mutation-capable settings | 5 | PASSING | `uv run --frozen --extra dev --python 3.11 pytest tests/unit/test_phase5_codec_config_identity.py` |
 
 ### Transaction Tests (Phase 6)
 | Test ID | Description | Phase | Status | Evidence |

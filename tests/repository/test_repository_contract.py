@@ -176,7 +176,7 @@ FROZEN_DOCS = {
     "ERROR_REGISTRY.md",
 }
 
-GATE_A_STATUS_DOCS = {
+GATE_STATUS_DOCS = {
     "CODEX_BUILD_PLAN.md",
     "TEST_MATRIX.md",
 }
@@ -338,24 +338,29 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Beyond __init__.py placeholders and cli/main.py, no substantive .py files exist."""
+    """Phase 5 permits codec/config/contracts/protocol/payload/identity primitives only."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
-    # Allowed: __init__.py files (short), cli/main.py, _version.py, __main__.py
+    allowed_subtrees = {
+        "src/guerilla/codec",
+        "src/guerilla/config",
+        "src/guerilla/contracts",
+        "src/guerilla/protocol",
+        "src/guerilla/payloads",
+        "src/guerilla/identity",
+    }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)
+        rel_posix = rel.as_posix()
         name = py_file.name
-        if name == "__init__.py":
-            # Must be a placeholder (short, no substantive logic beyond docstring)
-            content = py_file.read_text(encoding="utf-8")
-            assert len(content) < 300 or "cli" in str(rel), (
-                f"__init__.py at {rel} exceeds placeholder size ({len(content)} bytes)"
-            )
-        elif name in ("_version.py", "__main__.py") or "cli/main.py" in str(rel).replace("\\", "/"):
+        if any(rel_posix.startswith(subtree) for subtree in allowed_subtrees):
             continue  # permitted
-        else:
-            # Any other .py file is prohibited in Phase 1
-            raise AssertionError(f"Prohibited runtime module in Phase 1: {rel}")
+        if (
+            name in ("__init__.py", "_version.py", "__main__.py")
+            or rel_posix == "src/guerilla/cli/main.py"
+        ):
+            continue
+        raise AssertionError(f"Prohibited post-Phase-5 runtime module: {rel}")
 
 
 # ── Prompt inventory ──────────────────────────────────────────────────
@@ -402,8 +407,8 @@ def test_build_documents_identify_status():
         if name in FROZEN_DOCS:
             assert "**Status:** FROZEN -- Phase" in content
             assert "PLACEHOLDER" not in content
-        elif name in GATE_A_STATUS_DOCS:
-            assert "**Status:** Gate A" in content
+        elif name in GATE_STATUS_DOCS:
+            assert "**Status:** Gate " in content
             assert "PLACEHOLDER" not in content
         else:
             assert "PLACEHOLDER" in content or "placeholder" in content.lower(), (

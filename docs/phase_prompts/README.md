@@ -1,6 +1,6 @@
 # Phase Prompts
 
-**Status:** Gate A complete; Phase 5-22 prompts pending
+**Status:** Gate B in progress; Phase 5 PASS, Phase 6 next
 **Owner phase:** Cross-phase; each phase prompt is owned by its phase
 
 ---
@@ -28,7 +28,7 @@ This directory contains the ordered phase execution prompts that drive Guerilla'
 | 2 | `PHASE_02_ARCHITECTURE_DECISIONS.md` | A | PASS |
 | 3 | `PHASE_03_MACHINE_CONTRACTS.md` | A | PASS |
 | 4 | `PHASE_04_CONFORMANCE_FIXTURES.md` | A | PASS |
-| 5 | `PHASE_05_CODEC_CONFIG_IDENTIFIERS.md` | B | PENDING |
+| 5 | `PHASE_05_CODEC_CONFIG_IDENTIFIERS.md` | B | PASS |
 | 6 | `PHASE_06_APPEND_STORE_TRANSACTIONS_REPLAY.md` | B | PENDING |
 | 7 | `PHASE_07_DAG_INTEGRITY_INDEX_QUERY.md` | B | PENDING |
 | 8 | `PHASE_08_AUTHORITY_IDENTITY_BOUNDARIES.md` | B | PENDING |
