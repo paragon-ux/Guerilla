@@ -197,7 +197,10 @@ def normalize_timestamp(value: str, *, allow_offset: bool = True) -> str:
 
     normalized = parsed.astimezone(UTC)
     fraction_out = fraction.rstrip("0")
-    base = normalized.strftime("%Y-%m-%dT%H:%M:%S")
+    base = (
+        f"{normalized.year:04d}-{normalized.month:02d}-{normalized.day:02d}"
+        f"T{normalized.hour:02d}:{normalized.minute:02d}:{normalized.second:02d}"
+    )
     return f"{base}.{fraction_out}Z" if fraction_out else f"{base}Z"
 
 
