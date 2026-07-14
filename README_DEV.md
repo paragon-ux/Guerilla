@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate B in progress; Phases 1-7 complete
-**Phase:** 8 next - Authority, Identity, Boundaries
+**Current status:** Gate B in progress; Phases 1-8 complete
+**Phase:** Gate B checklist next
 
 ---
 
@@ -97,8 +97,11 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
 - Phase 6 implemented local append storage, payload persistence, writer locking,
   replay, and incomplete-tail recovery.
 - Phase 7 implemented DAG integrity, graph heads, exact-revision query helpers,
-  and a rebuildable non-authoritative SQLite index. Phase 8 is next. Do not
-  implement adapters, projections, or transports before their owning phases.
+  and a rebuildable non-authoritative SQLite index.
+- Phase 8 implemented fixed local authorization, state-boundary checks, adapter
+  identity registration without invocation, and scoped external identity
+  lifecycle handling. Do not implement adapters, projections, or transports
+  before their owning phases.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -112,11 +115,11 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Phase 8 Handoff
+## Gate B Handoff
 
-After Phase 7 completion:
+After Phase 8 completion:
 
-1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, and Phase 7 graph/index tests pass.
-2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-7 primitives as frozen Phase 8 inputs.
+1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, and Phase 8 security tests pass.
+2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B checklist inputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
-4. Begin Phase 8 only after Phase 7 hosted CI passes.
+4. Run the Gate B checklist only after Phase 8 hosted CI passes. Do not begin Phase 9.

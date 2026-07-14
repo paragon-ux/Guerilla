@@ -1,13 +1,13 @@
 # Test Matrix
 
-**Status:** Gate B evidence current -- Phases 1-7 PASS locally
+**Status:** Gate B evidence current -- Phases 1-8 PASS locally
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Phase 7 DAG integrity and index tests are passing locally.
-> Authority, security, performance, adapter, projection, and transport tests
-> remain planned until their owning phases.
+> **WARNING:** Phase 8 local authority and boundary tests are passing locally.
+> Security hardening, performance, adapter runtime, projection, and transport
+> tests remain planned until their owning phases.
 
 ---
 
@@ -105,6 +105,17 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | IXQ-004 | Ahead/stale/corrupt index status is detected without changing graph truth | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
 | IXQ-005 | Bounded traversal truncates explicitly | 7 | PASSING | `tests/integration/test_phase7_graph_index_query.py` |
 
+### Authority and Boundary Tests (Phase 8)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| AUTH-001 | Local owner can read and append; non-owner principal is denied | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
+| AUTH-002 | Actor and record authority claims cannot escalate effective permissions | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
+| BND-001 | Boundary operations and path/endpoint/namespace scope are enforced | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
+| BND-002 | Overlapping primary writers are rejected while overlapping reads are allowed | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
+| ADI-001 | Adapter identity descriptors register capabilities without invocation | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
+| XID-001 | External revisions are preserved and rename/delete/reuse/alias behavior is explicit | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
+| REG-001 | Committed boundary registry state replays and indexes equivalently | 8 | PASSING | `tests/security/test_phase8_authority_boundaries.py` |
+
 ### Adapter Tests (Phase 9-12)
 ### Action-Recovery Tests (Phase 11-12)
 ### Projection Tests (Phase 13-14)
@@ -126,8 +137,10 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime authority, security, performance, adapter, projection, and transport
-rows remain PLANNED until their owning phases. Gate A evidence does not claim
-kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims local
-append/replay behavior; Phase 7 evidence claims DAG integrity and rebuildable
-index/query behavior covered by the listed tests.
+Runtime security hardening, performance, adapter runtime, projection, and
+transport rows remain PLANNED until their owning phases. Gate A evidence does
+not claim kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims
+local append/replay behavior; Phase 7 evidence claims DAG integrity and
+rebuildable index/query behavior; Phase 8 evidence claims local authorization,
+boundary, adapter identity registration, and external identity lifecycle behavior
+covered by the listed tests.

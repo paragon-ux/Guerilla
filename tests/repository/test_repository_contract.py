@@ -172,12 +172,12 @@ FROZEN_DOCS = {
     "GRAPH_RECORD_FORMAT.md",
     "GLCP_CORE_SPEC.md",
     "ADAPTER_CONTRACT.md",
-    "STATE_BOUNDARY_MODEL.md",
     "ERROR_REGISTRY.md",
 }
 
 GATE_STATUS_DOCS = {
     "CODEX_BUILD_PLAN.md",
+    "STATE_BOUNDARY_MODEL.md",
     "STORAGE_AND_RECOVERY.md",
     "TEST_MATRIX.md",
 }
@@ -339,7 +339,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 7 permits graph/index plus Phase 5-6 primitive and storage packages."""
+    """Phase 8 permits authority plus Phase 5-7 kernel packages."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {
@@ -352,6 +352,7 @@ def test_no_prohibited_runtime_modules():
         "src/guerilla/storage",
         "src/guerilla/graph",
         "src/guerilla/index",
+        "src/guerilla/authority",
     }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)
@@ -364,7 +365,7 @@ def test_no_prohibited_runtime_modules():
             or rel_posix == "src/guerilla/cli/main.py"
         ):
             continue
-        raise AssertionError(f"Prohibited post-Phase-7 runtime module: {rel}")
+        raise AssertionError(f"Prohibited post-Phase-8 runtime module: {rel}")
 
 
 # ── Prompt inventory ──────────────────────────────────────────────────

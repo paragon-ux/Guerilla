@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from guerilla.authority import LocalAuthorizationProfile, validate_member_authority
 from guerilla.codec import (
     ZERO_SHA256,
     CanonicalJsonError,
@@ -96,9 +97,16 @@ def _parse_record(raw_line: bytes) -> dict[str, Any]:
 
 
 class GraphStore:
-    def __init__(self, root: Path, *, contracts: ContractBundle) -> None:
+    def __init__(
+        self,
+        root: Path,
+        *,
+        contracts: ContractBundle,
+        owner_principal_id: str = "local-user",
+    ) -> None:
         self.root = root
         self.contracts = contracts
+        self.authorization = LocalAuthorizationProfile(owner_principal_id=owner_principal_id)
         self.active_path = root / ".guerilla" / "graph" / "active.jsonl"
         self.tmp_dir = root / ".guerilla" / "tmp"
         self.locks_dir = root / ".guerilla" / "locks"
@@ -229,10 +237,13 @@ class GraphStore:
         actor: dict[str, Any],
         created_at: str,
         committed_at: str,
+        principal_id: str = "local-user",
         fail_at: str | None = None,
     ) -> dict[str, Any]:
         if not members:
             raise StorageError("transaction_empty", "transaction must contain members")
+        self.authorization.require(principal_id, "graph.append")
+        validate_member_authority(members, effective_principal_id=principal_id)
         lock_workspace = self.replay().workspace_id
         with WriterLock.acquire(
             self.locks_dir,

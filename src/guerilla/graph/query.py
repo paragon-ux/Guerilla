@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any, Literal
 
+from guerilla.authority import LocalAuthorizationProfile
 from guerilla.codec import ZERO_SHA256
 from guerilla.graph.errors import GraphQueryError
 
@@ -29,7 +30,18 @@ class QueryEnvelope:
 
 
 class GraphQuery:
-    def __init__(self, replay: Any, *, serving_path: ServingPath = "replay") -> None:
+    def __init__(
+        self,
+        replay: Any,
+        *,
+        serving_path: ServingPath = "replay",
+        principal_id: str = "local-user",
+        owner_principal_id: str = "local-user",
+    ) -> None:
+        LocalAuthorizationProfile(owner_principal_id=owner_principal_id).require(
+            principal_id,
+            "graph.read",
+        )
         self.replay = replay
         self.serving_path = serving_path
 
