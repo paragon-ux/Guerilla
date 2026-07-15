@@ -128,6 +128,11 @@ class AdapterHost:
         self._validate_result(request, result)
         return result
 
+    def validate_request(self, request: AdapterOperationRequest) -> None:
+        """Validate an adapter request without invoking adapter code."""
+
+        self._validate_request(request, now_ms=self._clock_ms())
+
     def _validate_descriptor(self, descriptor: dict[str, Any]) -> None:
         self.contracts.assert_valid("adapter_descriptor.schema.json", descriptor)
         if descriptor["trust_model"] != DESCRIPTOR_TRUST_MODEL:

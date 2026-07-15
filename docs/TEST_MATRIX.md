@@ -1,15 +1,14 @@
 # Test Matrix
 
-**Status:** Gate C evidence current -- Phase 10 PASS
+**Status:** Gate C evidence current -- Phase 11 PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests and Phase 9-10 Gate C tests pass locally
+> **WARNING:** Gate B kernel tests and Phase 9-11 Gate C tests pass locally
 > and in hosted CI.
-> Graph-backed action orchestration, reconciliation engine, projection,
-> snapshot, performance, and transport tests remain planned until their owning
-> phases.
+> Reconciliation engine, projection, snapshot, performance, and transport tests
+> remain planned until their owning phases.
 
 ---
 
@@ -148,7 +147,19 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | OBS-005 | Unauthorized observation, boundary escape, adapter exception, missing provenance, missing external identity, and injected append failure do not advance graph revision | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
 | OBS-006 | Replay and SQLite index rebuild do not invoke adapters and preserve observation truth | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
 
-### Action-Recovery Tests (Phase 11-12)
+### Action Intent and Idempotency Tests (Phase 11)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| ACT-001 | One action path records durable intent, invocation-start, and result records for transactional, filesystem, and asynchronous systems | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-002 | Invalid principal, stale graph revision, and boundary escape cause zero adapter calls and no graph commit | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-003 | Same idempotency key plus same request content replays prior result from graph truth | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-004 | Same idempotency key plus different request content returns `idempotency_conflict` | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-005 | Idempotency survives restart and SQLite index loss | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-006 | Prior invocation without committed result returns `outcome_unknown` without blind retry | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-007 | Filesystem partial mutation can be followed by bounded after-state observation | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-008 | Replay and SQLite index rebuild do not invoke adapters or external actions | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+
+### Reconciliation and Action-Recovery Tests (Phase 12)
 ### Projection Tests (Phase 13-14)
 ### Security Tests (Phase 19)
 ### Performance Tests (Phase 21)
@@ -168,8 +179,8 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, graph-backed action orchestration,
-reconciliation, projection, snapshot, and transport rows remain PLANNED until
+Runtime security hardening, performance, reconciliation, projection, snapshot,
+and transport rows remain PLANNED until
 their owning phases. Gate A evidence does not claim kernel behavior beyond the
 Phase 5 primitives; Phase 6 evidence claims local append/replay behavior; Phase
 7 evidence claims DAG integrity and rebuildable index/query behavior; Phase 8
@@ -178,4 +189,6 @@ and external identity lifecycle behavior covered by the listed tests. Gate B
 checklist evidence confirms the Phase 5-8 kernel surfaces together. Phase 9
 evidence claims only trusted in-process adapter SDK, host validation, and
 synthetic-system behavior. Phase 10 evidence claims only observe-only ingestion
-from trusted synthetic adapters into graph records.
+from trusted synthetic adapters into graph records. Phase 11 evidence claims
+only graph-backed action intent, idempotency, action-result recording, restart
+protection, and optional after-state observation.

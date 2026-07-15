@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate C in progress; Phases 1-10 complete
-**Phase:** Phase 11 pending
+**Current status:** Gate C in progress; Phases 1-11 complete
+**Phase:** Phase 12 pending
 
 ---
 
@@ -133,9 +133,16 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
   It preserves external identity, revisions, provenance, payload retention, and
   duplicate/conflict classifications without invoking `act` or mutating
   external state.
+- Phase 11 implemented graph-backed action intent, invocation-start records,
+  adapter `act` invocation only after durable intent verification, explicit
+  action-result records, idempotency replay/conflict behavior, restart handling,
+  and optional after-state observation through the Phase 10 ingestor. It did
+  not add reconciliation, conflict decisions, projections, snapshots,
+  transports, subprocess isolation, real integrations, or Gate D behavior.
 - Gate B is complete. Gate C is in progress; the current boundary is limited to
   contracts, kernel behavior, local authority/identity/boundaries, Phase 9
-  synthetic adapter SDK behavior, and Phase 10 observation ingestion.
+  synthetic adapter SDK behavior, Phase 10 observation ingestion, and Phase 11
+  action intent/idempotency orchestration.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -151,11 +158,12 @@ Each phase completion must report:
 
 ## Gate C Handoff
 
-After Gate B completion and Phase 10 local completion:
+After Gate B completion and Phase 11 local completion:
 
 1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, Phase 8 security, and Gate B checklist tests pass.
 2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
 4. Use `docs/phase_prompts/PHASE_09_ADAPTER_SDK_SYNTHETIC_SYSTEMS.md`, `src/guerilla/adapters/`, `tests/adapters/`, and `tests/fixtures/adapters/` as Phase 9 evidence.
-5. Use `docs/phase_prompts/PHASE_10_OBSERVATION_INGESTION.md`, `src/guerilla/observability/`, and `tests/integration/test_phase10_observation_ingestion.py` as Phase 10 local evidence.
-6. Begin Phase 11 only from the Phase 10 commit with clean full local validation and hosted CI.
+5. Use `docs/phase_prompts/PHASE_10_OBSERVATION_INGESTION.md`, `src/guerilla/observability/`, and `tests/integration/test_phase10_observation_ingestion.py` as Phase 10 evidence.
+6. Use `docs/phase_prompts/PHASE_11_ACTION_INTENT_IDEMPOTENCY.md`, `src/guerilla/orchestration/`, and `tests/integration/test_phase11_action_intent_idempotency.py` as Phase 11 local evidence.
+7. Begin Phase 12 only from the Phase 11 commit with clean full local validation and hosted CI.

@@ -1,7 +1,7 @@
 # Adapter Contract
 
-**Status:** FROZEN -- Phase 3 complete; Gate C Phase 9-10 adapter/observation surfaces implemented
-**Owner phase:** Phase 3 (Machine Contracts), Phase 9 (Adapter SDK/Synthetic Systems), Phase 10 (Observation Ingestion)
+**Status:** FROZEN -- Phase 3 complete; Gate C Phase 9-11 adapter, observation, and action surfaces implemented
+**Owner phase:** Phase 3 (Machine Contracts), Phase 9 (Adapter SDK/Synthetic Systems), Phase 10 (Observation Ingestion), Phase 11 (Action Intent and Idempotency)
 **Controlling schema:** `schemas/adapter_descriptor.schema.json`
 
 ## Purpose
@@ -12,7 +12,9 @@ vocabulary. Phase 9 implements the trusted in-process Python SDK, host, and
 synthetic systems that exercise the descriptor and operation contracts without
 adding graph ingestion, transports, subprocess isolation, or real integrations.
 Phase 10 implements observe-only ingestion from that host into authoritative
-graph records without adding action orchestration or reconciliation.
+graph records. Phase 11 implements graph-backed action intent, invocation
+start, result recording, idempotency replay/conflict behavior, and optional
+after-state observation without adding reconciliation or conflict engines.
 
 ## Descriptor
 
@@ -40,11 +42,11 @@ requests:
 - `schemas/adapter_evaluate.schema.json`
 - `schemas/adapter_reconcile.schema.json`
 
-`adapter_act` requires an `intent_node_id` so later runtime phases cannot model
-an external mutation without a committed intent. Phase 9 does not yet provide
-the Phase 11 graph-backed intent lifecycle; Phase 9 `act` calls are limited to
-trusted synthetic systems and are not recorded as authoritative graph
-transactions.
+`adapter_act` requires an `intent_node_id` so the runtime cannot model an
+external mutation without a committed intent. Phase 11 provides the
+graph-backed lifecycle for production action orchestration. Phase 9 direct
+`act` calls remain adapter SDK conformance tests only and are not the
+authoritative action path.
 
 ## Phase 9 Runtime Surface
 
@@ -96,6 +98,34 @@ Observation ingestion invokes only `observe`. It does not call `act`, create
 action intent, retry, infer external acceptance, reconcile, project, snapshot,
 or mutate external state.
 
+## Phase 11 Action Orchestration
+
+Phase 11 adds `src/guerilla/orchestration/actions.py`, an action path that:
+
+- validates `adapter.act` request contracts, principal authority, adapter
+  capability, and state-boundary scope before committing intent;
+- commits operation and action-request event records before adapter invocation;
+- verifies the committed intent from authoritative replay before crossing into
+  `act`;
+- commits invocation-start event records before adapter invocation;
+- passes structured arguments, expected external revision, idempotency context,
+  correlation, boundary, and authorization context to the Phase 9 host;
+- commits action-result event records that preserve external classification,
+  external revision or action identifiers, adapter evidence, retry
+  classification, warnings, and limitations;
+- reconstructs idempotency truth from graph replay rather than from SQLite,
+  adapter-native state, or runtime memory;
+- replays same-key/same-content requests from prior committed graph results;
+- rejects same-key/different-content requests with `idempotency_conflict`;
+- treats prior invocation without a committed result as `outcome_unknown` and
+  does not retry blindly;
+- optionally schedules after-state observation through the Phase 10 ingestor
+  without fabricating external state.
+
+Action orchestration invokes only `act` and optional bounded `observe`.
+It does not call `reconcile`, resolve conflicts, project, snapshot, transport,
+or mutate external systems outside declared adapter actions.
+
 ## Capabilities
 
 Capability values are registered in `registries/capabilities.json` and encoded
@@ -111,18 +141,19 @@ authority for those boundaries.
 
 ## Phase Boundary
 
-Implemented in Phase 9:
+Implemented in Phase 9-11:
 
 - trusted configured in-process adapter loading and invocation;
 - descriptor and capability validation;
 - synthetic observe, act, evaluate, and reconcile calls against three local
   synthetic systems;
 - observe-only normalization into authoritative graph records through one Gate B
-  append transaction.
+  append transaction;
+- graph-backed intent-before-action, invocation-start, result recording,
+  idempotency replay/conflict behavior, and optional after-state observation.
 
 Still deferred:
 
-- graph-backed intent-before-action and idempotency;
 - reconciliation engine, conflict engine, and decisions;
 - projections, snapshots, CLI workflows, transports, subprocess/container
   isolation, network services, real integrations, pilots, archive, backup, and
