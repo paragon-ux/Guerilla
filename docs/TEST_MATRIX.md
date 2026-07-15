@@ -1,12 +1,12 @@
 # Test Matrix
 
-**Status:** Gate C evidence current -- Phase 9 PASS locally
+**Status:** Gate C evidence current -- Phase 9 PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
 > **WARNING:** Gate B kernel tests and Phase 9 adapter SDK tests are passing
-> locally. Observation ingestion, graph-backed action orchestration,
+> locally and in hosted CI. Observation ingestion, graph-backed action orchestration,
 > reconciliation engine, projection, snapshot, performance, and transport tests
 > remain planned until their owning phases.
 

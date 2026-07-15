@@ -1,6 +1,6 @@
 # Phase 9 -- Adapter SDK and Synthetic Systems
 
-**Status:** LOCAL PASS -- Phase 9 implementation and local validation complete; hosted CI pending
+**Status:** PASS -- Phase 9 complete
 **Owner phase:** Phase 9 (Adapter SDK/Synthetic Systems)
 **Gate:** C -- Continuity MVP
 **Execution date:** 2026-07-14
@@ -176,7 +176,7 @@ reopening the appropriate gate.
 | Systems represent materially different continuity models | PASS | `tests/fixtures/adapters/synthetic_systems.json`; `examples/transactional_service/`; `examples/reconstructed_filesystem/`; `examples/asynchronous_unknown_outcome/` |
 | No real integration or transport exists | PASS | `tests/repository/test_repository_contract.py`; `src/guerilla/adapters/` inspection |
 | No Phase 10 ingestion exists | PASS | `tests/repository/test_repository_contract.py`; no observation-ingestion modules or graph-backed adapter commits added |
-| Full validation and hosted CI pass | LOCAL PASS / CI PENDING | `uv lock --check`; `uv sync --frozen --extra dev`; `uv run --frozen --extra dev ruff format --check .`; `uv run --frozen --extra dev ruff check .`; `uv run --frozen --extra dev mypy src tests`; `uv run --frozen --extra dev pytest`; `uv build`; isolated wheel smoke |
+| Full validation and hosted CI pass | PASS | `uv lock --check`; `uv sync --frozen --extra dev`; `uv run --frozen --extra dev ruff format --check .`; `uv run --frozen --extra dev ruff check .`; `uv run --frozen --extra dev mypy src tests`; `uv run --frozen --extra dev pytest`; `uv build`; isolated wheel smoke; PR #2 hosted CI |
 
 ## Completion Report Format
 

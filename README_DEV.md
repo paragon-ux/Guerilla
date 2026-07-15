@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate C in progress; Phases 1-9 complete locally, Phase 9 hosted CI pending
-**Phase:** Phase 10 pending; do not begin before Phase 9 hosted CI is clean
+**Current status:** Gate C in progress; Phases 1-9 complete
+**Phase:** Phase 10 pending
 
 ---
 
@@ -132,4 +132,4 @@ After Gate B completion and Phase 9 local completion:
 2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
 4. Use `docs/phase_prompts/PHASE_09_ADAPTER_SDK_SYNTHETIC_SYSTEMS.md`, `src/guerilla/adapters/`, `tests/adapters/`, and `tests/fixtures/adapters/` as Phase 9 local evidence.
-5. Do not begin Phase 10 until Phase 9 full local validation and hosted CI are clean.
+5. Begin Phase 10 only from the Phase 9 commit with clean full local validation and hosted CI.
