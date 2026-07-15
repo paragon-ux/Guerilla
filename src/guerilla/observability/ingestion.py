@@ -49,6 +49,7 @@ class ObservationIngestionRequest:
     requested_at: str
     received_at: str
     commit_at: str
+    expected_graph_revision: int | None = None
     operation_id: str | None = None
     correlation_id: str | None = None
     causation_id: str | None = None
@@ -155,6 +156,7 @@ class ObservationIngestor:
             created_at=request.received_at,
             committed_at=request.commit_at,
             principal_id=request.principal_id,
+            expected_graph_revision=request.expected_graph_revision,
             fail_at=request.fail_at,
         )
         return ObservationIngestionResult(

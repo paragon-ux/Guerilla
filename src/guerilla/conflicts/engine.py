@@ -49,6 +49,7 @@ class ConflictRecordRequest:
     severity: ConflictSeverity
     required_resolution_class: str
     summary: str
+    expected_graph_revision: int | None = None
     status: ConflictStatus = "open"
     policy_version: str = "local-owner-v1"
     limitations: tuple[str, ...] = ()
@@ -85,6 +86,7 @@ class ConflictResolutionRequest:
     actor: dict[str, Any]
     authority: dict[str, Any]
     decided_at: str
+    expected_graph_revision: int | None = None
     evidence_node_ids: tuple[str, ...] = ()
     continuation_operation: dict[str, Any] | None = None
     policy_version: str = "local-owner-v1"
@@ -186,6 +188,7 @@ class ConflictEngine:
             created_at=request.detected_at,
             committed_at=request.detected_at,
             principal_id=request.principal_id,
+            expected_graph_revision=request.expected_graph_revision,
             fail_at="after_stage" if request.fail_at == "conflict_commit_after_stage" else None,
         )
         return ConflictRecordResult(
@@ -316,6 +319,7 @@ class ConflictEngine:
             created_at=request.decided_at,
             committed_at=request.decided_at,
             principal_id=request.principal_id,
+            expected_graph_revision=request.expected_graph_revision,
             fail_at="after_stage" if request.fail_at == "decision_commit_after_stage" else None,
         )
         return ConflictResolutionResult(

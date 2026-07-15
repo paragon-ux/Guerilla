@@ -247,6 +247,7 @@ class Phase15Runtime:
             created_at=created_at,
             committed_at=created_at,
             principal_id=self.principal_id,
+            expected_graph_revision=expected_graph_revision,
         )
         return {
             "node_id": node_id,
@@ -279,6 +280,7 @@ class Phase15Runtime:
                 requested_at=at,
                 received_at=at,
                 commit_at=at,
+                expected_graph_revision=expected_graph_revision,
                 root=root,
                 namespace=namespace,
                 correlation_id=f"phase15-observe-{adapter_ref}",
@@ -354,6 +356,7 @@ class Phase15Runtime:
                 authority=_authority(self.principal_id),
                 requested_at=at,
                 reconciled_at=at,
+                expected_graph_revision=expected_graph_revision,
                 root=root,
                 namespace=namespace,
                 correlation_id=f"phase15-reconcile-{idempotency_key}",
@@ -440,6 +443,7 @@ class Phase15Runtime:
                 severity="medium",
                 required_resolution_class="decision",
                 summary=summary,
+                expected_graph_revision=expected_graph_revision,
             )
         )
         return result.to_dict()
@@ -464,6 +468,7 @@ class Phase15Runtime:
                 actor=_actor(self.principal_id),
                 authority=_authority(self.principal_id),
                 decided_at=at,
+                expected_graph_revision=expected_graph_revision,
             )
         )
         return result.to_dict()
@@ -537,6 +542,7 @@ class Phase15Runtime:
                 actor=_actor(self.principal_id),
                 authority=_authority(self.principal_id),
                 created_at=at,
+                expected_graph_revision=expected_graph_revision,
                 revision=revision,
                 persist_summary=persist_summary,
             )
