@@ -722,6 +722,8 @@ class _ActionAttempt:
     action: str
     arguments: dict[str, Any]
     action_data: dict[str, Any]
+    actor: dict[str, Any]
+    principal_id: str
     correlation_id: str | None
     root: str | None
     endpoint: str | None
@@ -765,6 +767,12 @@ def _find_action_attempt(
             continue
         kind = action_metadata.get("kind")
         if kind == "action_request_event" and node_id == intent_node_id:
+            authority = node.get("authority")
+            principal_id = (
+                str(authority.get("principal_id"))
+                if isinstance(authority, dict) and authority.get("principal_id") is not None
+                else ""
+            )
             attempt = _ActionAttempt(
                 operation_node_id=str(action_metadata["operation_node_id"]),
                 intent_node_id=str(node_id),
@@ -777,6 +785,8 @@ def _find_action_attempt(
                 action=str(action_metadata["action"]),
                 arguments=dict(action_metadata.get("arguments", {})),
                 action_data=dict(action_metadata.get("action_data", {})),
+                actor=dict(node["actor"]) if isinstance(node.get("actor"), dict) else {},
+                principal_id=principal_id,
                 correlation_id=_optional_string(action_metadata.get("correlation_id")),
                 root=_optional_string(action_metadata.get("root")),
                 endpoint=_optional_string(action_metadata.get("endpoint")),
@@ -926,6 +936,37 @@ def _same_request_different_attempt_exists(replay: Any, attempt: _ActionAttempt)
             continue
         if action_metadata.get("request_hash") != attempt.request_hash:
             continue
+        if not _matches_action_attempt_scope(
+            replay=replay,
+            node=node,
+            metadata=action_metadata,
+            attempt=attempt,
+        ):
+            continue
         if action_metadata.get("idempotency_key") != attempt.idempotency_key:
             return True
     return False
+
+
+def _matches_action_attempt_scope(
+    *,
+    replay: Any,
+    node: dict[str, Any],
+    metadata: dict[str, Any],
+    attempt: _ActionAttempt,
+) -> bool:
+    authority = node.get("authority")
+    return (
+        node.get("workspace_id") == replay.workspace_id
+        and metadata.get("adapter_id") == attempt.adapter_id
+        and metadata.get("adapter_version") == attempt.adapter_version
+        and metadata.get("system_id") == attempt.system_id
+        and metadata.get("state_boundary_id") == attempt.state_boundary_id
+        and metadata.get("action") == attempt.action
+        and node.get("actor") == attempt.actor
+        and isinstance(authority, dict)
+        and authority.get("principal_id") == attempt.principal_id
+        and metadata.get("root") == attempt.root
+        and metadata.get("endpoint") == attempt.endpoint
+        and metadata.get("namespace") == attempt.namespace
+    )

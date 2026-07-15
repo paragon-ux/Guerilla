@@ -429,6 +429,61 @@ def test_reconciliation_detects_stale_revision_and_duplicate_attempt_conflicts(
     assert first.result_node_id is not None
 
 
+def test_reconciliation_duplicate_attempt_detection_is_action_scope_bound(
+    contracts: ContractBundle, tmp_path: Path
+) -> None:
+    store = _store(tmp_path, contracts)
+    clock = VirtualClock()
+    first_adapter = AsyncUnknownOutcomeAdapter(seed=300, clock=clock)
+    second_adapter = AsyncUnknownOutcomeAdapter(seed=340, clock=clock)
+    host = AdapterHost(
+        contracts=contracts,
+        adapters=[first_adapter, second_adapter],
+        clock_ms=clock.now_ms,
+    )
+    actions = ActionOrchestrator(store=store, host=host)
+    reconciler = ReconciliationEngine(store=store, host=host)
+    arguments = {"subject": "job-independent-system", "completion_delay_ms": 10}
+
+    first = actions.execute(
+        _action_request(
+            first_adapter,
+            "submit_job",
+            arguments,
+            idempotency_key="phase12-key-scope-001",
+            namespace="async",
+        )
+    )
+    second = actions.execute(
+        _action_request(
+            second_adapter,
+            "submit_job",
+            arguments,
+            idempotency_key="phase12-key-scope-002",
+            namespace="async",
+        )
+    )
+    assert first_adapter.adapter_id != second_adapter.adapter_id
+    assert first_adapter.system_id != second_adapter.system_id
+    assert first_adapter.boundary_id != second_adapter.boundary_id
+    assert first.request_hash == second.request_hash
+    assert [first.action_classification, second.action_classification] == ["pending", "pending"]
+
+    clock.advance(20)
+    reconciled = reconciler.reconcile(
+        _reconcile_request(
+            second_adapter,
+            second.intent_node_id,
+            "phase12-key-scope-002",
+            namespace="async",
+        )
+    )
+
+    assert reconciled.classification == "confirmed_accepted"
+    assert reconciled.conflict_node_ids == ()
+    assert _phase12_conflicts(store.replay()) == []
+
+
 def test_conflict_decisions_are_append_only_and_cover_phase12_reason_classes(
     contracts: ContractBundle, tmp_path: Path
 ) -> None:
