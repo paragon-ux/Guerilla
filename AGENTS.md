@@ -1,6 +1,6 @@
 # AGENTS.md -- Guerilla Agent Control Surface
 
-**Status:** Gate C in progress -- Phase 13 Projections, Manifest, and Diff complete; agent governance active
+**Status:** Gate C in progress -- Phase 14 Snapshots and Resume Context complete; agent governance active
 **Owner phase:** Phase 1 (Kickoff), updated by every subsequent phase
 **Regeneration trigger:** Any phase completion, architecture decision change, or agent-rule update
 
@@ -187,7 +187,8 @@ A failure at any step MUST reject the entire append transaction.
 - Phase 11 implements graph-backed action intent, invocation-start records, action-result recording, idempotency replay/conflict behavior, restart protection, and optional after-state observation.
 - Phase 12 implements uncertain-outcome reconciliation, missing-lineage recovery, explicit conflict records, append-only decision/resolution lineage, duplicate-attempt detection, and unsupported/unknown reconciliation conflicts.
 - Phase 13 implements deterministic derived projections, manifests, diffs, progress, and traceability views.
-- Phase 13 does not implement snapshots, resume contexts, CLI workflows, transports, subprocess isolation, real integrations, or Gate D behavior.
+- Phase 14 implements verified snapshot records, derived materialized summaries, and bounded resume contexts.
+- Phase 14 does not implement CLI workflows, transports, subprocess isolation, real integrations, or Gate D behavior.
 
 ---
 

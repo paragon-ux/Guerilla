@@ -340,7 +340,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 13 permits projection modules but no Phase 14+ runtime modules."""
+    """Phase 14 permits projection/snapshot modules but no Phase 15+ runtime modules."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {

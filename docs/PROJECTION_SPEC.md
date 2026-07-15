@@ -1,6 +1,6 @@
 # Projection Specification
 
-**Status:** Gate C current -- Phase 13 projections implemented; Phase 14 snapshot/resume pending
+**Status:** Gate C current -- Phase 14 snapshots and resume implemented
 **Owner phase:** Phase 13 (Projections/Manifest/Diff), Phase 14 (Snapshot/Resume)
 **Controlling source documents:** `GUERILLA_CONCEPT_PAPER.md` Section 9, `GUERILLA_IMPLEMENTATION_SPEC.md` Sections 4.12-4.13 and 27, `GUERILLA_PROTOCOL_SPEC.md` Sections 18-20
 **Regeneration trigger:** Any projection policy change, Phase 13 completion, or Phase 14 completion
@@ -16,7 +16,7 @@ graph replay or a rebuilt non-authoritative index without changing lineage
 truth.
 
 Phase 13 implements lineage, dependency, conflict, manifest, diff, progress,
-and requirement-traceability-style views. Phase 14 will add snapshot creation,
+and requirement-traceability-style views. Phase 14 implements snapshot creation,
 snapshot verification, and resume-context generation.
 
 ---
@@ -183,8 +183,70 @@ Projection generation must satisfy all of these properties:
 
 ---
 
-## Phase 14 Reserved Scope
+## Snapshot Records
 
-Phase 13 does not implement snapshots, snapshot verification, resume contexts,
-CLI workflows, transports, subprocess isolation, real integrations, archive
-rotation, backup/restore, performance benchmarks, or empirical pilots.
+A snapshot node is authoritative evidence that a selected graph boundary was
+captured at a source graph revision. The materialized summary is derived and
+non-authoritative.
+
+Snapshot metadata includes:
+
+- snapshot node identifier;
+- source graph revision and source commit hash;
+- source query and included source node identifiers;
+- transformation version `phase14-snapshot-v1`;
+- projection transformation version;
+- policy version;
+- summary hash;
+- information-loss declaration;
+- freshness requirements;
+- materialized summary path;
+- actor, authority, and created time through the node envelope.
+
+Snapshot capture appends `captured_by` edges from every included non-snapshot
+source node to the snapshot node, preserving the Gate A direction: included
+source to snapshot.
+
+---
+
+## Materialized Summary
+
+The materialized summary is stored under `.guerilla/snapshots/` when requested.
+It is a canonical JSON file plus trailing newline and may be deleted or
+corrupted without destroying authoritative continuity. Verification regenerates
+the expected summary from graph replay and compares the summary hash pinned in
+the snapshot node.
+
+Missing or corrupt materialized summaries produce warnings, not a loss of
+authoritative snapshot evidence.
+
+---
+
+## Resume Context
+
+Resume context generation verifies the snapshot first and then produces a
+bounded derived context that separates:
+
+- authoritative facts;
+- derived summaries;
+- stale observations;
+- unknown outcomes;
+- open goals;
+- eligible operations;
+- blocked operations;
+- unresolved conflicts;
+- pending reconciliation;
+- required refresh observations;
+- relevant artifact revisions;
+- omitted information.
+
+Resume context generation never executes an operation, observes external state,
+reconciles an action, retries an unknown outcome, or invokes adapters.
+
+---
+
+## Phase 15 Reserved Scope
+
+Phase 14 does not implement CLI workflows, transports, subprocess isolation,
+real integrations, archive rotation, backup/restore, performance benchmarks, or
+empirical pilots.

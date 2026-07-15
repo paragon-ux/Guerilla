@@ -2,7 +2,7 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Gate C in progress. Phases 1-13 are complete:
+**Current status:** Gate C in progress. Phases 1-14 are complete:
 contracts are frozen, the local graph kernel is implemented, the synthetic
 adapter SDK exists, and observe-only ingestion records bounded external facts
 into the authoritative graph. Phase 11 adds committed intent-before-action,
@@ -10,8 +10,9 @@ graph-backed idempotency, explicit action-result recording, and optional
 after-state observation. Phase 12 adds uncertain-outcome reconciliation,
 missing-lineage recovery, explicit conflict records, and append-only
 decisions/resolution lineage. Phase 13 adds deterministic derived projections,
-manifests, diffs, progress, and traceability views. Snapshots, CLI workflows,
-transport, and real integrations remain future phases.
+manifests, diffs, progress, and traceability views. Phase 14 adds verified
+snapshot records, derived materialized summaries, and bounded resume contexts.
+CLI workflows, transport, and real integrations remain future phases.
 
 ---
 
@@ -46,7 +47,7 @@ Guerilla does **not** own: canonical application content, external database tran
 |---|---|---|---|
 | A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Complete |
 | B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Complete |
-| C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | In progress; Phase 13 complete locally |
+| C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | In progress; Phase 14 complete locally |
 | D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |
 | E — Research Validated | 20–22 | Real heterogeneous pilots, benchmark evidence, reproducible release | Blocked by Gate D |
 
@@ -72,14 +73,15 @@ uv run pytest
 
 ## Non-Claims
 
-- No snapshot runtime, resume context, production CLI workflow, or transport
-  exists yet. The implemented runtime surface is limited to Gate B kernel
+- No production CLI workflow or transport exists yet. The implemented runtime
+  surface is limited to Gate B kernel
   behavior, Phase 9 trusted in-process synthetic adapters, Phase 10
   observe-only graph ingestion, Phase 11 action intent/idempotency
   orchestration, Phase 12 reconciliation/conflict records, and Phase 13
-  projection/manifest/diff generation.
+  projection/manifest/diff generation, and Phase 14 snapshot/resume context
+  generation.
 - Schemas, registries, conformance fixtures, Gate B kernel primitives, and
-  Phase 9-13 continuity primitives are current for Phase 14 entry.
+  Phase 9-14 continuity primitives are current for Phase 15 entry.
 - No adapters, integrations, benchmarks, or empirical results are available.
 - The architecture papers (v0.2.0-draft) are the current normative specification.
 

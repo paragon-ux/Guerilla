@@ -1,14 +1,13 @@
 # Test Matrix
 
-**Status:** Gate C evidence current -- Phase 13 PASS
+**Status:** Gate C evidence current -- Phase 14 PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests and Phase 9-13 Gate C tests pass locally
+> **WARNING:** Gate B kernel tests and Phase 9-14 Gate C tests pass locally
 > and in hosted CI.
-> Snapshot, performance, and transport tests remain planned until their owning
-> phases.
+> Performance and transport tests remain planned until their owning phases.
 
 ---
 
@@ -184,6 +183,18 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | PRJ-008 | Later commits do not change projections explicitly requested for an older graph revision | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
 | PRJ-009 | Projection code does not invoke adapters or external actions | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
 
+### Snapshot and Resume Tests (Phase 14)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| SNP-001 | Snapshot creation commits an authoritative snapshot node and `captured_by` edges for included source nodes | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-002 | Snapshot verification checks source revision, source commit, source nodes, summary hash, transformation/policy versions, and captured edges | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-003 | Missing materialized summaries verify from authoritative graph replay with warnings | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-004 | Corrupt materialized summaries verify from authoritative graph replay with warnings | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-005 | Resume contexts distinguish authoritative facts, derived summaries, stale observations, unknown outcomes, goals, operations, conflicts, pending reconciliation, refresh requirements, artifact revisions, and omissions | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-006 | Old-revision snapshots remain stable after later commits and deleted index/projection cache | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-007 | Source commit mismatch is rejected without treating summaries as authority | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-008 | Snapshot/resume code invokes no adapters and executes no actions | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+
 ### Security Tests (Phase 19)
 ### Performance Tests (Phase 21)
 
@@ -202,7 +213,7 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, snapshot, and transport rows remain PLANNED until
+Runtime security hardening, performance, CLI, and transport rows remain PLANNED until
 their owning phases. Gate A evidence does not claim kernel behavior beyond the
 Phase 5 primitives; Phase 6 evidence claims local append/replay behavior; Phase
 7 evidence claims DAG integrity and rebuildable index/query behavior; Phase 8
@@ -216,4 +227,6 @@ only graph-backed action intent, idempotency, action-result recording, restart
 protection, and optional after-state observation. Phase 12 evidence claims only
 reconciliation, missing-lineage recovery, conflict records, and append-only
 decisions/resolution lineage. Phase 13 evidence claims only deterministic
-derived projections, manifests, diffs, progress, and traceability views.
+derived projections, manifests, diffs, progress, and traceability views. Phase
+14 evidence claims only verified snapshots, derived materialized summaries, and
+bounded resume contexts.

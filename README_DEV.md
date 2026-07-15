@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate C in progress; Phases 1-13 complete
-**Phase:** Phase 14 pending
+**Current status:** Gate C in progress; Phases 1-14 complete
+**Phase:** Phase 15 pending
 
 ---
 
@@ -148,11 +148,16 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
   manifest, diff, progress, and traceability views. It did not add snapshots,
   resume contexts, CLI workflows, transports, subprocess isolation, real
   integrations, or Gate D behavior.
+- Phase 14 implemented verified snapshot records, derived materialized
+  summaries, snapshot verification, and bounded resume contexts. It did not add
+  CLI workflows, transports, subprocess isolation, real integrations, or Gate D
+  behavior.
 - Gate B is complete. Gate C is in progress; the current boundary is limited to
   contracts, kernel behavior, local authority/identity/boundaries, Phase 9
   synthetic adapter SDK behavior, Phase 10 observation ingestion, Phase 11
   action intent/idempotency orchestration, Phase 12 reconciliation/conflict
-  lineage, and Phase 13 projections/manifests/diffs.
+  lineage, Phase 13 projections/manifests/diffs, and Phase 14 snapshots/resume
+  contexts.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -168,7 +173,7 @@ Each phase completion must report:
 
 ## Gate C Handoff
 
-After Gate B completion and Phase 13 local completion:
+After Gate B completion and Phase 14 local completion:
 
 1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, Phase 8 security, and Gate B checklist tests pass.
 2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
@@ -178,4 +183,5 @@ After Gate B completion and Phase 13 local completion:
 6. Use `docs/phase_prompts/PHASE_11_ACTION_INTENT_IDEMPOTENCY.md`, `src/guerilla/orchestration/`, and `tests/integration/test_phase11_action_intent_idempotency.py` as Phase 11 local evidence.
 7. Use `docs/phase_prompts/PHASE_12_RECONCILIATION_CONFLICTS.md`, `src/guerilla/reconciliation/`, `src/guerilla/conflicts/`, and `tests/integration/test_phase12_reconciliation_conflicts.py` as Phase 12 local evidence.
 8. Use `docs/phase_prompts/PHASE_13_PROJECTIONS_MANIFEST_DIFF.md`, `docs/PROJECTION_SPEC.md`, `src/guerilla/projections/`, and `tests/integration/test_phase13_projections_manifest_diff.py` as Phase 13 local evidence.
-9. Begin Phase 14 only from the Phase 13 commit with clean full local validation and hosted CI.
+9. Use `docs/phase_prompts/PHASE_14_SNAPSHOT_RESUME.md`, `src/guerilla/projections/snapshots.py`, and `tests/integration/test_phase14_snapshot_resume.py` as Phase 14 local evidence.
+10. Begin Phase 15 only from the Phase 14 commit with clean full local validation and hosted CI.
