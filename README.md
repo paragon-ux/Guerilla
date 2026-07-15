@@ -2,7 +2,7 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Gate C in progress. Phases 1-10 are complete locally:
+**Current status:** Gate C in progress. Phases 1-10 are complete:
 contracts are frozen, the local graph kernel is implemented, the synthetic
 adapter SDK exists, and observe-only ingestion records bounded external facts
 into the authoritative graph. Action intent/idempotency, reconciliation,
@@ -73,8 +73,7 @@ uv run pytest
   runtime surface is limited to Gate B kernel behavior, Phase 9 trusted
   in-process synthetic adapters, and Phase 10 observe-only graph ingestion.
 - Schemas, registries, conformance fixtures, Gate B kernel primitives, and
-  Phase 9-10 continuity primitives are current for Phase 11 entry after hosted
-  CI passes.
+  Phase 9-10 continuity primitives are current for Phase 11 entry.
 - No adapters, integrations, benchmarks, or empirical results are available.
 - The architecture papers (v0.2.0-draft) are the current normative specification.
 

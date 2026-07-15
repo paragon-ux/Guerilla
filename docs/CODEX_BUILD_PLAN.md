@@ -1,6 +1,6 @@
 # Codex Build Plan
 
-**Status:** Gate C in progress -- Phase 10 Observation Ingestion local validation complete
+**Status:** Gate C in progress -- Phase 10 Observation Ingestion complete
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
@@ -43,7 +43,7 @@ Track the complete build sequence from repository bootstrap through research rel
 | 7 | DAG Integrity, Index, Query | B | PASS |
 | 8 | Authority, Identity, Boundaries | B | PASS |
 | 9 | Adapter SDK, Synthetic Systems | C | PASS |
-| 10 | Observation Ingestion | C | LOCAL PASS / CI PENDING |
+| 10 | Observation Ingestion | C | PASS |
 | 11 | Action Intent, Idempotency | C | PENDING |
 | 12 | Reconciliation, Conflicts | C | PENDING |
 | 13 | Projections, Manifest, Diff | C | PENDING |
@@ -70,8 +70,8 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-Gate A and Gate B are complete. Phase 9 is complete. Phase 10 is complete
-locally and awaits hosted CI; Phase 11 has not started.
+Gate A and Gate B are complete. Phase 9 is complete. Phase 10 is complete;
+Phase 11 has not started.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,

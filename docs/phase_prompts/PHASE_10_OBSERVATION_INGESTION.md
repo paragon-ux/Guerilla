@@ -1,6 +1,6 @@
 # Phase 10 -- Observation Ingestion
 
-**Status:** LOCAL PASS -- Phase 10 implementation and local validation complete; hosted CI pending
+**Status:** PASS -- Phase 10 complete
 **Owner phase:** Phase 10 (Observation Ingestion)
 **Gate:** C -- Continuity MVP
 **Execution date:** 2026-07-14
@@ -169,7 +169,7 @@ require reopening the appropriate gate.
 | Observation never mutates external state | PASS | `tests/integration/test_phase10_observation_ingestion.py` |
 | Replay performs no adapter calls | PASS | `tests/integration/test_phase10_observation_ingestion.py` |
 | All systems use the same ingestion implementation | PASS | `tests/integration/test_phase10_observation_ingestion.py` |
-| Full validation and hosted CI pass | LOCAL PASS / CI PENDING | local validation sequence and PR checks |
+| Full validation and hosted CI pass | PASS | local validation sequence and PR #2 hosted CI |
 
 ## Completion Report Format
 

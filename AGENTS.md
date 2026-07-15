@@ -221,6 +221,13 @@ A failure at any step MUST reject the entire append transaction.
 | Adapter | `tests/adapters/` | Adapter SDK, host, and synthetic-system conformance |
 | Performance | `tests/performance/` | Throughput, latency, and resource measurement |
 
+Codex/Windows local validation should use the repository-local wrapper to avoid
+user-profile cache and temp-directory permission failures:
+
+```powershell
+.\scripts\validate-local.ps1
+```
+
 Local test commands:
 
 ```bash

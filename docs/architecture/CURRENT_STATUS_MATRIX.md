@@ -1,11 +1,11 @@
 # Current Status Matrix
 
-**Status:** Gate C in progress -- Phase 10 complete locally
+**Status:** Gate C in progress -- Phase 10 complete
 **Last updated:** 2026-07-14
 **Current baseline:** draft Gate C branch `feature/gate-c-continuity-mvp`
 **Evidence:** [Gate B completion report](../GATE_B_COMPLETION_REPORT.md), [Phase 9 completion report](../PHASE_09_COMPLETION_REPORT.md), Phase 10 local evidence in `tests/integration/test_phase10_observation_ingestion.py`, [PR #2](https://github.com/paragon-ux/Guerilla/pull/2)
 
-**Hosted CI evidence:** [Gate A closure](https://github.com/paragon-ux/Guerilla/actions/runs/29302019930), [Phase 5](https://github.com/paragon-ux/Guerilla/actions/runs/29302731597), [Phase 6](https://github.com/paragon-ux/Guerilla/actions/runs/29303454247), [Phase 7](https://github.com/paragon-ux/Guerilla/actions/runs/29304114169), [Phase 8](https://github.com/paragon-ux/Guerilla/actions/runs/29304560354), [final Gate B PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29363456584), [Phase 9 PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29378512503). Phase 10 hosted CI is pending for the next PR head.
+**Hosted CI evidence:** [Gate A closure](https://github.com/paragon-ux/Guerilla/actions/runs/29302019930), [Phase 5](https://github.com/paragon-ux/Guerilla/actions/runs/29302731597), [Phase 6](https://github.com/paragon-ux/Guerilla/actions/runs/29303454247), [Phase 7](https://github.com/paragon-ux/Guerilla/actions/runs/29304114169), [Phase 8](https://github.com/paragon-ux/Guerilla/actions/runs/29304560354), [final Gate B PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29363456584), [Phase 9 PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29378512503), [Phase 10 PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29379475653)
 
 ---
 
@@ -19,7 +19,7 @@ enforcement, trusted synthetic adapter SDK, and observe-only graph ingestion
 are implemented and tested locally.
 
 The project is now at the **continuity-MVP in progress stage**. Phase 10 is
-complete locally. Action intent/idempotency, reconciliation engine, projections,
+complete. Action intent/idempotency, reconciliation engine, projections,
 snapshots, transport bindings, pilots, and empirical evaluation are not
 implemented.
 
@@ -44,7 +44,7 @@ implemented.
 |---|---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, machine contracts, registries, and conformance fixtures are frozen | COMPLETE | `docs/ARCHITECTURE_DECISIONS.md`, `schemas/`, `registries/`, `tests/conformance/` |
 | B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, rebuildable index, authority, and identity | COMPLETE | `docs/GATE_B_COMPLETION_REPORT.md`, `tests/integration/test_gate_b_kernel_checklist.py` |
-| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | IN PROGRESS | Phase 10 complete locally; hosted CI pending |
+| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | IN PROGRESS | Phase 10 complete |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, transport parity, security/durability/archive | BLOCKED | Requires Gate C |
 | E -- Research Validated | 20-22 | Heterogeneous pilots, benchmarks, evaluation, reproducible release | BLOCKED | Requires Gate D |
 

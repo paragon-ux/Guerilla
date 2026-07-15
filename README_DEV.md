@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate C in progress; Phases 1-10 complete locally
-**Phase:** Phase 11 pending; do not begin before Phase 10 hosted CI is clean
+**Current status:** Gate C in progress; Phases 1-10 complete
+**Phase:** Phase 11 pending
 
 ---
 
@@ -25,6 +25,17 @@ uv sync --frozen --extra dev
 uv run python -c "import guerilla; print(guerilla.__version__)"
 uv run guerilla --version
 uv run guerilla --help
+```
+
+## Codex / Windows Local Validation
+
+Use the local wrapper when running validation from Codex or another restricted
+Windows workspace. It keeps `uv` cache writes under the repository-local
+`.uv-cache/` directory, keeps test temporary files under `.tmp/`, and runs the
+isolated wheel smoke test without `uv` or user-profile package caches.
+
+```powershell
+.\scripts\validate-local.ps1
 ```
 
 ## Development Commands
@@ -65,18 +76,27 @@ uv build
 
 ```powershell
 # Build the wheel
+$env:UV_CACHE_DIR = Join-Path (Get-Location) ".uv-cache"
+$env:TEMP = Join-Path (Get-Location) ".tmp"
+$env:TMP = $env:TEMP
+$env:TMPDIR = $env:TEMP
+$env:PIP_CACHE_DIR = Join-Path $env:TEMP "pip-cache"
 uv build
 
-# Install in a clean environment and verify from outside the repository
+# Install in a clean environment and verify from a non-source work directory
 $wheel = (Get-Item dist\*.whl | Select-Object -First 1).FullName
-$wheelVenv = Join-Path ([System.IO.Path]::GetTempPath()) ("guerilla-wheel-test-" + [System.Guid]::NewGuid())
-uv venv $wheelVenv
-uv pip install --python (Join-Path $wheelVenv "Scripts\python.exe") $wheel --no-deps
-Push-Location ([System.IO.Path]::GetTempPath())
-& (Join-Path $wheelVenv "Scripts\python.exe") -c "import guerilla; print(guerilla.__version__)"
-& (Join-Path $wheelVenv "Scripts\guerilla.exe") --version
-& (Join-Path $wheelVenv "Scripts\guerilla.exe") --help
-& (Join-Path $wheelVenv "Scripts\guerilla.exe") version --json
+$wheelVenv = Join-Path $env:TEMP ("guerilla-wheel-test-" + [System.Guid]::NewGuid())
+python -m venv $wheelVenv
+$wheelPython = Join-Path $wheelVenv "Scripts\python.exe"
+$wheelCli = Join-Path $wheelVenv "Scripts\guerilla.exe"
+& $wheelPython -m pip install --no-deps $wheel
+$smokeWorkDir = Join-Path $env:TEMP "wheel-smoke-workdir"
+New-Item -ItemType Directory -Force -Path $smokeWorkDir | Out-Null
+Push-Location $smokeWorkDir
+& $wheelPython -c "import guerilla; print(guerilla.__version__)"
+& $wheelCli --version
+& $wheelCli --help
+& $wheelCli version --json
 Pop-Location
 
 # Confirm no workspace, graph, database, cache, or external-state files are created
@@ -138,4 +158,4 @@ After Gate B completion and Phase 10 local completion:
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
 4. Use `docs/phase_prompts/PHASE_09_ADAPTER_SDK_SYNTHETIC_SYSTEMS.md`, `src/guerilla/adapters/`, `tests/adapters/`, and `tests/fixtures/adapters/` as Phase 9 evidence.
 5. Use `docs/phase_prompts/PHASE_10_OBSERVATION_INGESTION.md`, `src/guerilla/observability/`, and `tests/integration/test_phase10_observation_ingestion.py` as Phase 10 local evidence.
-6. Do not begin Phase 11 until Phase 10 full local validation and hosted CI are clean.
+6. Begin Phase 11 only from the Phase 10 commit with clean full local validation and hosted CI.
