@@ -340,7 +340,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 14 permits projection/snapshot modules but no Phase 15+ runtime modules."""
+    """Phase 15 permits local CLI workflow modules but no Phase 16+ runtime modules."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {
@@ -360,6 +360,7 @@ def test_no_prohibited_runtime_modules():
         "src/guerilla/reconciliation",
         "src/guerilla/conflicts",
         "src/guerilla/projections",
+        "src/guerilla/cli",
     }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)
@@ -367,10 +368,7 @@ def test_no_prohibited_runtime_modules():
         name = py_file.name
         if any(rel_posix.startswith(subtree) for subtree in allowed_subtrees):
             continue  # permitted
-        if (
-            name in ("__init__.py", "_version.py", "__main__.py")
-            or rel_posix == "src/guerilla/cli/main.py"
-        ):
+        if name in ("__init__.py", "_version.py", "__main__.py"):
             continue
         raise AssertionError(f"Prohibited post-Phase-8 runtime module: {rel}")
 

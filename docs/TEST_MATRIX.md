@@ -1,11 +1,11 @@
 # Test Matrix
 
-**Status:** Gate C evidence current -- Phase 14 PASS
+**Status:** Gate C evidence current -- Phase 15 PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests and Phase 9-14 Gate C tests pass locally
+> **WARNING:** Gate B kernel tests and Phase 9-15 Gate C tests pass locally
 > and in hosted CI.
 > Performance and transport tests remain planned until their owning phases.
 
@@ -195,6 +195,16 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | SNP-007 | Source commit mismatch is rejected without treating summaries as authority | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
 | SNP-008 | Snapshot/resume code invokes no adapters and executes no actions | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
 
+### Internal CLI and E2E Smoke Tests (Phase 15)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| CLI-001 | CLI exposes workspace, adapter, goal, operation, observation, action, reconciliation, conflict, lineage, view, manifest, snapshot, and graph command families with stable JSON output | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py` |
+| CLI-002 | Transactional synthetic service E2E covers init, observe, goal/operation creation, intent-before-action, after-state observation, evaluation, and replay safety | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_transactional_cli_e2e_intent_after_state_and_evaluation` |
+| CLI-003 | Reconstructed filesystem E2E covers observation, partial failure, conflict recording, append-only decision resolution, lineage/view generation, index rebuild, snapshot, and replay safety | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_reconstructed_filesystem_cli_e2e_conflict_decision_and_rebuild` |
+| CLI-004 | Async unknown-outcome E2E covers unresolved-intent listing, reconciliation, explicit unknown conflict preservation, stale graph revision rejection, snapshot, resume, and replay safety | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_async_unknown_cli_reconciliation_and_replay_safety` |
+| CLI-005 | CLI workflow facade delegates to existing runtime APIs and adds no transport, subprocess, or real-adapter path | 15 | PASSING | `src/guerilla/cli/workflows.py` |
+| CLI-006 | Snapshot, manifest, progress-view, verify, and resume CLI smoke covers derived-output boundaries over the existing runtime APIs | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_snapshot_manifest_cli_smoke_uses_derived_view_path` |
+
 ### Security Tests (Phase 19)
 ### Performance Tests (Phase 21)
 
@@ -213,7 +223,7 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, CLI, and transport rows remain PLANNED until
+Runtime security hardening, performance, and transport rows remain PLANNED until
 their owning phases. Gate A evidence does not claim kernel behavior beyond the
 Phase 5 primitives; Phase 6 evidence claims local append/replay behavior; Phase
 7 evidence claims DAG integrity and rebuildable index/query behavior; Phase 8
@@ -229,4 +239,6 @@ reconciliation, missing-lineage recovery, conflict records, and append-only
 decisions/resolution lineage. Phase 13 evidence claims only deterministic
 derived projections, manifests, diffs, progress, and traceability views. Phase
 14 evidence claims only verified snapshots, derived materialized summaries, and
-bounded resume contexts.
+bounded resume contexts. Phase 15 evidence claims only local internal CLI
+workflows over the existing library APIs and synthetic systems; transports,
+subprocess isolation, and real adapters remain planned.

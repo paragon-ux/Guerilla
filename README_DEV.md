@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate C in progress; Phases 1-14 complete
-**Phase:** Phase 15 pending
+**Current status:** Gate C complete; Phases 1-15 and final checklist complete
+**Phase:** Phase 16 pending; do not begin without explicit Gate D instruction
 
 ---
 
@@ -152,12 +152,16 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
   summaries, snapshot verification, and bounded resume contexts. It did not add
   CLI workflows, transports, subprocess isolation, real integrations, or Gate D
   behavior.
-- Gate B is complete. Gate C is in progress; the current boundary is limited to
+- Phase 15 implemented local internal CLI workflows for workspace, adapter,
+  goal, operation, observation, action, reconciliation, conflict, lineage,
+  view, manifest, snapshot, and graph commands. It did not add transports,
+  subprocess isolation, real integrations, or Gate D behavior.
+- Gate B and Gate C are complete. The current boundary is limited to
   contracts, kernel behavior, local authority/identity/boundaries, Phase 9
   synthetic adapter SDK behavior, Phase 10 observation ingestion, Phase 11
   action intent/idempotency orchestration, Phase 12 reconciliation/conflict
-  lineage, Phase 13 projections/manifests/diffs, and Phase 14 snapshots/resume
-  contexts.
+  lineage, Phase 13 projections/manifests/diffs, Phase 14 snapshots/resume
+  contexts, and Phase 15 internal CLI workflows.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -173,7 +177,7 @@ Each phase completion must report:
 
 ## Gate C Handoff
 
-After Gate B completion and Phase 14 local completion:
+After Gate B completion and Phase 15 local completion:
 
 1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, Phase 8 security, and Gate B checklist tests pass.
 2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
@@ -184,4 +188,5 @@ After Gate B completion and Phase 14 local completion:
 7. Use `docs/phase_prompts/PHASE_12_RECONCILIATION_CONFLICTS.md`, `src/guerilla/reconciliation/`, `src/guerilla/conflicts/`, and `tests/integration/test_phase12_reconciliation_conflicts.py` as Phase 12 local evidence.
 8. Use `docs/phase_prompts/PHASE_13_PROJECTIONS_MANIFEST_DIFF.md`, `docs/PROJECTION_SPEC.md`, `src/guerilla/projections/`, and `tests/integration/test_phase13_projections_manifest_diff.py` as Phase 13 local evidence.
 9. Use `docs/phase_prompts/PHASE_14_SNAPSHOT_RESUME.md`, `src/guerilla/projections/snapshots.py`, and `tests/integration/test_phase14_snapshot_resume.py` as Phase 14 local evidence.
-10. Begin Phase 15 only from the Phase 14 commit with clean full local validation and hosted CI.
+10. Use `docs/phase_prompts/PHASE_15_INTERNAL_CLI_E2E_SMOKE.md`, `src/guerilla/cli/`, and `tests/integration/test_phase15_internal_cli_e2e_smoke.py` as Phase 15 local evidence.
+11. Complete the final Internal MVP checklist before starting Phase 16.

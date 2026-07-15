@@ -1,6 +1,6 @@
 # Phase Prompts
 
-**Status:** Gate C in progress; Phase 14 PASS; Phase 15 pending
+**Status:** Gate C complete; Phase 15 and final Internal MVP checklist PASS
 **Owner phase:** Cross-phase; each phase prompt is owned by its phase
 
 ---
@@ -38,8 +38,8 @@ This directory contains the ordered phase execution prompts that drive Guerilla'
 | 12 | `PHASE_12_RECONCILIATION_CONFLICTS.md` | C | PASS |
 | 13 | `PHASE_13_PROJECTIONS_MANIFEST_DIFF.md` | C | PASS |
 | 14 | `PHASE_14_SNAPSHOT_RESUME.md` | C | PASS |
-| 15 | `PHASE_15_INTERNAL_CLI_E2E_SMOKE.md` | C | PENDING |
-| FINAL | `FINAL_INTERNAL_MVP_CHECKLIST.md` | C | PENDING |
+| 15 | `PHASE_15_INTERNAL_CLI_E2E_SMOKE.md` | C | PASS |
+| FINAL | `FINAL_INTERNAL_MVP_CHECKLIST.md` | C | PASS |
 | 16 | `PHASE_16_GLCP_REFERENCE_CLIENT_SERVER.md` | D | PENDING |
 | 17 | `PHASE_17_SUBPROCESS_ADAPTER_HOST.md` | D | PENDING |
 | 18 | `PHASE_18_TRANSPORT_PARITY_ROBUSTNESS.md` | D | PENDING |

@@ -245,8 +245,9 @@ reconciles an action, retries an unknown outcome, or invokes adapters.
 
 ---
 
-## Phase 15 Reserved Scope
+## Post-Phase-15 Reserved Scope
 
-Phase 14 does not implement CLI workflows, transports, subprocess isolation,
-real integrations, archive rotation, backup/restore, performance benchmarks, or
-empirical pilots.
+Phase 15 implements local internal CLI workflows over projection, manifest,
+snapshot, and resume APIs. It does not implement transports, subprocess
+isolation, real integrations, archive rotation, backup/restore, performance
+benchmarks, or empirical pilots.

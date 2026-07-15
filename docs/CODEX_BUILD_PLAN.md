@@ -1,6 +1,6 @@
 # Codex Build Plan
 
-**Status:** Gate C in progress -- Phase 14 Snapshots and Resume Context complete
+**Status:** Gate C complete -- Internal Continuity MVP complete
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
@@ -8,9 +8,9 @@
 > **WARNING:** Gate B local kernel behavior, Phase 9 trusted in-process
 > synthetic adapter SDK behavior, Phase 10 observe-only ingestion, Phase 11
 > graph-backed action intent/idempotency, Phase 12 reconciliation/conflict
-> lineage, Phase 13 derived projections/manifests/diffs, and Phase 14
-> snapshots/resume contexts are implemented. Do not treat CLI workflows,
-> transports, or real integrations as implemented.
+> lineage, Phase 13 derived projections/manifests/diffs, Phase 14
+> snapshots/resume contexts, and Phase 15 internal CLI workflows are
+> implemented. Do not treat transports or real integrations as implemented.
 
 ---
 
@@ -26,8 +26,8 @@ Track the complete build sequence from repository bootstrap through research rel
 |---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | COMPLETE |
 | B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | COMPLETE |
-| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | IN PROGRESS |
-| D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
+| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | COMPLETE |
+| D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | PENDING |
 | E -- Research Validated | 20-22 | Real heterogeneous pilots, benchmark evidence, reproducible release | BLOCKED |
 
 ---
@@ -50,8 +50,8 @@ Track the complete build sequence from repository bootstrap through research rel
 | 12 | Reconciliation, Conflicts | C | PASS |
 | 13 | Projections, Manifest, Diff | C | PASS |
 | 14 | Snapshot, Resume | C | PASS |
-| 15 | Internal CLI, E2E, Smoke | C | PENDING |
-| FINAL | Internal MVP Checklist | C | PENDING |
+| 15 | Internal CLI, E2E, Smoke | C | PASS |
+| FINAL | Internal MVP Checklist | C | PASS |
 | 16 | GLCP Reference Client/Server | D | PENDING |
 | 17 | Subprocess Adapter Host | D | PENDING |
 | 18 | Transport Parity, Robustness | D | PENDING |
@@ -74,7 +74,8 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 Gate A and Gate B are complete. Phase 9 is complete. Phase 10 is complete.
 Phase 11 is complete. Phase 12 is complete. Phase 13 is complete. Phase 14 is
-complete; Phase 15 has not started.
+complete. Phase 15 is complete. The final Internal MVP checklist is complete;
+Phase 16 has not started.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
@@ -119,7 +120,11 @@ add snapshots, resume contexts, CLI workflows, transports, subprocess
 isolation, real integrations, or Gate D behavior. Phase 14 added verified
 snapshot records, derived materialized summaries, snapshot verification, and
 bounded resume contexts. Phase 14 did not add CLI workflows, transports,
-subprocess isolation, real integrations, or Gate D behavior. The Gate B checklist verifies clean reopen/replay, invalid-mutation
+subprocess isolation, real integrations, or Gate D behavior. Phase 15 added
+local internal CLI workflows for workspace, adapter, goal, operation,
+observation, action, reconciliation, conflict, lineage, view, manifest,
+snapshot, and graph commands. Phase 15 did not add transports, subprocess
+isolation, real integrations, or Gate D behavior. The Gate B checklist verifies clean reopen/replay, invalid-mutation
 rollback, index loss rebuild, authority rejection, and replay/index query
 equivalence. Phase 9 adapter tests verify the SDK and synthetic-system boundary
 only. Phase 10 tests verify observation ingestion only. Phase 11 tests verify
@@ -131,4 +136,7 @@ old-revision stability, and adapter non-invocation only. Phase 14 tests verify
 snapshot source boundary citation, summary regeneration, missing/corrupt
 summary handling, resume separation, pending/unknown action surfacing,
 old-revision stability, source commit mismatch rejection, and adapter
-non-invocation only.
+non-invocation only. Phase 15 tests verify transactional, reconstructed
+filesystem, and async unknown-outcome CLI E2E scenarios, stable JSON output,
+expected-revision rejection, replay safety, index rebuild, manifest/view, and
+snapshot/resume behavior.
