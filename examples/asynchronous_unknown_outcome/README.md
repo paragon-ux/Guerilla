@@ -1,8 +1,10 @@
-# Asynchronous Unknown Outcome Example
+# Asynchronous Unknown Outcome Service
 
-**Status:** PLACEHOLDER — documentation only
-**Owner phase:** Phase 20 (Heterogeneous Pilots)
+**Status:** Phase 9 synthetic example
 
-This example will demonstrate Guerilla integration with an asynchronous service capable of returning an unknown action outcome (e.g., a batch job submission where the result may not be immediately available, or a message-queue-based system where delivery acknowledgment does not imply processing completion).
+This example is represented by
+`guerilla.adapters.synthetic.AsyncUnknownOutcomeAdapter`. It models accepted
+asynchronous operations, pending state, delayed completion, duplicate
+submission, partially queryable history, and outcomes that can remain unknown.
 
-No executable adapter or simulation code exists in Phase 1.
+It uses deterministic virtual time rather than sleeps.

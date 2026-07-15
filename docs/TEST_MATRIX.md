@@ -1,13 +1,13 @@
 # Test Matrix
 
-**Status:** Gate B evidence current -- Gate B PASS locally
+**Status:** Gate C evidence current -- Phase 15 PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests are passing locally.
-> Security hardening, performance, adapter runtime, projection, and transport
-> tests remain planned until their owning phases.
+> **WARNING:** Gate B kernel tests and Phase 9-15 Gate C tests pass locally
+> and in hosted CI.
+> Performance and transport tests remain planned until their owning phases.
 
 ---
 
@@ -124,8 +124,87 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | GTB-003 | Deleted index rebuilds from authoritative replay without lineage loss | Gate B | PASSING | `tests/integration/test_gate_b_kernel_checklist.py` |
 
 ### Adapter Tests (Phase 9-12)
-### Action-Recovery Tests (Phase 11-12)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| ADP-001 | One in-process SDK and host path supports transactional, reconstructed-filesystem, and asynchronous synthetic systems | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-002 | Descriptor completeness, schema compatibility, duplicate registration, and critical-extension rejection | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-003 | Unsupported capability and malformed request data are rejected before adapter invocation | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-004 | Authorization and state-boundary checks precede adapter invocation | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-005 | Malformed adapter results, adapter exceptions, and timeout conditions are rejected or normalized | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-006 | Transactional synthetic service preserves revisions, native idempotency, deterministic rejection, and reconciliation classification | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-007 | Reconstructed filesystem synthetic system preserves content-hash revisions, root boundaries, partial failure, rename, deletion, and inert payload data | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-008 | Asynchronous synthetic system preserves pending, duplicated, completed, and unknown outcomes under deterministic virtual time | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-009 | Synthetic-state export is deterministic and fixture metadata is present | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+
+### Observation Tests (Phase 10)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| OBS-001 | One validated ingestion flow records transactional, reconstructed-filesystem, and asynchronous observations | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-002 | External identity, revisions, authority, provenance, payload retention, graph commit time, and limitations are preserved | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-003 | Exact duplicate, duplicate event, same-revision changed content, stale revision, out-of-order event, unknown ordering, and absent revision classifications are deterministic | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-004 | Rename, deletion, and identity reuse are explicit lifecycle observations without transferring authority | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-005 | Unauthorized observation, boundary escape, adapter exception, missing provenance, missing external identity, and injected append failure do not advance graph revision | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-006 | Replay and SQLite index rebuild do not invoke adapters and preserve observation truth | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+
+### Action Intent and Idempotency Tests (Phase 11)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| ACT-001 | One action path records durable intent, invocation-start, and result records for transactional, filesystem, and asynchronous systems | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-002 | Invalid principal, stale graph revision, and boundary escape cause zero adapter calls and no graph commit | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-003 | Same idempotency key plus same request content replays prior result from graph truth | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-004 | Same idempotency key plus different request content returns `idempotency_conflict` | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-005 | Idempotency survives restart and SQLite index loss | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-006 | Prior invocation without committed result returns `outcome_unknown` without blind retry | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-007 | Filesystem partial mutation can be followed by bounded after-state observation | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+| ACT-008 | Replay and SQLite index rebuild do not invoke adapters or external actions | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
+
+### Reconciliation and Action-Recovery Tests (Phase 12)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| RCN-001 | Missing action-result lineage is recovered by one reconciliation engine for transactional, filesystem, and async systems | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-002 | Recovered external results preserve original intent/invocation records and do not fabricate the original result timestamp | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-003 | Same idempotency key retries replay the recovered graph-backed result without another adapter `act` call | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-004 | Unknown and unsupported reconciliation outcomes create explicit evidence-backed conflicts | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-005 | Stale external revision and same-request/different-key attempts create explicit conflicts | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-006 | Conflict records include type, subject, evidence, authority, severity, status, detection time, policy, required resolution, and limitations | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-007 | Decisions resolve conflicts append-only through `resolved_by` lineage and optional continuation operations | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-008 | Replay and index rebuild preserve reconciliation/conflict truth without invoking adapters | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+
 ### Projection Tests (Phase 13-14)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| PRJ-001 | Lineage, dependency, conflict, manifest, progress, and traceability views cite source revision, source query, source nodes, freshness, information loss, policy, transformation version, result hash, and derived authority | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-002 | Same graph revision and projection query regenerate the same result hash | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-003 | Manifest selects latest non-superseded artifacts and reports stale external observations | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-004 | Resolved conflicts are not reported as effectively open blockers | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-005 | Graph diff reports added nodes, supersession, resolved conflicts, and refreshed observations without modified-record claims | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-006 | Persisted projections are disposable and regenerate to the same hash after deletion | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-007 | Deleted SQLite index rebuilds from authoritative replay and indexed projection results match replay results | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-008 | Later commits do not change projections explicitly requested for an older graph revision | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-009 | Projection code does not invoke adapters or external actions | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+
+### Snapshot and Resume Tests (Phase 14)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| SNP-001 | Snapshot creation commits an authoritative snapshot node and `captured_by` edges for included source nodes | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-002 | Snapshot verification checks source revision, source commit, source nodes, summary hash, transformation/policy versions, and captured edges | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-003 | Missing materialized summaries verify from authoritative graph replay with warnings | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-004 | Corrupt materialized summaries verify from authoritative graph replay with warnings | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-005 | Resume contexts distinguish authoritative facts, derived summaries, stale observations, unknown outcomes, goals, operations, conflicts, pending reconciliation, refresh requirements, artifact revisions, and omissions | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-006 | Old-revision snapshots remain stable after later commits and deleted index/projection cache | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-007 | Source commit mismatch is rejected without treating summaries as authority | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+| SNP-008 | Snapshot/resume code invokes no adapters and executes no actions | 14 | PASSING | `tests/integration/test_phase14_snapshot_resume.py` |
+
+### Internal CLI and E2E Smoke Tests (Phase 15)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| CLI-001 | CLI exposes workspace, adapter, goal, operation, observation, action, reconciliation, conflict, lineage, view, manifest, snapshot, and graph command families with stable JSON output | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py` |
+| CLI-002 | Transactional synthetic service E2E covers init, observe, goal/operation creation, intent-before-action, after-state observation, evaluation, and replay safety | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_transactional_cli_e2e_intent_after_state_and_evaluation` |
+| CLI-003 | Reconstructed filesystem E2E covers observation, partial failure, conflict recording, append-only decision resolution, lineage/view generation, index rebuild, snapshot, and replay safety | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_reconstructed_filesystem_cli_e2e_conflict_decision_and_rebuild` |
+| CLI-004 | Async unknown-outcome E2E covers unresolved-intent listing, reconciliation, explicit unknown conflict preservation, stale graph revision rejection, snapshot, resume, and replay safety | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_async_unknown_cli_reconciliation_and_replay_safety` |
+| CLI-005 | CLI workflow facade delegates to existing runtime APIs and adds no transport, subprocess, or real-adapter path | 15 | PASSING | `src/guerilla/cli/workflows.py` |
+| CLI-006 | Snapshot, manifest, progress-view, verify, and resume CLI smoke covers derived-output boundaries over the existing runtime APIs | 15 | PASSING | `tests/integration/test_phase15_internal_cli_e2e_smoke.py::test_snapshot_manifest_cli_smoke_uses_derived_view_path` |
+
 ### Security Tests (Phase 19)
 ### Performance Tests (Phase 21)
 
@@ -144,11 +223,22 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, adapter runtime, projection, and
-transport rows remain PLANNED until their owning phases. Gate A evidence does
-not claim kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims
-local append/replay behavior; Phase 7 evidence claims DAG integrity and
-rebuildable index/query behavior; Phase 8 evidence claims local authorization,
-boundary, adapter identity registration, and external identity lifecycle behavior
-covered by the listed tests. Gate B checklist evidence confirms the Phase 5-8
-kernel surfaces together and does not claim Phase 9 adapter behavior.
+Runtime security hardening, performance, and transport rows remain PLANNED until
+their owning phases. Gate A evidence does not claim kernel behavior beyond the
+Phase 5 primitives; Phase 6 evidence claims local append/replay behavior; Phase
+7 evidence claims DAG integrity and rebuildable index/query behavior; Phase 8
+evidence claims local authorization, boundary, adapter identity registration,
+and external identity lifecycle behavior covered by the listed tests. Gate B
+checklist evidence confirms the Phase 5-8 kernel surfaces together. Phase 9
+evidence claims only trusted in-process adapter SDK, host validation, and
+synthetic-system behavior. Phase 10 evidence claims only observe-only ingestion
+from trusted synthetic adapters into graph records. Phase 11 evidence claims
+only graph-backed action intent, idempotency, action-result recording, restart
+protection, and optional after-state observation. Phase 12 evidence claims only
+reconciliation, missing-lineage recovery, conflict records, and append-only
+decisions/resolution lineage. Phase 13 evidence claims only deterministic
+derived projections, manifests, diffs, progress, and traceability views. Phase
+14 evidence claims only verified snapshots, derived materialized summaries, and
+bounded resume contexts. Phase 15 evidence claims only local internal CLI
+workflows over the existing library APIs and synthetic systems; transports,
+subprocess isolation, and real adapters remain planned.

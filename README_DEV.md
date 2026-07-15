@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate B complete; Phases 1-8 complete
-**Phase:** Phase 9 pending; do not begin without explicit authorization
+**Current status:** Gate C complete; Phases 1-15 and final checklist complete
+**Phase:** Phase 16 pending; do not begin without explicit Gate D instruction
 
 ---
 
@@ -25,6 +25,17 @@ uv sync --frozen --extra dev
 uv run python -c "import guerilla; print(guerilla.__version__)"
 uv run guerilla --version
 uv run guerilla --help
+```
+
+## Codex / Windows Local Validation
+
+Use the local wrapper when running validation from Codex or another restricted
+Windows workspace. It keeps `uv` cache writes under the repository-local
+`.uv-cache/` directory, keeps test temporary files under `.tmp/`, and runs the
+isolated wheel smoke test without `uv` or user-profile package caches.
+
+```powershell
+.\scripts\validate-local.ps1
 ```
 
 ## Development Commands
@@ -65,18 +76,27 @@ uv build
 
 ```powershell
 # Build the wheel
+$env:UV_CACHE_DIR = Join-Path (Get-Location) ".uv-cache"
+$env:TEMP = Join-Path (Get-Location) ".tmp"
+$env:TMP = $env:TEMP
+$env:TMPDIR = $env:TEMP
+$env:PIP_CACHE_DIR = Join-Path $env:TEMP "pip-cache"
 uv build
 
-# Install in a clean environment and verify from outside the repository
+# Install in a clean environment and verify from a non-source work directory
 $wheel = (Get-Item dist\*.whl | Select-Object -First 1).FullName
-$wheelVenv = Join-Path ([System.IO.Path]::GetTempPath()) ("guerilla-wheel-test-" + [System.Guid]::NewGuid())
-uv venv $wheelVenv
-uv pip install --python (Join-Path $wheelVenv "Scripts\python.exe") $wheel --no-deps
-Push-Location ([System.IO.Path]::GetTempPath())
-& (Join-Path $wheelVenv "Scripts\python.exe") -c "import guerilla; print(guerilla.__version__)"
-& (Join-Path $wheelVenv "Scripts\guerilla.exe") --version
-& (Join-Path $wheelVenv "Scripts\guerilla.exe") --help
-& (Join-Path $wheelVenv "Scripts\guerilla.exe") version --json
+$wheelVenv = Join-Path $env:TEMP ("guerilla-wheel-test-" + [System.Guid]::NewGuid())
+python -m venv $wheelVenv
+$wheelPython = Join-Path $wheelVenv "Scripts\python.exe"
+$wheelCli = Join-Path $wheelVenv "Scripts\guerilla.exe"
+& $wheelPython -m pip install --no-deps $wheel
+$smokeWorkDir = Join-Path $env:TEMP "wheel-smoke-workdir"
+New-Item -ItemType Directory -Force -Path $smokeWorkDir | Out-Null
+Push-Location $smokeWorkDir
+& $wheelPython -c "import guerilla; print(guerilla.__version__)"
+& $wheelCli --version
+& $wheelCli --help
+& $wheelCli version --json
 Pop-Location
 
 # Confirm no workspace, graph, database, cache, or external-state files are created
@@ -102,9 +122,46 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
   identity registration without invocation, and scoped external identity
   lifecycle handling. Do not implement adapters, projections, or transports
   before their owning phases.
-- Gate B is complete. The kernel baseline is limited to contracts, codec,
-  local append/replay, DAG/index/query, and local authority/identity/boundary
+- Phase 9 implemented the trusted in-process adapter SDK, one validating host
+  path, descriptor completeness checks, and transactional, reconstructed
+  filesystem, and asynchronous synthetic systems. It did not add graph
+  observation ingestion, graph-backed action orchestration, reconciliation,
+  projections, snapshots, transports, subprocess isolation, or real
+  integrations.
+- Phase 10 implemented observe-only ingestion from the Phase 9 adapter host into
+  the authoritative graph through one validated flow and one append transaction.
+  It preserves external identity, revisions, provenance, payload retention, and
+  duplicate/conflict classifications without invoking `act` or mutating
+  external state.
+- Phase 11 implemented graph-backed action intent, invocation-start records,
+  adapter `act` invocation only after durable intent verification, explicit
+  action-result records, idempotency replay/conflict behavior, restart handling,
+  and optional after-state observation through the Phase 10 ingestor. It did
+  not add reconciliation, conflict decisions, projections, snapshots,
+  transports, subprocess isolation, real integrations, or Gate D behavior.
+- Phase 12 implemented uncertain-outcome reconciliation, missing-lineage
+  recovery, explicit conflict records, append-only decision/resolution lineage,
+  duplicate-attempt detection, and unsupported/unknown reconciliation conflicts.
+  It did not add projections, snapshots, CLI workflows, transports, subprocess
+  isolation, real integrations, or Gate D behavior.
+- Phase 13 implemented deterministic derived lineage, dependency, conflict,
+  manifest, diff, progress, and traceability views. It did not add snapshots,
+  resume contexts, CLI workflows, transports, subprocess isolation, real
+  integrations, or Gate D behavior.
+- Phase 14 implemented verified snapshot records, derived materialized
+  summaries, snapshot verification, and bounded resume contexts. It did not add
+  CLI workflows, transports, subprocess isolation, real integrations, or Gate D
   behavior.
+- Phase 15 implemented local internal CLI workflows for workspace, adapter,
+  goal, operation, observation, action, reconciliation, conflict, lineage,
+  view, manifest, snapshot, and graph commands. It did not add transports,
+  subprocess isolation, real integrations, or Gate D behavior.
+- Gate B and Gate C are complete. The current boundary is limited to
+  contracts, kernel behavior, local authority/identity/boundaries, Phase 9
+  synthetic adapter SDK behavior, Phase 10 observation ingestion, Phase 11
+  action intent/idempotency orchestration, Phase 12 reconciliation/conflict
+  lineage, Phase 13 projections/manifests/diffs, Phase 14 snapshots/resume
+  contexts, and Phase 15 internal CLI workflows.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -118,11 +175,18 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Gate B Handoff
+## Gate C Handoff
 
-After Gate B completion:
+After Gate B completion and Phase 15 local completion:
 
 1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, Phase 8 security, and Gate B checklist tests pass.
 2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
-4. Do not begin Phase 9 without an explicit Phase 9 prompt.
+4. Use `docs/phase_prompts/PHASE_09_ADAPTER_SDK_SYNTHETIC_SYSTEMS.md`, `src/guerilla/adapters/`, `tests/adapters/`, and `tests/fixtures/adapters/` as Phase 9 evidence.
+5. Use `docs/phase_prompts/PHASE_10_OBSERVATION_INGESTION.md`, `src/guerilla/observability/`, and `tests/integration/test_phase10_observation_ingestion.py` as Phase 10 evidence.
+6. Use `docs/phase_prompts/PHASE_11_ACTION_INTENT_IDEMPOTENCY.md`, `src/guerilla/orchestration/`, and `tests/integration/test_phase11_action_intent_idempotency.py` as Phase 11 local evidence.
+7. Use `docs/phase_prompts/PHASE_12_RECONCILIATION_CONFLICTS.md`, `src/guerilla/reconciliation/`, `src/guerilla/conflicts/`, and `tests/integration/test_phase12_reconciliation_conflicts.py` as Phase 12 local evidence.
+8. Use `docs/phase_prompts/PHASE_13_PROJECTIONS_MANIFEST_DIFF.md`, `docs/PROJECTION_SPEC.md`, `src/guerilla/projections/`, and `tests/integration/test_phase13_projections_manifest_diff.py` as Phase 13 local evidence.
+9. Use `docs/phase_prompts/PHASE_14_SNAPSHOT_RESUME.md`, `src/guerilla/projections/snapshots.py`, and `tests/integration/test_phase14_snapshot_resume.py` as Phase 14 local evidence.
+10. Use `docs/phase_prompts/PHASE_15_INTERNAL_CLI_E2E_SMOKE.md`, `src/guerilla/cli/`, and `tests/integration/test_phase15_internal_cli_e2e_smoke.py` as Phase 15 local evidence.
+11. Complete the final Internal MVP checklist before starting Phase 16.

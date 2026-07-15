@@ -238,6 +238,7 @@ class GraphStore:
         created_at: str,
         committed_at: str,
         principal_id: str = "local-user",
+        expected_graph_revision: int | None = None,
         fail_at: str | None = None,
     ) -> dict[str, Any]:
         if not members:
@@ -251,6 +252,15 @@ class GraphStore:
             acquired_at=created_at,
         ):
             head = self.replay()
+            if (
+                expected_graph_revision is not None
+                and expected_graph_revision != head.graph_revision
+            ):
+                raise StorageError(
+                    "stale_graph_revision",
+                    f"expected graph revision {expected_graph_revision}, "
+                    f"current revision {head.graph_revision}",
+                )
             prepared_members = _ordered_members([dict(member) for member in members])
             seen = set(head.nodes) | set(head.edges)
             for member in prepared_members:

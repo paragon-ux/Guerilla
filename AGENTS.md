@@ -1,6 +1,6 @@
 # AGENTS.md -- Guerilla Agent Control Surface
 
-**Status:** Gate B complete -- Kernel Ready; agent governance active
+**Status:** Gate C complete -- Internal Continuity MVP complete; agent governance active
 **Owner phase:** Phase 1 (Kickoff), updated by every subsequent phase
 **Regeneration trigger:** Any phase completion, architecture decision change, or agent-rule update
 
@@ -182,6 +182,14 @@ A failure at any step MUST reject the entire append transaction.
 - Every adapter must declare: read consistency, write behavior, event ordering, concurrency, conflict handling, replay support, snapshot support, identity stability, lineage completeness, idempotency, mutating actions, state boundaries, schemas, authentication requirements, and known limitations.
 - A capability declaration is a claim by the adapter. It does not transfer application-state authority to Guerilla.
 - Model-generated or user-generated shell text MUST NOT be executed directly by the core runtime. Adapters SHOULD use typed clients, argument arrays, or structured tool invocations.
+- Phase 9 implements only trusted configured in-process synthetic adapters and the shared host/SDK.
+- Phase 10 implements observe-only ingestion from trusted synthetic adapters into the authoritative graph through the Gate B transaction path.
+- Phase 11 implements graph-backed action intent, invocation-start records, action-result recording, idempotency replay/conflict behavior, restart protection, and optional after-state observation.
+- Phase 12 implements uncertain-outcome reconciliation, missing-lineage recovery, explicit conflict records, append-only decision/resolution lineage, duplicate-attempt detection, and unsupported/unknown reconciliation conflicts.
+- Phase 13 implements deterministic derived projections, manifests, diffs, progress, and traceability views.
+- Phase 14 implements verified snapshot records, derived materialized summaries, and bounded resume contexts.
+- Phase 15 implements local internal CLI workflows over the existing runtime APIs.
+- Phase 15 does not implement transports, subprocess isolation, real integrations, or Gate D behavior.
 
 ---
 
@@ -215,7 +223,15 @@ A failure at any step MUST reject the entire append transaction.
 | Conformance | `tests/conformance/` | Schema, protocol, and graph-invariant conformance |
 | Crash | `tests/crash/` | Crash simulation and recovery |
 | Security | `tests/security/` | Authorization, payload safety, adapter escalation |
+| Adapter | `tests/adapters/` | Adapter SDK, host, and synthetic-system conformance |
 | Performance | `tests/performance/` | Throughput, latency, and resource measurement |
+
+Codex/Windows local validation should use the repository-local wrapper to avoid
+user-profile cache and temp-directory permission failures:
+
+```powershell
+.\scripts\validate-local.ps1
+```
 
 Local test commands:
 

@@ -21,6 +21,11 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+dependencies = [
+    "jsonschema>=4.26.0",
+    "jsonschema-rs>=0.47.0",
+    "referencing>=0.37.0",
+]
 
 [project.scripts]
 guerilla = "guerilla.cli.main:main"
@@ -28,8 +33,6 @@ guerilla = "guerilla.cli.main:main"
 [project.optional-dependencies]
 dev = [
     "hypothesis>=6.100",
-    "jsonschema>=4.26.0",
-    "jsonschema-rs>=0.47.0",
     "pytest>=8.0",
     "ruff>=0.8",
     "mypy>=1.10",

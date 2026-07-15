@@ -2,12 +2,19 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Gate B complete. Phases 1-8 are complete: contracts are
-frozen, deterministic codec/config/identifier/hash primitives exist, the local
-append store/replay path is implemented, DAG integrity plus a rebuildable
-SQLite query index exist, and local authority/boundary registries are in place.
-The Gate B checklist has passed. No adapter runtime, projection, or transport
-exists yet.
+**Current status:** Gate C complete. Phases 1-15 and the final Internal MVP
+checklist are complete:
+contracts are frozen, the local graph kernel is implemented, the synthetic
+adapter SDK exists, and observe-only ingestion records bounded external facts
+into the authoritative graph. Phase 11 adds committed intent-before-action,
+graph-backed idempotency, explicit action-result recording, and optional
+after-state observation. Phase 12 adds uncertain-outcome reconciliation,
+missing-lineage recovery, explicit conflict records, and append-only
+decisions/resolution lineage. Phase 13 adds deterministic derived projections,
+manifests, diffs, progress, and traceability views. Phase 14 adds verified
+snapshot records, derived materialized summaries, and bounded resume contexts.
+Phase 15 adds local internal CLI workflows over those runtime APIs. Transport,
+subprocess isolation, and real integrations remain future phases.
 
 ---
 
@@ -42,8 +49,8 @@ Guerilla does **not** own: canonical application content, external database tran
 |---|---|---|---|
 | A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Complete |
 | B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Complete |
-| C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Pending; Phase 9 not started |
-| D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |
+| C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Complete |
+| D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Pending |
 | E — Research Validated | 20–22 | Real heterogeneous pilots, benchmark evidence, reproducible release | Blocked by Gate D |
 
 ---
@@ -68,12 +75,16 @@ uv run pytest
 
 ## Non-Claims
 
-- No adapter runtime, projection engine, or transport exists yet. The
-  implemented runtime surface is limited to Phase 5 primitives, Phase 6 local
-  append storage/replay, Phase 7 DAG/index/query behavior, and Phase 8 local
-  authority/boundary registries.
-- Schemas, registries, conformance fixtures, and Gate B kernel primitives are
-  frozen for Phase 9 entry.
+- No transport or real integration exists yet. The implemented runtime
+  surface is limited to Gate B kernel
+  behavior, Phase 9 trusted in-process synthetic adapters, Phase 10
+  observe-only graph ingestion, Phase 11 action intent/idempotency
+  orchestration, Phase 12 reconciliation/conflict records, and Phase 13
+  projection/manifest/diff generation, Phase 14 snapshot/resume context
+  generation, and Phase 15 internal CLI workflows.
+- Schemas, registries, conformance fixtures, Gate B kernel primitives, and
+  Phase 9-15 continuity primitives are current for Gate C completion
+  validation.
 - No adapters, integrations, benchmarks, or empirical results are available.
 - The architecture papers (v0.2.0-draft) are the current normative specification.
 

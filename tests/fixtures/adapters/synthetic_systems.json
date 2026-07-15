@@ -1,0 +1,27 @@
+{
+  "fixture_set": "phase9_synthetic_systems",
+  "contract_version": "0.2.0",
+  "systems": [
+    {
+      "name": "transactional_revisioned_service",
+      "continuity_mode": "online",
+      "state_model": "atomic compare-and-set with monotonic external revisions",
+      "idempotency": "native",
+      "outcomes": ["accepted", "rejected", "confirmed_accepted", "confirmed_rejected"]
+    },
+    {
+      "name": "reconstructed_filesystem",
+      "continuity_mode": "reconstructed",
+      "state_model": "current files reconstruct state with content-hash external revisions",
+      "idempotency": "adapter-emulated",
+      "outcomes": ["accepted", "failed", "confirmed_failed", "unknown"]
+    },
+    {
+      "name": "asynchronous_unknown_outcome",
+      "continuity_mode": "online",
+      "state_model": "accepted asynchronous operations with deterministic virtual time",
+      "idempotency": "native",
+      "outcomes": ["pending", "duplicated", "confirmed_accepted", "still_pending", "unknown"]
+    }
+  ]
+}

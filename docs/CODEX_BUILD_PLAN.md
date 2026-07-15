@@ -1,13 +1,16 @@
 # Codex Build Plan
 
-**Status:** Gate B complete -- Kernel Ready
+**Status:** Gate C complete -- Internal Continuity MVP complete
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
-> **WARNING:** Gate B local kernel behavior is implemented.
-> Do not treat adapters, projections, transports, or Phase 9+ behavior as
-> implemented.
+> **WARNING:** Gate B local kernel behavior, Phase 9 trusted in-process
+> synthetic adapter SDK behavior, Phase 10 observe-only ingestion, Phase 11
+> graph-backed action intent/idempotency, Phase 12 reconciliation/conflict
+> lineage, Phase 13 derived projections/manifests/diffs, Phase 14
+> snapshots/resume contexts, and Phase 15 internal CLI workflows are
+> implemented. Do not treat transports or real integrations as implemented.
 
 ---
 
@@ -23,8 +26,8 @@ Track the complete build sequence from repository bootstrap through research rel
 |---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | COMPLETE |
 | B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | COMPLETE |
-| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | PENDING |
-| D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
+| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | COMPLETE |
+| D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | PENDING |
 | E -- Research Validated | 20-22 | Real heterogeneous pilots, benchmark evidence, reproducible release | BLOCKED |
 
 ---
@@ -41,14 +44,14 @@ Track the complete build sequence from repository bootstrap through research rel
 | 6 | Append Store, Transactions, Replay | B | PASS |
 | 7 | DAG Integrity, Index, Query | B | PASS |
 | 8 | Authority, Identity, Boundaries | B | PASS |
-| 9 | Adapter SDK, Synthetic Systems | C | PENDING |
-| 10 | Observation Ingestion | C | PENDING |
-| 11 | Action Intent, Idempotency | C | PENDING |
-| 12 | Reconciliation, Conflicts | C | PENDING |
-| 13 | Projections, Manifest, Diff | C | PENDING |
-| 14 | Snapshot, Resume | C | PENDING |
-| 15 | Internal CLI, E2E, Smoke | C | PENDING |
-| FINAL | Internal MVP Checklist | C | PENDING |
+| 9 | Adapter SDK, Synthetic Systems | C | PASS |
+| 10 | Observation Ingestion | C | PASS |
+| 11 | Action Intent, Idempotency | C | PASS |
+| 12 | Reconciliation, Conflicts | C | PASS |
+| 13 | Projections, Manifest, Diff | C | PASS |
+| 14 | Snapshot, Resume | C | PASS |
+| 15 | Internal CLI, E2E, Smoke | C | PASS |
+| FINAL | Internal MVP Checklist | C | PASS |
 | 16 | GLCP Reference Client/Server | D | PENDING |
 | 17 | Subprocess Adapter Host | D | PENDING |
 | 18 | Transport Parity, Robustness | D | PENDING |
@@ -69,7 +72,10 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-Gate A and Gate B are complete. Phase 9 has not started.
+Gate A and Gate B are complete. Phase 9 is complete. Phase 10 is complete.
+Phase 11 is complete. Phase 12 is complete. Phase 13 is complete. Phase 14 is
+complete. Phase 15 is complete. The final Internal MVP checklist is complete;
+Phase 16 has not started.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
@@ -83,6 +89,54 @@ helpers, and a rebuildable non-authoritative SQLite index; it did not add
 authority registry, adapters, projections, or transports. Phase 8 added fixed
 local authorization, state-boundary enforcement helpers, adapter identity
 registration without invocation, and scoped external identity lifecycle handling;
-it did not add adapters, projections, transports, or Phase 9 behavior. The Gate
-B checklist verifies clean reopen/replay, invalid-mutation rollback, index loss
-rebuild, authority rejection, and replay/index query equivalence.
+it did not add adapter invocation, projections, transports, or Phase 9 behavior.
+Phase 9 added trusted configured in-process adapter SDK modules, one validating
+host path, descriptor completeness checks, and three synthetic systems:
+transactional revisioned service, reconstructed filesystem, and asynchronous
+unknown-outcome service. Phase 9 did not add observation ingestion into graph
+records, committed action orchestration, graph-backed idempotency,
+reconciliation engine, projections, snapshots, transports, subprocess
+isolation, real integrations, or Gate D behavior. Phase 10 added observe-only
+ingestion that invokes adapter `observe`, preserves external facts in graph
+records, classifies duplicate/stale/conflicting observations from authoritative
+replay, and appends through one Gate B graph transaction. Phase 10 did not add
+action intent, idempotency orchestration, reconciliation, projections,
+snapshots, transports, subprocess isolation, real integrations, or Gate D
+behavior. Phase 11 added graph-backed action intent, invocation-start records,
+validated adapter `act` invocation after durable intent verification, explicit
+action-result records, idempotency replay/conflict behavior, restart protection,
+and optional after-state observation through the Phase 10 ingestor. Phase 11 did
+not add reconciliation, conflict decisions, projections, snapshots, transports,
+subprocess isolation, real integrations, or Gate D behavior. Phase 12 added
+uncertain-outcome reconciliation, missing-lineage recovery, explicit conflict
+records, append-only decision/resolution lineage, duplicate-attempt detection,
+and unsupported/unknown reconciliation conflicts. Phase 12 did not add
+projections, snapshots, CLI workflows, transports, subprocess isolation, real
+integrations, or Gate D behavior. Phase 13 added deterministic derived
+lineage, dependency, conflict, manifest, diff, progress, and traceability views
+that cite source graph revision, source nodes, freshness, information loss,
+transformation version, policy version, and derived authority. Phase 13 did not
+add snapshots, resume contexts, CLI workflows, transports, subprocess
+isolation, real integrations, or Gate D behavior. Phase 14 added verified
+snapshot records, derived materialized summaries, snapshot verification, and
+bounded resume contexts. Phase 14 did not add CLI workflows, transports,
+subprocess isolation, real integrations, or Gate D behavior. Phase 15 added
+local internal CLI workflows for workspace, adapter, goal, operation,
+observation, action, reconciliation, conflict, lineage, view, manifest,
+snapshot, and graph commands. Phase 15 did not add transports, subprocess
+isolation, real integrations, or Gate D behavior. The Gate B checklist verifies clean reopen/replay, invalid-mutation
+rollback, index loss rebuild, authority rejection, and replay/index query
+equivalence. Phase 9 adapter tests verify the SDK and synthetic-system boundary
+only. Phase 10 tests verify observation ingestion only. Phase 11 tests verify
+action intent and idempotency only. Phase 12 tests verify reconciliation,
+conflict records, and append-only decisions only. Phase 13 tests verify
+projection determinism, manifest stale-observation reporting, diff
+classifications, disposable projection persistence, index regeneration,
+old-revision stability, and adapter non-invocation only. Phase 14 tests verify
+snapshot source boundary citation, summary regeneration, missing/corrupt
+summary handling, resume separation, pending/unknown action surfacing,
+old-revision stability, source commit mismatch rejection, and adapter
+non-invocation only. Phase 15 tests verify transactional, reconstructed
+filesystem, and async unknown-outcome CLI E2E scenarios, stable JSON output,
+expected-revision rejection, replay safety, index rebuild, manifest/view, and
+snapshot/resume behavior.

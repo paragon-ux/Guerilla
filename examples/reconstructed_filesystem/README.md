@@ -1,8 +1,11 @@
-# Reconstructed Filesystem Example
+# Reconstructed Filesystem
 
-**Status:** PLACEHOLDER — documentation only
-**Owner phase:** Phase 20 (Heterogeneous Pilots)
+**Status:** Phase 9 synthetic example
 
-This example will demonstrate Guerilla integration with a filesystem-based reconstructed-state system (e.g., a set of files where state is derived by scanning or checksumming the current filesystem).
+This example is represented by
+`guerilla.adapters.synthetic.ReconstructedFilesystemAdapter`. It models state
+reconstructed from files under a declared temporary root, content-hash external
+revisions, rename and deletion observations, partial multi-file failure, no
+native rollback, and adapter-emulated idempotency.
 
-No executable adapter or simulation code exists in Phase 1.
+It must be used only with temporary test roots during Phase 9.
