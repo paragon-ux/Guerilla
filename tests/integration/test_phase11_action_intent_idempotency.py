@@ -258,6 +258,43 @@ def test_idempotency_replays_same_content_and_survives_index_loss(
     assert adapter.calls["act"] == 1
 
 
+def test_idempotency_scope_prevents_cross_adapter_replay(
+    contracts: ContractBundle, tmp_path: Path
+) -> None:
+    store = _store(tmp_path, contracts)
+    first_adapter = TransactionalRevisionedServiceAdapter(seed=100)
+    second_adapter = TransactionalRevisionedServiceAdapter(seed=140)
+    host = AdapterHost(contracts=contracts, adapters=[first_adapter, second_adapter])
+    orchestrator = ActionOrchestrator(store=store, host=host)
+
+    first = orchestrator.execute(
+        _request(
+            first_adapter,
+            "set_value",
+            {"subject": "ticket-shared", "value": "open"},
+            idempotency_key="phase11-shared-key",
+            namespace="transactional",
+        )
+    )
+    second = orchestrator.execute(
+        _request(
+            second_adapter,
+            "set_value",
+            {"subject": "ticket-shared", "value": "open"},
+            idempotency_key="phase11-shared-key",
+            namespace="transactional",
+        )
+    )
+
+    assert first.idempotency_status == "new_intent"
+    assert second.idempotency_status == "new_intent"
+    assert first.result_node_id != second.result_node_id
+    assert first_adapter.calls["act"] == 1
+    assert second_adapter.calls["act"] == 1
+    assert first_adapter.records["ticket-shared"]["revision"] == "rev-1"
+    assert second_adapter.records["ticket-shared"]["revision"] == "rev-1"
+
+
 def test_restart_points_resume_or_block_without_blind_retry(
     contracts: ContractBundle, tmp_path: Path
 ) -> None:

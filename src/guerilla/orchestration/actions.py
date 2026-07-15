@@ -123,6 +123,16 @@ class ActionOrchestrator:
         prior = _find_idempotency_entry(
             replay_before,
             idempotency_key=request.idempotency_key,
+            adapter_id=request.adapter_id,
+            adapter_version=adapter_version,
+            system_id=system_id,
+            state_boundary_id=request.state_boundary_id,
+            action=request.action,
+            actor=request.actor,
+            principal_id=request.principal_id,
+            root=request.root,
+            endpoint=request.endpoint,
+            namespace=request.namespace,
         )
         if prior is not None and prior.request_hash != request_hash:
             raise ActionExecutionError(
@@ -695,6 +705,16 @@ def _find_idempotency_entry(
     replay: Any,
     *,
     idempotency_key: str,
+    adapter_id: str,
+    adapter_version: str,
+    system_id: str,
+    state_boundary_id: str,
+    action: str,
+    actor: dict[str, Any],
+    principal_id: str,
+    root: str | None,
+    endpoint: str | None,
+    namespace: str | None,
 ) -> _IdempotencyEntry | None:
     entries: dict[str, _IdempotencyEntry] = {}
     ordered_nodes = sorted(
@@ -713,6 +733,22 @@ def _find_idempotency_entry(
         if key != idempotency_key:
             continue
         if kind == "action_request_event":
+            if not _matches_idempotency_scope(
+                replay=replay,
+                node=node,
+                metadata=action_metadata,
+                adapter_id=adapter_id,
+                adapter_version=adapter_version,
+                system_id=system_id,
+                state_boundary_id=state_boundary_id,
+                action=action,
+                actor=actor,
+                principal_id=principal_id,
+                root=root,
+                endpoint=endpoint,
+                namespace=namespace,
+            ):
+                continue
             entries[str(node_id)] = _IdempotencyEntry(
                 idempotency_key=str(key),
                 request_hash=str(action_metadata["request_hash"]),
@@ -737,6 +773,39 @@ def _find_idempotency_entry(
         return None
     matching.sort(key=lambda item: (item.intent_revision, item.intent_node_id))
     return matching[0]
+
+
+def _matches_idempotency_scope(
+    *,
+    replay: Any,
+    node: dict[str, Any],
+    metadata: dict[str, Any],
+    adapter_id: str,
+    adapter_version: str,
+    system_id: str,
+    state_boundary_id: str,
+    action: str,
+    actor: dict[str, Any],
+    principal_id: str,
+    root: str | None,
+    endpoint: str | None,
+    namespace: str | None,
+) -> bool:
+    authority = node.get("authority")
+    return (
+        node.get("workspace_id") == replay.workspace_id
+        and metadata.get("adapter_id") == adapter_id
+        and metadata.get("adapter_version") == adapter_version
+        and metadata.get("system_id") == system_id
+        and metadata.get("state_boundary_id") == state_boundary_id
+        and metadata.get("action") == action
+        and node.get("actor") == actor
+        and isinstance(authority, dict)
+        and authority.get("principal_id") == principal_id
+        and metadata.get("root") == root
+        and metadata.get("endpoint") == endpoint
+        and metadata.get("namespace") == namespace
+    )
 
 
 def _result_from_prior(replay: Any, entry: _IdempotencyEntry) -> ActionExecutionResult:

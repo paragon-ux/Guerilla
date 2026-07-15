@@ -113,7 +113,6 @@ class ProjectionEngine:
                 limit=limit,
             )
             related_items = [str(item) for item in related.items]
-            edges = _edges_touching(query, target, related.items, {node_id})
             truncated = related.truncated
         elif direction == "descendants":
             related = query.descendants(
@@ -123,7 +122,6 @@ class ProjectionEngine:
                 limit=limit,
             )
             related_items = [str(item) for item in related.items]
-            edges = _edges_touching(query, target, {node_id}, related.items)
             truncated = related.truncated
         elif direction == "both":
             ancestors = query.ancestors(node_id, revision=target, max_depth=max_depth, limit=limit)
@@ -134,7 +132,6 @@ class ProjectionEngine:
                 limit=limit,
             )
             related_items = sorted({*ancestors.items, *descendants.items})
-            edges = _edges_touching(query, target, {*ancestors.items, node_id}, descendants.items)
             truncated = ancestors.truncated or descendants.truncated
         elif direction == "immediate_predecessors":
             related_ids = sorted(
@@ -143,7 +140,6 @@ class ProjectionEngine:
                 if edge["to_node_id"] == node_id
             )
             related_items = related_ids[:limit]
-            edges = _edges_touching(query, target, related_items, {node_id})
             truncated = len(related_ids) > limit
         else:
             related_ids = sorted(
@@ -152,12 +148,13 @@ class ProjectionEngine:
                 if edge["from_node_id"] == node_id
             )
             related_items = related_ids[:limit]
-            edges = _edges_touching(query, target, {node_id}, related_items)
             truncated = len(related_ids) > limit
+        source_node_ids = sorted({node_id, *related_items})
+        edges = _edges_within(query, target, source_node_ids)
         payload = {
             "root_node_id": node_id,
             "direction": direction,
-            "nodes": _node_summaries(nodes, [node_id, *related_items], query, target),
+            "nodes": _node_summaries(nodes, source_node_ids, query, target),
             "edges": _edge_summaries(edges, query, target),
             "truncated": truncated,
         }
@@ -174,7 +171,7 @@ class ProjectionEngine:
                 "max_depth": max_depth,
                 "limit": limit,
             },
-            source_node_ids=tuple(sorted({node_id, *related_items})),
+            source_node_ids=tuple(source_node_ids),
             information_loss=(
                 "payload contains node and edge summaries, not complete record bodies",
             ),
@@ -607,18 +604,16 @@ def _edge_summaries(
     ]
 
 
-def _edges_touching(
+def _edges_within(
     query: GraphQuery,
     revision: int,
-    from_ids: set[str] | list[str],
-    to_ids: set[str] | list[str],
+    node_ids: set[str] | list[str],
 ) -> list[dict[str, Any]]:
-    from_set = set(from_ids)
-    to_set = set(to_ids)
+    selected = set(node_ids)
     return [
         edge
         for edge in _visible_edges(query, revision).values()
-        if edge["from_node_id"] in from_set and edge["to_node_id"] in to_set
+        if edge["from_node_id"] in selected and edge["to_node_id"] in selected
     ]
 
 
@@ -642,7 +637,13 @@ def _manifest_ambiguity_reports(entries: list[dict[str, Any]]) -> list[dict[str,
             continue
         key = "|".join(
             str(identity.get(field, ""))
-            for field in ("system_id", "state_boundary_id", "external_kind", "external_id")
+            for field in (
+                "system_id",
+                "state_boundary_id",
+                "external_kind",
+                "external_id",
+                "namespace",
+            )
         )
         by_identity.setdefault(key, []).append(entry)
     reports = []

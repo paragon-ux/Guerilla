@@ -103,6 +103,7 @@ def _observation_metadata(
     external_id: str,
     external_revision: str,
     content_hash: str,
+    namespace: str | None = None,
 ) -> dict[str, Any]:
     external_identity = {
         "system_id": system_id,
@@ -110,7 +111,7 @@ def _observation_metadata(
         "external_kind": external_kind,
         "external_id": external_id,
         "external_revision": external_revision,
-        "namespace": system_id,
+        "namespace": namespace if namespace is not None else system_id,
     }
     return {
         PHASE10_METADATA_KEY: {
@@ -304,6 +305,12 @@ def test_phase13_views_are_revision_bound_source_cited_and_deterministic(
 
     assert lineage.result_hash == lineage_again.result_hash
     assert nodes["artifact_old"]["node_id"] in lineage.source_node_ids
+    lineage_edges = {
+        (edge["from_node_id"], edge["to_node_id"]) for edge in lineage.payload["edges"]
+    }
+    assert (nodes["goal"]["node_id"], nodes["operation"]["node_id"]) in lineage_edges
+    assert (nodes["operation"]["node_id"], nodes["artifact_old"]["node_id"]) in lineage_edges
+    assert (nodes["artifact_old"]["node_id"], nodes["artifact_new"]["node_id"]) in lineage_edges
     assert dependency.payload["edges"]
     assert conflicts.payload["conflicts"]
     assert engine.conflict().payload["conflicts"] == []
@@ -361,6 +368,59 @@ def test_manifest_diff_persistence_and_index_regeneration_are_deterministic(
         }
     ]
     assert diff.payload["resolved_conflicts"] == [nodes["conflict"]["node_id"]]
+
+
+def test_manifest_ambiguity_keeps_external_identity_namespaces_distinct(
+    contracts: ContractBundle, tmp_path: Path
+) -> None:
+    store, workspace_id = _store(tmp_path, contracts)
+    ids = IdentifierGenerator()
+    system_id = "external-system"
+    boundary_id = deterministic_identifier("state_boundary", 1310)
+    artifact_a = _node(
+        ids,
+        workspace_id,
+        "artifact",
+        40,
+        status="observed",
+        metadata=_observation_metadata(
+            system_id=system_id,
+            boundary_id=boundary_id,
+            external_kind="record",
+            external_id="shared-id",
+            external_revision="rev-a",
+            content_hash="e" * 64,
+            namespace="ns-a",
+        ),
+        state_boundary_id=boundary_id,
+    )
+    artifact_b = _node(
+        ids,
+        workspace_id,
+        "artifact",
+        41,
+        status="observed",
+        metadata=_observation_metadata(
+            system_id=system_id,
+            boundary_id=boundary_id,
+            external_kind="record",
+            external_id="shared-id",
+            external_revision="rev-b",
+            content_hash="f" * 64,
+            namespace="ns-b",
+        ),
+        state_boundary_id=boundary_id,
+    )
+    store.append_transaction(
+        [artifact_a, artifact_b],
+        actor=_actor(),
+        created_at=TS,
+        committed_at=TS,
+    )
+
+    manifest = ProjectionEngine(store=store).manifest()
+    assert len(manifest.payload["entries"]) == 2
+    assert manifest.payload["ambiguity_reports"] == []
 
 
 def test_later_commits_do_not_change_old_revision_projection_output(

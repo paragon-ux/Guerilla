@@ -316,6 +316,46 @@ def test_unknown_and_unsupported_reconciliation_create_explicit_conflicts(
     assert unsupported.calls["reconcile"] == 0
 
 
+def test_reconciled_pending_action_replays_current_effective_status(
+    contracts: ContractBundle, tmp_path: Path
+) -> None:
+    store = _store(tmp_path, contracts)
+    clock = VirtualClock()
+    async_adapter = AsyncUnknownOutcomeAdapter(clock=clock)
+    host = AdapterHost(contracts=contracts, adapters=[async_adapter], clock_ms=clock.now_ms)
+    actions = ActionOrchestrator(store=store, host=host)
+    reconciler = ReconciliationEngine(store=store, host=host)
+    request = _action_request(
+        async_adapter,
+        "submit_job",
+        {"subject": "job-replayed-after-reconcile", "completion_delay_ms": 10},
+        idempotency_key="phase12-key-pending-replay",
+        namespace="async",
+    )
+
+    pending = actions.execute(request)
+    assert pending.action_classification == "pending"
+    clock.advance(20)
+
+    reconciled = reconciler.reconcile(
+        _reconcile_request(
+            async_adapter,
+            pending.intent_node_id,
+            "phase12-key-pending-replay",
+            namespace="async",
+        )
+    )
+    assert reconciled.classification == "confirmed_accepted"
+    assert reconciled.recovered_result_node_id is not None
+
+    replayed = actions.execute(request)
+    assert replayed.idempotency_status == "replayed_result"
+    assert replayed.action_classification == "accepted"
+    assert replayed.result_node_id == reconciled.recovered_result_node_id
+    assert replayed.external_revision == "async-rev-async-1"
+    assert async_adapter.calls["act"] == 1
+
+
 def test_reconciliation_detects_stale_revision_and_duplicate_attempt_conflicts(
     contracts: ContractBundle, tmp_path: Path
 ) -> None:

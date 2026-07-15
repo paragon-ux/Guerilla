@@ -814,7 +814,10 @@ def _recovered_action_status(
     classification: ReconciliationClassification,
     attempt: _ActionAttempt,
 ) -> str | None:
-    if attempt.result_node_id is not None:
+    if attempt.result_node_id is not None and attempt.result_classification not in {
+        "pending",
+        "outcome_unknown",
+    }:
         return None
     if classification == "confirmed_accepted":
         return "accepted"
@@ -826,6 +829,8 @@ def _recovered_action_status(
         return "failed"
     if classification == "duplicated":
         return "duplicated"
+    if classification == "still_pending":
+        return "pending"
     return None
 
 
