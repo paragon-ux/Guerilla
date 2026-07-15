@@ -1,6 +1,6 @@
 # AGENTS.md -- Guerilla Agent Control Surface
 
-**Status:** Gate C in progress -- Phase 9 Adapter SDK complete; agent governance active
+**Status:** Gate C in progress -- Phase 10 Observation Ingestion complete; agent governance active
 **Owner phase:** Phase 1 (Kickoff), updated by every subsequent phase
 **Regeneration trigger:** Any phase completion, architecture decision change, or agent-rule update
 
@@ -182,7 +182,9 @@ A failure at any step MUST reject the entire append transaction.
 - Every adapter must declare: read consistency, write behavior, event ordering, concurrency, conflict handling, replay support, snapshot support, identity stability, lineage completeness, idempotency, mutating actions, state boundaries, schemas, authentication requirements, and known limitations.
 - A capability declaration is a claim by the adapter. It does not transfer application-state authority to Guerilla.
 - Model-generated or user-generated shell text MUST NOT be executed directly by the core runtime. Adapters SHOULD use typed clients, argument arrays, or structured tool invocations.
-- Phase 9 implements only trusted configured in-process synthetic adapters and the shared host/SDK. It does not implement graph ingestion, committed action orchestration, reconciliation engine behavior, projections, snapshots, transports, subprocess isolation, or real integrations.
+- Phase 9 implements only trusted configured in-process synthetic adapters and the shared host/SDK.
+- Phase 10 implements observe-only ingestion from trusted synthetic adapters into the authoritative graph through the Gate B transaction path.
+- Phase 10 does not implement action intent, idempotency orchestration, reconciliation engine behavior, projections, snapshots, transports, subprocess isolation, or real integrations.
 
 ---
 

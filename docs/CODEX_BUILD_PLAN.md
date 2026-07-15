@@ -1,14 +1,14 @@
 # Codex Build Plan
 
-**Status:** Gate C in progress -- Phase 9 Adapter SDK complete
+**Status:** Gate C in progress -- Phase 10 Observation Ingestion local validation complete
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
-> **WARNING:** Gate B local kernel behavior and Phase 9 trusted in-process
-> synthetic adapter SDK behavior are implemented. Do not treat observation
-> ingestion, graph-backed actions, reconciliation, projections, snapshots,
-> transports, or real integrations as implemented.
+> **WARNING:** Gate B local kernel behavior, Phase 9 trusted in-process
+> synthetic adapter SDK behavior, and Phase 10 observe-only ingestion are
+> implemented. Do not treat graph-backed actions, reconciliation, projections,
+> snapshots, transports, or real integrations as implemented.
 
 ---
 
@@ -43,7 +43,7 @@ Track the complete build sequence from repository bootstrap through research rel
 | 7 | DAG Integrity, Index, Query | B | PASS |
 | 8 | Authority, Identity, Boundaries | B | PASS |
 | 9 | Adapter SDK, Synthetic Systems | C | PASS |
-| 10 | Observation Ingestion | C | PENDING |
+| 10 | Observation Ingestion | C | LOCAL PASS / CI PENDING |
 | 11 | Action Intent, Idempotency | C | PENDING |
 | 12 | Reconciliation, Conflicts | C | PENDING |
 | 13 | Projections, Manifest, Diff | C | PENDING |
@@ -70,7 +70,8 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-Gate A and Gate B are complete. Phase 9 is complete; Phase 10 has not started.
+Gate A and Gate B are complete. Phase 9 is complete. Phase 10 is complete
+locally and awaits hosted CI; Phase 11 has not started.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
@@ -91,7 +92,13 @@ transactional revisioned service, reconstructed filesystem, and asynchronous
 unknown-outcome service. Phase 9 did not add observation ingestion into graph
 records, committed action orchestration, graph-backed idempotency,
 reconciliation engine, projections, snapshots, transports, subprocess
-isolation, real integrations, or Gate D behavior. The Gate B checklist verifies
-clean reopen/replay, invalid-mutation rollback, index loss rebuild, authority
-rejection, and replay/index query equivalence. Phase 9 adapter tests verify the
-SDK and synthetic-system boundary only.
+isolation, real integrations, or Gate D behavior. Phase 10 added observe-only
+ingestion that invokes adapter `observe`, preserves external facts in graph
+records, classifies duplicate/stale/conflicting observations from authoritative
+replay, and appends through one Gate B graph transaction. Phase 10 did not add
+action intent, idempotency orchestration, reconciliation, projections,
+snapshots, transports, subprocess isolation, real integrations, or Gate D
+behavior. The Gate B checklist verifies clean reopen/replay, invalid-mutation
+rollback, index loss rebuild, authority rejection, and replay/index query
+equivalence. Phase 9 adapter tests verify the SDK and synthetic-system boundary
+only. Phase 10 tests verify observation ingestion only.

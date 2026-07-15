@@ -339,7 +339,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 9 permits adapter SDK modules but no Phase 10+ runtime modules."""
+    """Phase 10 permits observation ingestion but no Phase 11+ runtime modules."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {
@@ -354,6 +354,7 @@ def test_no_prohibited_runtime_modules():
         "src/guerilla/index",
         "src/guerilla/authority",
         "src/guerilla/adapters",
+        "src/guerilla/observability",
     }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)

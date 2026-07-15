@@ -1,14 +1,15 @@
 # Test Matrix
 
-**Status:** Gate C evidence current -- Phase 9 PASS
+**Status:** Gate C evidence current -- Phase 10 PASS locally
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests and Phase 9 adapter SDK tests are passing
-> locally and in hosted CI. Observation ingestion, graph-backed action orchestration,
-> reconciliation engine, projection, snapshot, performance, and transport tests
-> remain planned until their owning phases.
+> **WARNING:** Gate B kernel tests and Phase 9 adapter SDK tests pass locally
+> and in hosted CI. Phase 10 observation ingestion tests pass locally.
+> Graph-backed action orchestration, reconciliation engine, projection,
+> snapshot, performance, and transport tests remain planned until their owning
+> phases.
 
 ---
 
@@ -137,6 +138,16 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | ADP-008 | Asynchronous synthetic system preserves pending, duplicated, completed, and unknown outcomes under deterministic virtual time | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
 | ADP-009 | Synthetic-state export is deterministic and fixture metadata is present | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
 
+### Observation Tests (Phase 10)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| OBS-001 | One validated ingestion flow records transactional, reconstructed-filesystem, and asynchronous observations | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-002 | External identity, revisions, authority, provenance, payload retention, graph commit time, and limitations are preserved | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-003 | Exact duplicate, duplicate event, same-revision changed content, stale revision, out-of-order event, unknown ordering, and absent revision classifications are deterministic | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-004 | Rename, deletion, and identity reuse are explicit lifecycle observations without transferring authority | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-005 | Unauthorized observation, boundary escape, adapter exception, missing provenance, missing external identity, and injected append failure do not advance graph revision | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+| OBS-006 | Replay and SQLite index rebuild do not invoke adapters and preserve observation truth | 10 | PASSING | `tests/integration/test_phase10_observation_ingestion.py` |
+
 ### Action-Recovery Tests (Phase 11-12)
 ### Projection Tests (Phase 13-14)
 ### Security Tests (Phase 19)
@@ -157,13 +168,14 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, observation ingestion, graph-backed
-action orchestration, reconciliation, projection, snapshot, and transport rows
-remain PLANNED until their owning phases. Gate A evidence does not claim kernel
-behavior beyond the Phase 5 primitives; Phase 6 evidence claims local
-append/replay behavior; Phase 7 evidence claims DAG integrity and rebuildable
-index/query behavior; Phase 8 evidence claims local authorization, boundary,
-adapter identity registration, and external identity lifecycle behavior covered
-by the listed tests. Gate B checklist evidence confirms the Phase 5-8 kernel
-surfaces together. Phase 9 evidence claims only trusted in-process adapter SDK,
-host validation, and synthetic-system behavior.
+Runtime security hardening, performance, graph-backed action orchestration,
+reconciliation, projection, snapshot, and transport rows remain PLANNED until
+their owning phases. Gate A evidence does not claim kernel behavior beyond the
+Phase 5 primitives; Phase 6 evidence claims local append/replay behavior; Phase
+7 evidence claims DAG integrity and rebuildable index/query behavior; Phase 8
+evidence claims local authorization, boundary, adapter identity registration,
+and external identity lifecycle behavior covered by the listed tests. Gate B
+checklist evidence confirms the Phase 5-8 kernel surfaces together. Phase 9
+evidence claims only trusted in-process adapter SDK, host validation, and
+synthetic-system behavior. Phase 10 evidence claims only observe-only ingestion
+from trusted synthetic adapters into graph records.

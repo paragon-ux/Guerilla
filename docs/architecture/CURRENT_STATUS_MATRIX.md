@@ -1,25 +1,27 @@
 # Current Status Matrix
 
-**Status:** Gate B complete -- Kernel Ready
+**Status:** Gate C in progress -- Phase 10 complete locally
 **Last updated:** 2026-07-14
-**Current baseline:** `05183d61fecc668362e145624385832f50851f31`
-**Evidence:** [Gate B completion report](../GATE_B_COMPLETION_REPORT.md), [PR #1](https://github.com/paragon-ux/Guerilla/pull/1) merged to `main` as [`05183d6`](https://github.com/paragon-ux/Guerilla/commit/05183d61fecc668362e145624385832f50851f31)
+**Current baseline:** draft Gate C branch `feature/gate-c-continuity-mvp`
+**Evidence:** [Gate B completion report](../GATE_B_COMPLETION_REPORT.md), [Phase 9 completion report](../PHASE_09_COMPLETION_REPORT.md), Phase 10 local evidence in `tests/integration/test_phase10_observation_ingestion.py`, [PR #2](https://github.com/paragon-ux/Guerilla/pull/2)
 
-**Hosted CI evidence:** [Gate A closure](https://github.com/paragon-ux/Guerilla/actions/runs/29302019930), [Phase 5](https://github.com/paragon-ux/Guerilla/actions/runs/29302731597), [Phase 6](https://github.com/paragon-ux/Guerilla/actions/runs/29303454247), [Phase 7](https://github.com/paragon-ux/Guerilla/actions/runs/29304114169), [Phase 8](https://github.com/paragon-ux/Guerilla/actions/runs/29304560354), [final Gate B PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29363456584)
+**Hosted CI evidence:** [Gate A closure](https://github.com/paragon-ux/Guerilla/actions/runs/29302019930), [Phase 5](https://github.com/paragon-ux/Guerilla/actions/runs/29302731597), [Phase 6](https://github.com/paragon-ux/Guerilla/actions/runs/29303454247), [Phase 7](https://github.com/paragon-ux/Guerilla/actions/runs/29304114169), [Phase 8](https://github.com/paragon-ux/Guerilla/actions/runs/29304560354), [final Gate B PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29363456584), [Phase 9 PR validation](https://github.com/paragon-ux/Guerilla/actions/runs/29378512503). Phase 10 hosted CI is pending for the next PR head.
 
 ---
 
 ## Current Maturity
 
 Guerilla has moved beyond the pre-prototype stage. Gate A and Gate B are
-complete: the architecture decisions, schemas, registries, fixtures, canonical
-codec primitives, local append-only graph kernel, replay path, DAG/index/query
-surface, and local authority/boundary enforcement are implemented and tested.
+complete, and Gate C is in progress: the architecture decisions, schemas,
+registries, fixtures, canonical codec primitives, local append-only graph
+kernel, replay path, DAG/index/query surface, local authority/boundary
+enforcement, trusted synthetic adapter SDK, and observe-only graph ingestion
+are implemented and tested locally.
 
-The project is now at the **kernel-ready / pre-continuity-MVP stage**. Phase 9
-has not started, and no adapter runtime, observations, external actions,
-reconciliation engine, projections, snapshots, transport bindings, pilots, or
-empirical evaluation are implemented.
+The project is now at the **continuity-MVP in progress stage**. Phase 10 is
+complete locally. Action intent/idempotency, reconciliation engine, projections,
+snapshots, transport bindings, pilots, and empirical evaluation are not
+implemented.
 
 | Area | Estimated maturity | Assessment |
 |---|---:|---|
@@ -28,9 +30,9 @@ empirical evaluation are implemented.
 | Frozen contracts and schemas | 90% | Gate A complete; schemas, registries, fixtures, and decision vectors are frozen for current protocol `0.2.0` |
 | Protocol design | 75% | GLCP core contracts exist; runtime transport bindings and parity tests remain future work |
 | Implementation design | 80% | Gate plan, storage/recovery model, state-boundary model, and test matrix are current through Gate B |
-| Reference implementation | 45-50% | Local graph kernel layers are substantially implemented; continuity orchestration remains pending |
-| Adapter SDK and integrations | 0% | Phase 9 synthetic adapter SDK has not started; real adapters remain prohibited |
-| Conformance and kernel testing | 50-60% | Gate A conformance and Gate B kernel/security/crash tests pass; adapter, projection, transport interoperability, and performance suites remain planned |
+| Reference implementation | 55-60% | Local graph kernel, synthetic adapter SDK, and observe-only ingestion are implemented; action/reconciliation/projection/snapshot layers remain pending |
+| Adapter SDK and integrations | 35% | Phase 9 synthetic adapter SDK is implemented; Phase 10 observations use it; real adapters remain prohibited |
+| Conformance and kernel testing | 60-65% | Gate A conformance, Gate B kernel/security/crash tests, Phase 9 adapter tests, and Phase 10 observation tests pass locally; projection, transport interoperability, and performance suites remain planned |
 | Empirical evaluation | 0% | No pilots, benchmarks, or comparative evaluation have been run |
 | Production readiness | 5% | Local kernel durability and authority checks exist; operational hardening, isolation, archive, backup/restore, and threat-model completion remain future phases |
 
@@ -42,7 +44,7 @@ empirical evaluation are implemented.
 |---|---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, machine contracts, registries, and conformance fixtures are frozen | COMPLETE | `docs/ARCHITECTURE_DECISIONS.md`, `schemas/`, `registries/`, `tests/conformance/` |
 | B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, rebuildable index, authority, and identity | COMPLETE | `docs/GATE_B_COMPLETION_REPORT.md`, `tests/integration/test_gate_b_kernel_checklist.py` |
-| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | PENDING | Phase 9 not started |
+| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | IN PROGRESS | Phase 10 complete locally; hosted CI pending |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, transport parity, security/durability/archive | BLOCKED | Requires Gate C |
 | E -- Research Validated | 20-22 | Heterogeneous pilots, benchmarks, evaluation, reproducible release | BLOCKED | Requires Gate D |
 
@@ -83,6 +85,25 @@ The local kernel implements and tests:
 - adapter identity registration without invocation;
 - scoped external identity lifecycle handling.
 
+### Gate C Phase 9-10 Continuity Baseline
+
+The local continuity MVP now includes:
+
+- trusted configured in-process adapter SDK modules;
+- one validating adapter host path for `describe`, `observe`, `act`,
+  `evaluate`, and `reconcile`;
+- transactional revisioned, reconstructed filesystem, and asynchronous
+  unknown-outcome synthetic systems;
+- observe-only ingestion through one validated path;
+- authoritative graph records for bounded observation operations, observation
+  events, external-state artifact revisions, and evidence/causal edges;
+- preservation of external identity, external revision, adapter version,
+  state-boundary ID, provenance, payload retention/redaction metadata,
+  freshness, consistency limitations, receipt time, and graph commit time;
+- deterministic duplicate, stale, conflicting, out-of-order, unknown-ordering,
+  absent-revision, rename, deletion, and identity-reuse classifications;
+- replay and index rebuild without adapter invocation.
+
 ### Current Evidence Base
 
 The Gate B report records passing local validation for:
@@ -93,26 +114,27 @@ The Gate B report records passing local validation for:
 - package build and isolated wheel smoke;
 - focused Gate B checklist tests;
 - hosted CI for the merged Gate B PR.
+- hosted CI for Phase 9 on draft PR #2.
+- local Phase 10 validation through focused observation ingestion tests,
+  formatting, linting, type checking, and full test suite.
 
 ---
 
 ## What Remains Incomplete
 
-### Phase 9-15: Continuity MVP
+### Phase 11-15: Continuity MVP
 
 The next gate must implement the continuity behavior that makes Guerilla useful
-above the kernel:
+above the observe-only baseline:
 
-- synthetic adapter SDK;
-- adapter `describe`, `observe`, `act`, `evaluate`, and `reconcile` surfaces;
-- bounded observation ingestion;
 - committed intent-before-action;
 - idempotency enforcement;
 - uncertain-outcome reconciliation;
 - conflict lifecycle;
 - projections, manifests, diffs, snapshots, resume contexts, and CLI workflows.
 
-No real adapter should be added before synthetic adapter conformance passes.
+No real adapter should be added before internal synthetic adapter conformance
+and Gate C completion pass.
 
 ### Phase 16-19: External Compatibility
 
@@ -156,10 +178,11 @@ external actions have uncertain outcomes.
 
 A defensible project-status statement is:
 
-> Guerilla has completed Gate B. Its frozen contracts and local kernel can
-> initialize a workspace, append and replay authoritative graph transactions,
-> enforce DAG and authority constraints, verify hashes, recover incomplete
-> tails, and rebuild non-authoritative indexes. The next milestone is Phase 9:
-> a synthetic adapter SDK and testbed that exercises bounded observations,
-> intent-before-action, idempotency, and reconciliation without adding real
-> integrations or changing the Gate B kernel contract.
+> Guerilla has completed Gate B and is in Gate C. Its frozen contracts and local
+> kernel can initialize a workspace, append and replay authoritative graph
+> transactions, enforce DAG and authority constraints, verify hashes, recover
+> incomplete tails, and rebuild non-authoritative indexes. Gate C now includes a
+> trusted synthetic adapter SDK and observe-only ingestion that records bounded
+> external facts while preserving external authority and revisions. The next
+> milestone is Phase 11: committed intent-before-action and graph-backed
+> idempotency without adding real integrations or changing Gate A/B contracts.

@@ -2,12 +2,12 @@
 
 An authoritative causal-lineage and continuity layer for heterogeneous systems.
 
-**Current status:** Gate B complete. Phases 1-8 are complete: contracts are
-frozen, deterministic codec/config/identifier/hash primitives exist, the local
-append store/replay path is implemented, DAG integrity plus a rebuildable
-SQLite query index exist, and local authority/boundary registries are in place.
-The Gate B checklist has passed. No adapter runtime, projection, or transport
-exists yet.
+**Current status:** Gate C in progress. Phases 1-10 are complete locally:
+contracts are frozen, the local graph kernel is implemented, the synthetic
+adapter SDK exists, and observe-only ingestion records bounded external facts
+into the authoritative graph. Action intent/idempotency, reconciliation,
+projections, snapshots, CLI workflows, transport, and real integrations remain
+future phases.
 
 ---
 
@@ -42,7 +42,7 @@ Guerilla does **not** own: canonical application content, external database tran
 |---|---|---|---|
 | A — Contract Ready | 1–4 | Architecture decisions, schemas, registries, and fixtures are frozen | Complete |
 | B — Kernel Ready | 5–8 | Authoritative storage, replay, DAG integrity, index, authority, identity | Complete |
-| C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | Pending; Phase 9 not started |
+| C — Continuity MVP | 9–15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | In progress; Phase 10 complete locally |
 | D — External Compatible | 16–19 | Reference transport, isolated adapters, parity, security, durability, archive | Blocked by Gate C |
 | E — Research Validated | 20–22 | Real heterogeneous pilots, benchmark evidence, reproducible release | Blocked by Gate D |
 
@@ -68,12 +68,13 @@ uv run pytest
 
 ## Non-Claims
 
-- No adapter runtime, projection engine, or transport exists yet. The
-  implemented runtime surface is limited to Phase 5 primitives, Phase 6 local
-  append storage/replay, Phase 7 DAG/index/query behavior, and Phase 8 local
-  authority/boundary registries.
-- Schemas, registries, conformance fixtures, and Gate B kernel primitives are
-  frozen for Phase 9 entry.
+- No action orchestration, reconciliation engine, projection engine, snapshot
+  runtime, production CLI workflow, or transport exists yet. The implemented
+  runtime surface is limited to Gate B kernel behavior, Phase 9 trusted
+  in-process synthetic adapters, and Phase 10 observe-only graph ingestion.
+- Schemas, registries, conformance fixtures, Gate B kernel primitives, and
+  Phase 9-10 continuity primitives are current for Phase 11 entry after hosted
+  CI passes.
 - No adapters, integrations, benchmarks, or empirical results are available.
 - The architecture papers (v0.2.0-draft) are the current normative specification.
 

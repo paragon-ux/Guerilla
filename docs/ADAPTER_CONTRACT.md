@@ -1,7 +1,7 @@
 # Adapter Contract
 
-**Status:** FROZEN -- Phase 3 complete; Gate C Phase 9 adapter SDK implemented
-**Owner phase:** Phase 3 (Machine Contracts), Phase 9 (Adapter SDK/Synthetic Systems)
+**Status:** FROZEN -- Phase 3 complete; Gate C Phase 9-10 adapter/observation surfaces implemented
+**Owner phase:** Phase 3 (Machine Contracts), Phase 9 (Adapter SDK/Synthetic Systems), Phase 10 (Observation Ingestion)
 **Controlling schema:** `schemas/adapter_descriptor.schema.json`
 
 ## Purpose
@@ -11,6 +11,8 @@ systems and Guerilla contracts. Phase 3 froze descriptor shape and capability
 vocabulary. Phase 9 implements the trusted in-process Python SDK, host, and
 synthetic systems that exercise the descriptor and operation contracts without
 adding graph ingestion, transports, subprocess isolation, or real integrations.
+Phase 10 implements observe-only ingestion from that host into authoritative
+graph records without adding action orchestration or reconciliation.
 
 ## Descriptor
 
@@ -74,6 +76,26 @@ The host checks authorization and state boundaries before invocation. Adapter
 outputs are validated after invocation and before they can be used by later
 phases. Phase 9 returns typed results only; it does not commit graph records.
 
+## Phase 10 Observation Ingestion
+
+Phase 10 adds `src/guerilla/observability/ingestion.py`, an observe-only
+ingestion path that:
+
+- validates `adapter.observe` request contracts;
+- uses the Phase 9 host for authorization, state-boundary checks, adapter
+  invocation, and result validation;
+- rejects missing provenance or missing external identity;
+- normalizes operation, event, artifact/external revision, and edge records;
+- preserves external system, adapter, boundary, external identity, external
+  revision, effective time, receipt time, graph commit time, correlation,
+  causation, authority, provenance, payload retention/redaction, freshness, and
+  consistency metadata;
+- appends all normalized records in one authoritative graph transaction.
+
+Observation ingestion invokes only `observe`. It does not call `act`, create
+action intent, retry, infer external acceptance, reconcile, project, snapshot,
+or mutate external state.
+
 ## Capabilities
 
 Capability values are registered in `registries/capabilities.json` and encoded
@@ -94,11 +116,12 @@ Implemented in Phase 9:
 - trusted configured in-process adapter loading and invocation;
 - descriptor and capability validation;
 - synthetic observe, act, evaluate, and reconcile calls against three local
-  synthetic systems.
+  synthetic systems;
+- observe-only normalization into authoritative graph records through one Gate B
+  append transaction.
 
 Still deferred:
 
-- observation ingestion into authoritative graph records;
 - graph-backed intent-before-action and idempotency;
 - reconciliation engine, conflict engine, and decisions;
 - projections, snapshots, CLI workflows, transports, subprocess/container
