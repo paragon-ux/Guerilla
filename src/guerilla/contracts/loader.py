@@ -7,10 +7,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-import jsonschema
-import jsonschema_rs
-from referencing import Registry, Resource
-
 
 class ContractError(ValueError):
     """Raised when contract loading or validation fails."""
@@ -51,6 +47,37 @@ def _declares_extension_map(schema: dict[str, Any]) -> bool:
     return "extensions" in schema.get("properties", {})
 
 
+def _missing_dependency_error(package: str) -> ContractError:
+    return ContractError(
+        "missing_dependency",
+        f"missing runtime dependency {package!r}; install Guerilla with runtime dependencies",
+    )
+
+
+def _jsonschema_module() -> Any:
+    try:
+        import jsonschema
+    except ModuleNotFoundError as exc:
+        raise _missing_dependency_error("jsonschema") from exc
+    return jsonschema
+
+
+def _jsonschema_rs_module() -> Any:
+    try:
+        import jsonschema_rs
+    except ModuleNotFoundError as exc:
+        raise _missing_dependency_error("jsonschema-rs") from exc
+    return jsonschema_rs
+
+
+def _referencing_types() -> tuple[Any, Any]:
+    try:
+        from referencing import Registry, Resource
+    except ModuleNotFoundError as exc:
+        raise _missing_dependency_error("referencing") from exc
+    return Registry, Resource
+
+
 @dataclass(frozen=True, slots=True)
 class ContractBundle:
     """Loaded schema/registry bundle with independent validators."""
@@ -59,20 +86,23 @@ class ContractBundle:
     registries: dict[str, dict[str, Any]]
 
     def __post_init__(self) -> None:
+        jsonschema = _jsonschema_module()
         for name, schema in self.schemas.items():
             if schema.get("$schema") != "https://json-schema.org/draft/2020-12/schema":
                 raise ContractError("unsupported_schema_draft", f"{name} is not Draft 2020-12")
             jsonschema.Draft202012Validator.check_schema(schema)
 
     @property
-    def _jsonschema_registry(self) -> Registry:
+    def _jsonschema_registry(self) -> Any:
+        registry_type, resource_type = _referencing_types()
         resources = [
-            (schema["$id"], Resource.from_contents(schema)) for schema in self.schemas.values()
+            (schema["$id"], resource_type.from_contents(schema)) for schema in self.schemas.values()
         ]
-        return Registry().with_resources(resources)
+        return registry_type().with_resources(resources)
 
     @property
-    def _rs_registry(self) -> jsonschema_rs.Registry:
+    def _rs_registry(self) -> Any:
+        jsonschema_rs = _jsonschema_rs_module()
         return jsonschema_rs.Registry([(schema["$id"], schema) for schema in self.schemas.values()])
 
     def schema(self, schema_name: str) -> dict[str, Any]:
@@ -83,6 +113,7 @@ class ContractBundle:
 
     def validate(self, schema_name: str, instance: Any) -> ValidationResult:
         schema = self.schema(schema_name)
+        jsonschema = _jsonschema_module()
         py_validator = jsonschema.Draft202012Validator(
             schema,
             registry=self._jsonschema_registry,
@@ -98,6 +129,7 @@ class ContractBundle:
             )
             for error in py_errors
         )
+        jsonschema_rs = _jsonschema_rs_module()
         rs_validator = jsonschema_rs.Draft202012Validator(
             schema,
             registry=self._rs_registry,

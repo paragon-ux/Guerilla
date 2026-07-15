@@ -69,12 +69,15 @@ wheels = [
 name = "guerilla"
 version = "0.0.0"
 source = { editable = "." }
+dependencies = [
+    { name = "jsonschema" },
+    { name = "jsonschema-rs" },
+    { name = "referencing" },
+]
 
 [package.optional-dependencies]
 dev = [
     { name = "hypothesis" },
-    { name = "jsonschema" },
-    { name = "jsonschema-rs" },
     { name = "mypy" },
     { name = "pytest" },
     { name = "ruff" },
@@ -83,10 +86,11 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "hypothesis", marker = "extra == 'dev'", specifier = ">=6.100" },
-    { name = "jsonschema", marker = "extra == 'dev'", specifier = ">=4.26.0" },
-    { name = "jsonschema-rs", marker = "extra == 'dev'", specifier = ">=0.47.0" },
+    { name = "jsonschema", specifier = ">=4.26.0" },
+    { name = "jsonschema-rs", specifier = ">=0.47.0" },
     { name = "mypy", marker = "extra == 'dev'", specifier = ">=1.10" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
+    { name = "referencing", specifier = ">=0.37.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.8" },
 ]
 provides-extras = ["dev"]

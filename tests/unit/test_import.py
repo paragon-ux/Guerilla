@@ -95,3 +95,45 @@ if before != after:
 """
     result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
     assert result.returncode == 0, f"Import mutated environment: {result.stderr}"
+
+
+def test_cli_help_and_version_do_not_require_contract_validator_dependencies():
+    """Wheel smoke help/version commands must work before validator imports are exercised."""
+    code = """
+import builtins
+import io
+import sys
+
+blocked_roots = {"jsonschema", "jsonschema_rs", "referencing"}
+real_import = builtins.__import__
+
+
+def guarded_import(name, globals=None, locals=None, fromlist=(), level=0):
+    if level == 0 and name.partition(".")[0] in blocked_roots:
+        raise ModuleNotFoundError(f"No module named {name!r}")
+    return real_import(name, globals, locals, fromlist, level)
+
+
+builtins.__import__ = guarded_import
+
+from guerilla.cli.main import main, run
+
+for args in (["--version"], ["--help"]):
+    try:
+        main(args)
+    except SystemExit as exc:
+        if exc.code not in (0, None):
+            raise
+    else:
+        raise SystemExit(f"{args} did not exit after displaying output")
+
+stdout = io.StringIO()
+stderr = io.StringIO()
+exit_code = run(["version", "--json"], stdout=stdout, stderr=stderr)
+if exit_code != 0:
+    raise SystemExit(f"version --json failed: {stderr.getvalue()}")
+if '"package": "guerilla"' not in stdout.getvalue():
+    raise SystemExit(stdout.getvalue())
+"""
+    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+    assert result.returncode == 0, f"CLI import used validator dependency: {result.stderr}"
