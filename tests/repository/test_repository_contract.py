@@ -177,6 +177,7 @@ FROZEN_DOCS = {
 
 GATE_STATUS_DOCS = {
     "CODEX_BUILD_PLAN.md",
+    "PROJECTION_SPEC.md",
     "STATE_BOUNDARY_MODEL.md",
     "STORAGE_AND_RECOVERY.md",
     "TEST_MATRIX.md",
@@ -339,7 +340,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 12 permits reconciliation and conflict modules but no Phase 13+ runtime modules."""
+    """Phase 13 permits projection modules but no Phase 14+ runtime modules."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {
@@ -358,6 +359,7 @@ def test_no_prohibited_runtime_modules():
         "src/guerilla/orchestration",
         "src/guerilla/reconciliation",
         "src/guerilla/conflicts",
+        "src/guerilla/projections",
     }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)

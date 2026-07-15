@@ -1,14 +1,14 @@
 # Test Matrix
 
-**Status:** Gate C evidence current -- Phase 12 PASS
+**Status:** Gate C evidence current -- Phase 13 PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests and Phase 9-12 Gate C tests pass locally
+> **WARNING:** Gate B kernel tests and Phase 9-13 Gate C tests pass locally
 > and in hosted CI.
-> Projection, snapshot, performance, and transport tests remain planned until
-> their owning phases.
+> Snapshot, performance, and transport tests remain planned until their owning
+> phases.
 
 ---
 
@@ -172,6 +172,18 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | RCN-008 | Replay and index rebuild preserve reconciliation/conflict truth without invoking adapters | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
 
 ### Projection Tests (Phase 13-14)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| PRJ-001 | Lineage, dependency, conflict, manifest, progress, and traceability views cite source revision, source query, source nodes, freshness, information loss, policy, transformation version, result hash, and derived authority | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-002 | Same graph revision and projection query regenerate the same result hash | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-003 | Manifest selects latest non-superseded artifacts and reports stale external observations | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-004 | Resolved conflicts are not reported as effectively open blockers | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-005 | Graph diff reports added nodes, supersession, resolved conflicts, and refreshed observations without modified-record claims | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-006 | Persisted projections are disposable and regenerate to the same hash after deletion | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-007 | Deleted SQLite index rebuilds from authoritative replay and indexed projection results match replay results | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-008 | Later commits do not change projections explicitly requested for an older graph revision | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+| PRJ-009 | Projection code does not invoke adapters or external actions | 13 | PASSING | `tests/integration/test_phase13_projections_manifest_diff.py` |
+
 ### Security Tests (Phase 19)
 ### Performance Tests (Phase 21)
 
@@ -190,7 +202,7 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, projection, snapshot, and transport rows remain PLANNED until
+Runtime security hardening, performance, snapshot, and transport rows remain PLANNED until
 their owning phases. Gate A evidence does not claim kernel behavior beyond the
 Phase 5 primitives; Phase 6 evidence claims local append/replay behavior; Phase
 7 evidence claims DAG integrity and rebuildable index/query behavior; Phase 8
@@ -203,4 +215,5 @@ from trusted synthetic adapters into graph records. Phase 11 evidence claims
 only graph-backed action intent, idempotency, action-result recording, restart
 protection, and optional after-state observation. Phase 12 evidence claims only
 reconciliation, missing-lineage recovery, conflict records, and append-only
-decisions/resolution lineage.
+decisions/resolution lineage. Phase 13 evidence claims only deterministic
+derived projections, manifests, diffs, progress, and traceability views.
