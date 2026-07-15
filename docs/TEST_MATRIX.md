@@ -1,13 +1,14 @@
 # Test Matrix
 
-**Status:** Gate B evidence current -- Gate B PASS locally
+**Status:** Gate C evidence current -- Phase 9 PASS locally
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests are passing locally.
-> Security hardening, performance, adapter runtime, projection, and transport
-> tests remain planned until their owning phases.
+> **WARNING:** Gate B kernel tests and Phase 9 adapter SDK tests are passing
+> locally. Observation ingestion, graph-backed action orchestration,
+> reconciliation engine, projection, snapshot, performance, and transport tests
+> remain planned until their owning phases.
 
 ---
 
@@ -124,6 +125,18 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | GTB-003 | Deleted index rebuilds from authoritative replay without lineage loss | Gate B | PASSING | `tests/integration/test_gate_b_kernel_checklist.py` |
 
 ### Adapter Tests (Phase 9-12)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| ADP-001 | One in-process SDK and host path supports transactional, reconstructed-filesystem, and asynchronous synthetic systems | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-002 | Descriptor completeness, schema compatibility, duplicate registration, and critical-extension rejection | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-003 | Unsupported capability and malformed request data are rejected before adapter invocation | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-004 | Authorization and state-boundary checks precede adapter invocation | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-005 | Malformed adapter results, adapter exceptions, and timeout conditions are rejected or normalized | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-006 | Transactional synthetic service preserves revisions, native idempotency, deterministic rejection, and reconciliation classification | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-007 | Reconstructed filesystem synthetic system preserves content-hash revisions, root boundaries, partial failure, rename, deletion, and inert payload data | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-008 | Asynchronous synthetic system preserves pending, duplicated, completed, and unknown outcomes under deterministic virtual time | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+| ADP-009 | Synthetic-state export is deterministic and fixture metadata is present | 9 | PASSING | `tests/adapters/test_phase9_adapter_sdk.py` |
+
 ### Action-Recovery Tests (Phase 11-12)
 ### Projection Tests (Phase 13-14)
 ### Security Tests (Phase 19)
@@ -144,11 +157,13 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, adapter runtime, projection, and
-transport rows remain PLANNED until their owning phases. Gate A evidence does
-not claim kernel behavior beyond the Phase 5 primitives; Phase 6 evidence claims
-local append/replay behavior; Phase 7 evidence claims DAG integrity and
-rebuildable index/query behavior; Phase 8 evidence claims local authorization,
-boundary, adapter identity registration, and external identity lifecycle behavior
-covered by the listed tests. Gate B checklist evidence confirms the Phase 5-8
-kernel surfaces together and does not claim Phase 9 adapter behavior.
+Runtime security hardening, performance, observation ingestion, graph-backed
+action orchestration, reconciliation, projection, snapshot, and transport rows
+remain PLANNED until their owning phases. Gate A evidence does not claim kernel
+behavior beyond the Phase 5 primitives; Phase 6 evidence claims local
+append/replay behavior; Phase 7 evidence claims DAG integrity and rebuildable
+index/query behavior; Phase 8 evidence claims local authorization, boundary,
+adapter identity registration, and external identity lifecycle behavior covered
+by the listed tests. Gate B checklist evidence confirms the Phase 5-8 kernel
+surfaces together. Phase 9 evidence claims only trusted in-process adapter SDK,
+host validation, and synthetic-system behavior.

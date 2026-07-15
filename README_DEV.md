@@ -1,7 +1,7 @@
 # Guerilla — Development Guide
 
-**Current status:** Gate B complete; Phases 1-8 complete
-**Phase:** Phase 9 pending; do not begin without explicit authorization
+**Current status:** Gate C in progress; Phases 1-9 complete locally, Phase 9 hosted CI pending
+**Phase:** Phase 10 pending; do not begin before Phase 9 hosted CI is clean
 
 ---
 
@@ -102,9 +102,15 @@ uv run pytest tests/repository/test_repository_contract.py -k source_digests
   identity registration without invocation, and scoped external identity
   lifecycle handling. Do not implement adapters, projections, or transports
   before their owning phases.
-- Gate B is complete. The kernel baseline is limited to contracts, codec,
-  local append/replay, DAG/index/query, and local authority/identity/boundary
-  behavior.
+- Phase 9 implemented the trusted in-process adapter SDK, one validating host
+  path, descriptor completeness checks, and transactional, reconstructed
+  filesystem, and asynchronous synthetic systems. It did not add graph
+  observation ingestion, graph-backed action orchestration, reconciliation,
+  projections, snapshots, transports, subprocess isolation, or real
+  integrations.
+- Gate B is complete. Gate C is in progress; the current boundary is limited to
+  contracts, kernel behavior, local authority/identity/boundaries, and Phase 9
+  synthetic adapter SDK behavior.
 - Completion claims require linked evidence (command output, test result, file digest, inspection result).
 
 ## Completion Evidence
@@ -118,11 +124,12 @@ Each phase completion must report:
 - **Scope Audit:** prohibited behavior and reserved decisions introduced (or None)
 - **Blockers and Contradictions:** or None
 
-## Gate B Handoff
+## Gate C Handoff
 
-After Gate B completion:
+After Gate B completion and Phase 9 local completion:
 
 1. Confirm repository, conformance, Phase 5 unit, Phase 6 storage/recovery, Phase 7 graph/index, Phase 8 security, and Gate B checklist tests pass.
 2. Use `ARCHITECTURE_DECISIONS.md`, `docs/contract_inventory.json`, `schemas/`, `registries/`, `tests/fixtures/contracts/`, and Phase 5-8 primitives as frozen Gate B outputs.
 3. Do not change canonical bytes, identifiers, hashes, relationship directions, or authorization rules without reopening Gate A.
-4. Do not begin Phase 9 without an explicit Phase 9 prompt.
+4. Use `docs/phase_prompts/PHASE_09_ADAPTER_SDK_SYNTHETIC_SYSTEMS.md`, `src/guerilla/adapters/`, `tests/adapters/`, and `tests/fixtures/adapters/` as Phase 9 local evidence.
+5. Do not begin Phase 10 until Phase 9 full local validation and hosted CI are clean.

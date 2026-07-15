@@ -1,13 +1,14 @@
 # Codex Build Plan
 
-**Status:** Gate B complete -- Kernel Ready
+**Status:** Gate C in progress -- Phase 9 Adapter SDK local validation complete
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
-> **WARNING:** Gate B local kernel behavior is implemented.
-> Do not treat adapters, projections, transports, or Phase 9+ behavior as
-> implemented.
+> **WARNING:** Gate B local kernel behavior and Phase 9 trusted in-process
+> synthetic adapter SDK behavior are implemented. Do not treat observation
+> ingestion, graph-backed actions, reconciliation, projections, snapshots,
+> transports, or real integrations as implemented.
 
 ---
 
@@ -23,7 +24,7 @@ Track the complete build sequence from repository bootstrap through research rel
 |---|---|---|---|
 | A -- Contract Ready | 1-4 | Architecture decisions, schemas, registries, and fixtures are frozen | COMPLETE |
 | B -- Kernel Ready | 5-8 | Authoritative storage, replay, DAG integrity, index, authority, identity | COMPLETE |
-| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | PENDING |
+| C -- Continuity MVP | 9-15 | Synthetic adapters, observations, safe actions, reconciliation, projections, snapshots, CLI | IN PROGRESS |
 | D -- External Compatible | 16-19 | Reference transport, isolated adapters, parity, security, durability, archive | BLOCKED |
 | E -- Research Validated | 20-22 | Real heterogeneous pilots, benchmark evidence, reproducible release | BLOCKED |
 
@@ -41,7 +42,7 @@ Track the complete build sequence from repository bootstrap through research rel
 | 6 | Append Store, Transactions, Replay | B | PASS |
 | 7 | DAG Integrity, Index, Query | B | PASS |
 | 8 | Authority, Identity, Boundaries | B | PASS |
-| 9 | Adapter SDK, Synthetic Systems | C | PENDING |
+| 9 | Adapter SDK, Synthetic Systems | C | LOCAL PASS / CI PENDING |
 | 10 | Observation Ingestion | C | PENDING |
 | 11 | Action Intent, Idempotency | C | PENDING |
 | 12 | Reconciliation, Conflicts | C | PENDING |
@@ -69,7 +70,7 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 
 ## Unresolved Items
 
-Gate A and Gate B are complete. Phase 9 has not started.
+Gate A and Gate B are complete. Phase 9 is complete locally and awaits hosted CI; Phase 10 has not started.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
@@ -83,6 +84,14 @@ helpers, and a rebuildable non-authoritative SQLite index; it did not add
 authority registry, adapters, projections, or transports. Phase 8 added fixed
 local authorization, state-boundary enforcement helpers, adapter identity
 registration without invocation, and scoped external identity lifecycle handling;
-it did not add adapters, projections, transports, or Phase 9 behavior. The Gate
-B checklist verifies clean reopen/replay, invalid-mutation rollback, index loss
-rebuild, authority rejection, and replay/index query equivalence.
+it did not add adapter invocation, projections, transports, or Phase 9 behavior.
+Phase 9 added trusted configured in-process adapter SDK modules, one validating
+host path, descriptor completeness checks, and three synthetic systems:
+transactional revisioned service, reconstructed filesystem, and asynchronous
+unknown-outcome service. Phase 9 did not add observation ingestion into graph
+records, committed action orchestration, graph-backed idempotency,
+reconciliation engine, projections, snapshots, transports, subprocess
+isolation, real integrations, or Gate D behavior. The Gate B checklist verifies
+clean reopen/replay, invalid-mutation rollback, index loss rebuild, authority
+rejection, and replay/index query equivalence. Phase 9 adapter tests verify the
+SDK and synthetic-system boundary only.

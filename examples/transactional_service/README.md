@@ -1,8 +1,11 @@
-# Transactional Service Example
+# Transactional Revisioned Service
 
-**Status:** PLACEHOLDER — documentation only
-**Owner phase:** Phase 20 (Heterogeneous Pilots)
+**Status:** Phase 9 synthetic example
 
-This example will demonstrate Guerilla integration with a transactional revisioned service (e.g., a database-backed API with ACID transactions and stable revision identifiers).
+This example is represented by
+`guerilla.adapters.synthetic.TransactionalRevisionedServiceAdapter`. It models an
+in-process system of record with atomic compare-and-set mutation, monotonic
+external revisions, queryable action status, deterministic rejection, and native
+idempotency.
 
-No executable adapter or simulation code exists in Phase 1.
+It is not a real integration and does not access a network service.
