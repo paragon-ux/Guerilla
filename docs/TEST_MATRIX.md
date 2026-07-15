@@ -1,14 +1,14 @@
 # Test Matrix
 
-**Status:** Gate C evidence current -- Phase 11 PASS
+**Status:** Gate C evidence current -- Phase 12 PASS
 **Owner phase:** Cross-phase; populated by each phase
 **Controlling source documents:** `GUERILLA_IMPLEMENTATION_SPEC.md` Section 36, `GUERILLA_PROTOCOL_SPEC.md` Section 33
 **Regeneration trigger:** Any phase completion that adds or modifies tests
 
-> **WARNING:** Gate B kernel tests and Phase 9-11 Gate C tests pass locally
+> **WARNING:** Gate B kernel tests and Phase 9-12 Gate C tests pass locally
 > and in hosted CI.
-> Reconciliation engine, projection, snapshot, performance, and transport tests
-> remain planned until their owning phases.
+> Projection, snapshot, performance, and transport tests remain planned until
+> their owning phases.
 
 ---
 
@@ -160,6 +160,17 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 | ACT-008 | Replay and SQLite index rebuild do not invoke adapters or external actions | 11 | PASSING | `tests/integration/test_phase11_action_intent_idempotency.py` |
 
 ### Reconciliation and Action-Recovery Tests (Phase 12)
+| Test ID | Description | Phase | Status | Evidence |
+|---|---|---|---|---|
+| RCN-001 | Missing action-result lineage is recovered by one reconciliation engine for transactional, filesystem, and async systems | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-002 | Recovered external results preserve original intent/invocation records and do not fabricate the original result timestamp | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-003 | Same idempotency key retries replay the recovered graph-backed result without another adapter `act` call | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-004 | Unknown and unsupported reconciliation outcomes create explicit evidence-backed conflicts | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-005 | Stale external revision and same-request/different-key attempts create explicit conflicts | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-006 | Conflict records include type, subject, evidence, authority, severity, status, detection time, policy, required resolution, and limitations | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-007 | Decisions resolve conflicts append-only through `resolved_by` lineage and optional continuation operations | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+| RCN-008 | Replay and index rebuild preserve reconciliation/conflict truth without invoking adapters | 12 | PASSING | `tests/integration/test_phase12_reconciliation_conflicts.py` |
+
 ### Projection Tests (Phase 13-14)
 ### Security Tests (Phase 19)
 ### Performance Tests (Phase 21)
@@ -179,8 +190,7 @@ Track every planned test, its owning phase, current status, and evidence. Each r
 
 ## Unresolved Items
 
-Runtime security hardening, performance, reconciliation, projection, snapshot,
-and transport rows remain PLANNED until
+Runtime security hardening, performance, projection, snapshot, and transport rows remain PLANNED until
 their owning phases. Gate A evidence does not claim kernel behavior beyond the
 Phase 5 primitives; Phase 6 evidence claims local append/replay behavior; Phase
 7 evidence claims DAG integrity and rebuildable index/query behavior; Phase 8
@@ -191,4 +201,6 @@ evidence claims only trusted in-process adapter SDK, host validation, and
 synthetic-system behavior. Phase 10 evidence claims only observe-only ingestion
 from trusted synthetic adapters into graph records. Phase 11 evidence claims
 only graph-backed action intent, idempotency, action-result recording, restart
-protection, and optional after-state observation.
+protection, and optional after-state observation. Phase 12 evidence claims only
+reconciliation, missing-lineage recovery, conflict records, and append-only
+decisions/resolution lineage.

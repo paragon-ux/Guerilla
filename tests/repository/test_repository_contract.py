@@ -339,7 +339,7 @@ PROHIBITED_PATTERNS = [
 
 
 def test_no_prohibited_runtime_modules():
-    """Phase 11 permits action orchestration but no Phase 12+ runtime modules."""
+    """Phase 12 permits reconciliation and conflict modules but no Phase 13+ runtime modules."""
     src = REPO_ROOT / "src" / "guerilla"
     py_files = list(src.rglob("*.py"))
     allowed_subtrees = {
@@ -356,6 +356,8 @@ def test_no_prohibited_runtime_modules():
         "src/guerilla/adapters",
         "src/guerilla/observability",
         "src/guerilla/orchestration",
+        "src/guerilla/reconciliation",
+        "src/guerilla/conflicts",
     }
     for py_file in py_files:
         rel = py_file.relative_to(REPO_ROOT)

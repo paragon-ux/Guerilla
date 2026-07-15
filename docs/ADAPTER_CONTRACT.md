@@ -1,7 +1,7 @@
 # Adapter Contract
 
-**Status:** FROZEN -- Phase 3 complete; Gate C Phase 9-11 adapter, observation, and action surfaces implemented
-**Owner phase:** Phase 3 (Machine Contracts), Phase 9 (Adapter SDK/Synthetic Systems), Phase 10 (Observation Ingestion), Phase 11 (Action Intent and Idempotency)
+**Status:** FROZEN -- Phase 3 complete; Gate C Phase 9-12 adapter, observation, action, reconciliation, and conflict surfaces implemented
+**Owner phase:** Phase 3 (Machine Contracts), Phase 9 (Adapter SDK/Synthetic Systems), Phase 10 (Observation Ingestion), Phase 11 (Action Intent and Idempotency), Phase 12 (Reconciliation and Conflicts)
 **Controlling schema:** `schemas/adapter_descriptor.schema.json`
 
 ## Purpose
@@ -14,7 +14,8 @@ adding graph ingestion, transports, subprocess isolation, or real integrations.
 Phase 10 implements observe-only ingestion from that host into authoritative
 graph records. Phase 11 implements graph-backed action intent, invocation
 start, result recording, idempotency replay/conflict behavior, and optional
-after-state observation without adding reconciliation or conflict engines.
+after-state observation. Phase 12 implements reconciliation events,
+missing-lineage recovery, explicit conflict records, and append-only decisions.
 
 ## Descriptor
 
@@ -126,6 +127,40 @@ Action orchestration invokes only `act` and optional bounded `observe`.
 It does not call `reconcile`, resolve conflicts, project, snapshot, transport,
 or mutate external systems outside declared adapter actions.
 
+## Phase 12 Reconciliation and Conflicts
+
+Phase 12 adds `src/guerilla/reconciliation/engine.py` and
+`src/guerilla/conflicts/engine.py`.
+
+The reconciliation engine:
+
+- loads committed Phase 11 intent, invocation, and result evidence from
+  authoritative graph replay;
+- authorizes and validates `adapter.reconcile` through the same Phase 9 host;
+- invokes `reconcile` only after capability and boundary checks pass;
+- commits reconciliation events as new event nodes and never rewrites original
+  intent, invocation, or result records;
+- recovers missing action-result lineage by appending a recovered result event
+  with Phase 11 idempotency metadata, without fabricating the original result
+  timestamp;
+- records explicit conflicts for unknown outcomes, unsupported reconciliation,
+  duplicate attempts, stale external revisions, and incomplete lineage;
+- optionally triggers after-state observation through the Phase 10 ingestor.
+
+The conflict engine:
+
+- appends conflict nodes with canonical registry `conflict_type` values and
+  Phase 12-specific `conflict_reason` metadata;
+- records subject, evidence, authority, severity, status, detection time,
+  policy version, required resolution class, limitations, and details;
+- appends decisions and `resolved_by` lineage without deleting or rewriting
+  conflicts;
+- optionally appends continuation operation records that depend on the
+  resolution decision.
+
+Phase 12 does not project, snapshot, transport, isolate subprocess adapters,
+run real integrations, or implement Gate D behavior.
+
 ## Capabilities
 
 Capability values are registered in `registries/capabilities.json` and encoded
@@ -141,7 +176,7 @@ authority for those boundaries.
 
 ## Phase Boundary
 
-Implemented in Phase 9-11:
+Implemented in Phase 9-12:
 
 - trusted configured in-process adapter loading and invocation;
 - descriptor and capability validation;
@@ -151,10 +186,11 @@ Implemented in Phase 9-11:
   append transaction;
 - graph-backed intent-before-action, invocation-start, result recording,
   idempotency replay/conflict behavior, and optional after-state observation.
+- reconciliation events, missing-lineage recovery, explicit conflict records,
+  append-only decisions, and resolution lineage.
 
 Still deferred:
 
-- reconciliation engine, conflict engine, and decisions;
 - projections, snapshots, CLI workflows, transports, subprocess/container
   isolation, network services, real integrations, pilots, archive, backup, and
   production hardening.

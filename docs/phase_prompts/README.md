@@ -1,6 +1,6 @@
 # Phase Prompts
 
-**Status:** Gate C in progress; Phase 11 PASS; Phase 12 pending
+**Status:** Gate C in progress; Phase 12 PASS; Phase 13 pending
 **Owner phase:** Cross-phase; each phase prompt is owned by its phase
 
 ---
@@ -35,7 +35,7 @@ This directory contains the ordered phase execution prompts that drive Guerilla'
 | 9 | `PHASE_09_ADAPTER_SDK_SYNTHETIC_SYSTEMS.md` | C | PASS |
 | 10 | `PHASE_10_OBSERVATION_INGESTION.md` | C | PASS |
 | 11 | `PHASE_11_ACTION_INTENT_IDEMPOTENCY.md` | C | PASS |
-| 12 | `PHASE_12_RECONCILIATION_CONFLICTS.md` | C | PENDING |
+| 12 | `PHASE_12_RECONCILIATION_CONFLICTS.md` | C | PASS |
 | 13 | `PHASE_13_PROJECTIONS_MANIFEST_DIFF.md` | C | PENDING |
 | 14 | `PHASE_14_SNAPSHOT_RESUME.md` | C | PENDING |
 | 15 | `PHASE_15_INTERNAL_CLI_E2E_SMOKE.md` | C | PENDING |

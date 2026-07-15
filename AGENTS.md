@@ -1,6 +1,6 @@
 # AGENTS.md -- Guerilla Agent Control Surface
 
-**Status:** Gate C in progress -- Phase 11 Action Intent and Idempotency complete; agent governance active
+**Status:** Gate C in progress -- Phase 12 Reconciliation and Conflicts complete; agent governance active
 **Owner phase:** Phase 1 (Kickoff), updated by every subsequent phase
 **Regeneration trigger:** Any phase completion, architecture decision change, or agent-rule update
 
@@ -185,7 +185,8 @@ A failure at any step MUST reject the entire append transaction.
 - Phase 9 implements only trusted configured in-process synthetic adapters and the shared host/SDK.
 - Phase 10 implements observe-only ingestion from trusted synthetic adapters into the authoritative graph through the Gate B transaction path.
 - Phase 11 implements graph-backed action intent, invocation-start records, action-result recording, idempotency replay/conflict behavior, restart protection, and optional after-state observation.
-- Phase 11 does not implement reconciliation engine behavior, conflict decisions, projections, snapshots, transports, subprocess isolation, or real integrations.
+- Phase 12 implements uncertain-outcome reconciliation, missing-lineage recovery, explicit conflict records, append-only decision/resolution lineage, duplicate-attempt detection, and unsupported/unknown reconciliation conflicts.
+- Phase 12 does not implement projections, snapshots, CLI workflows, transports, subprocess isolation, real integrations, or Gate D behavior.
 
 ---
 

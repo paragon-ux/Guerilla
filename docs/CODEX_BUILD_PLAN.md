@@ -1,15 +1,15 @@
 # Codex Build Plan
 
-**Status:** Gate C in progress -- Phase 11 Action Intent and Idempotency complete
+**Status:** Gate C in progress -- Phase 12 Reconciliation and Conflicts complete
 **Owner phase:** Cross-phase; updated by each phase
 **Controlling source documents:** `GUERILLA_WORKFLOW_CURRENT.md`, `Guerilla-Kickoff-Prompt.md`
 **Regeneration trigger:** Any phase completion or gate status change
 
 > **WARNING:** Gate B local kernel behavior, Phase 9 trusted in-process
-> synthetic adapter SDK behavior, Phase 10 observe-only ingestion, and Phase 11
-> graph-backed action intent/idempotency are implemented. Do not treat
-> reconciliation, projections, snapshots, transports, or real integrations as
-> implemented.
+> synthetic adapter SDK behavior, Phase 10 observe-only ingestion, Phase 11
+> graph-backed action intent/idempotency, and Phase 12 reconciliation/conflict
+> lineage are implemented. Do not treat projections, snapshots, transports, or
+> real integrations as implemented.
 
 ---
 
@@ -46,7 +46,7 @@ Track the complete build sequence from repository bootstrap through research rel
 | 9 | Adapter SDK, Synthetic Systems | C | PASS |
 | 10 | Observation Ingestion | C | PASS |
 | 11 | Action Intent, Idempotency | C | PASS |
-| 12 | Reconciliation, Conflicts | C | PENDING |
+| 12 | Reconciliation, Conflicts | C | PASS |
 | 13 | Projections, Manifest, Diff | C | PENDING |
 | 14 | Snapshot, Resume | C | PENDING |
 | 15 | Internal CLI, E2E, Smoke | C | PENDING |
@@ -72,7 +72,7 @@ architecture decisions → machine contracts → codec and hashes → append/rep
 ## Unresolved Items
 
 Gate A and Gate B are complete. Phase 9 is complete. Phase 10 is complete.
-Phase 11 is complete; Phase 12 has not started.
+Phase 11 is complete. Phase 12 is complete; Phase 13 has not started.
 Frozen inputs for later kernel work are `docs/ARCHITECTURE_DECISIONS.md`,
 `docs/contract_inventory.json`, `schemas/`, `registries/`, and
 `tests/fixtures/contracts/`. Phase 5 added deterministic codec, config,
@@ -104,8 +104,14 @@ validated adapter `act` invocation after durable intent verification, explicit
 action-result records, idempotency replay/conflict behavior, restart protection,
 and optional after-state observation through the Phase 10 ingestor. Phase 11 did
 not add reconciliation, conflict decisions, projections, snapshots, transports,
-subprocess isolation, real integrations, or Gate D behavior. The Gate B checklist verifies clean reopen/replay, invalid-mutation
+subprocess isolation, real integrations, or Gate D behavior. Phase 12 added
+uncertain-outcome reconciliation, missing-lineage recovery, explicit conflict
+records, append-only decision/resolution lineage, duplicate-attempt detection,
+and unsupported/unknown reconciliation conflicts. Phase 12 did not add
+projections, snapshots, CLI workflows, transports, subprocess isolation, real
+integrations, or Gate D behavior. The Gate B checklist verifies clean reopen/replay, invalid-mutation
 rollback, index loss rebuild, authority rejection, and replay/index query
 equivalence. Phase 9 adapter tests verify the SDK and synthetic-system boundary
 only. Phase 10 tests verify observation ingestion only. Phase 11 tests verify
-action intent and idempotency only.
+action intent and idempotency only. Phase 12 tests verify reconciliation,
+conflict records, and append-only decisions only.
