@@ -39,6 +39,7 @@ class SnapshotRequest:
     actor: dict[str, Any]
     authority: dict[str, Any]
     created_at: str
+    expected_graph_revision: int | None = None
     revision: int | None = None
     policy_version: str = DEFAULT_POLICY_VERSION
     persist_summary: bool = True
@@ -173,6 +174,7 @@ class SnapshotEngine:
             created_at=request.created_at,
             committed_at=request.created_at,
             principal_id=request.principal_id,
+            expected_graph_revision=request.expected_graph_revision,
         )
         summary_path = None
         if request.persist_summary:

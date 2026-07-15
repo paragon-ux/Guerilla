@@ -47,6 +47,7 @@ class ReconciliationRequest:
     authority: dict[str, Any]
     requested_at: str
     reconciled_at: str
+    expected_graph_revision: int | None = None
     operation_id: str | None = None
     root: str | None = None
     endpoint: str | None = None
@@ -454,6 +455,7 @@ class ReconciliationEngine:
             created_at=request.reconciled_at,
             committed_at=request.reconciled_at,
             principal_id=request.principal_id,
+            expected_graph_revision=request.expected_graph_revision,
             fail_at=(
                 "after_stage" if request.fail_at == "reconciliation_commit_after_stage" else None
             ),

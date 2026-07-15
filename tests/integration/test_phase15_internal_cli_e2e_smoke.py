@@ -80,6 +80,85 @@ def _init_workspace(context: Phase15Context, seed: int) -> None:
     assert result["graph_revision"] == 0
 
 
+def _append_interleaving_event(root: Path, contracts: ContractBundle) -> None:
+    store = GraphStore(root, contracts=contracts)
+    replay = store.replay()
+    node = {
+        "record_type": "node",
+        "protocol_version": "0.2.0",
+        "workspace_id": replay.workspace_id,
+        "node_id": str(store.ids.generate("node")),
+        "entity_id": str(store.ids.generate("entity")),
+        "node_type": "event",
+        "created_at": TS,
+        "actor": {"actor_id": "local-user", "actor_kind": "human"},
+        "authority": {
+            "authority_type": "guerilla",
+            "principal_id": "local-user",
+            "profile": "local-owner-v1",
+        },
+        "status": "interleaving_write",
+        "provenance": {
+            "source": "test.phase15.interleaving_writer",
+            "source_record_ids": [],
+        },
+        "payload_ref": {"retention_class": "none"},
+        "metadata": {"phase15_interleaving_test": {"kind": "interleaving_write"}},
+        "extensions": {},
+        "record_hash": "0" * 64,
+    }
+    store.append_transaction(
+        [node],
+        actor={"actor_id": "local-user", "actor_kind": "human"},
+        created_at=TS,
+        committed_at=TS,
+    )
+
+
+def test_cli_expected_graph_revision_rejects_interleaving_observe_write(
+    contracts: ContractBundle,
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    context, adapters = _context(tmp_path, contracts)
+    adapters["transactional"].records["ticket-guard"] = {"value": "open", "revision": "rev-1"}
+    _init_workspace(context, 1504)
+    original_append = GraphStore.append_transaction
+    injected = False
+
+    def append_with_interleaving(
+        self: GraphStore,
+        members: list[dict[str, Any]],
+        **kwargs: Any,
+    ) -> dict[str, Any]:
+        nonlocal injected
+        if not injected:
+            injected = True
+            _append_interleaving_event(tmp_path, contracts)
+        return original_append(self, members, **kwargs)
+
+    monkeypatch.setattr(GraphStore, "append_transaction", append_with_interleaving)
+
+    error = _invoke_error(
+        context,
+        "observe",
+        "request",
+        "transactional",
+        "--namespace",
+        "transactional",
+        "--expected-graph-revision",
+        "0",
+        "--input",
+        json.dumps({"subject": "ticket-guard"}),
+    )
+
+    replay = GraphStore(tmp_path, contracts=contracts).replay()
+    assert error["code"] == "stale_graph_revision"
+    assert injected is True
+    assert replay.graph_revision == 1
+    assert adapters["transactional"].calls["observe"] == 1
+
+
 def test_transactional_cli_e2e_intent_after_state_and_evaluation(
     contracts: ContractBundle,
     tmp_path: Path,

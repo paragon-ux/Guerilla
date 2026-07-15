@@ -422,6 +422,7 @@ class ActionOrchestrator:
             created_at=request.intent_committed_at,
             committed_at=request.intent_committed_at,
             principal_id=request.principal_id,
+            expected_graph_revision=request.expected_graph_revision,
             fail_at="after_stage" if request.fail_at == "intent_commit_after_stage" else None,
         )
 

@@ -11,6 +11,7 @@ from typing import Any, TextIO
 
 from guerilla import __version__
 from guerilla.identity import IdentifierGenerator
+from guerilla.storage import StorageError
 
 DEFAULT_TIMESTAMP = "2026-07-14T00:00:00Z"
 
@@ -233,7 +234,7 @@ def run(
     try:
         runtime = _runtime(args, context)
         operation, result = _dispatch(args, runtime)
-    except (CliWorkflowError, ValueError, OSError) as exc:
+    except (CliWorkflowError, StorageError, ValueError, OSError) as exc:
         return emit_error(stderr, exc)
     emit_success(stdout, operation, result)
     return 0
@@ -559,6 +560,7 @@ def _create_node_with_new_to_edges(
         created_at=created_at,
         committed_at=created_at,
         principal_id=runtime.principal_id,
+        expected_graph_revision=expected_graph_revision,
     )
     return {
         "node_id": new_node_id,
